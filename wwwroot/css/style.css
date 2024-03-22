@@ -1,0 +1,36 @@
+.myform {
+  width: 50%;
+  height: 80%;
+    padding: 20px;
+    border: 1px solid #272525;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px; /* Agrega un espacio entre formularios */
+  }
+  
+  /* Estilos para el campo de entrada de texto */
+  .form-input {
+    width: 100%;
+    margin:auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #140c0c;
+    border-radius: 5px;
+  }
+  
+  /* Estilos para el botón de envío */
+  .btn-submit {
+    width: 100%;
+    background-color: #007bff;
+    margin-left: 20%;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #map {
+    
+    height: 500px;
+    width: 100%;
+  }

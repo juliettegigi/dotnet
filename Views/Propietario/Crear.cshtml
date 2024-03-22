@@ -1,0 +1,171 @@
+@model InmobiliariaGutierrez.Models.VO.ModalViewModel 
+ @{
+    ViewData["Title"] = "Home Page";
+}  
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js" integrity="sha384-vVLAXFZdBnVG2FNWV7XyzYZEUksVe2b6GOa5n5Z9lghxFAQB5VBlm5uVKXjy6CP4" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+  
+    <script>
+        $(document).ready(function () {
+            $('#myModal').modal('show');
+
+            $('#cerrarModal').click(function () {
+                // Redirecciona al usuario a la acción del controlador correspondiente (HomeController/Index)
+                window.location.href = "/Home/Index";
+            });
+
+             iniciarMap();
+
+          
+        });
+              function iniciarMap() {
+        var coord = { lat: -34.5956145, lng: -58.4431949 };
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: coord
+        });
+        marker = new google.maps.Marker({
+            position: coord,
+            map: map,
+            draggable: true // Permite arrastrar el marcador
+        });
+
+        // Agrega un listener para el evento de arrastre del marcador
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            document.getElementById('lat').value = event.latLng.lat();
+            document.getElementById('lng').value = event.latLng.lng();
+        });
+    }
+    </script>
+    
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu7va6ywpsO9cysQN_Z7d9goMR2Xw6Sr8&callback=iniciarMap" async defer></script>
+
+
+<h4>Propietario</h4>
+<hr />
+  
+<div class="row">
+    <div class="col-md-4">
+        <form action="/Propietario/Guardar" method="post">
+            
+            <div class="form-group">
+                 <input type="text" name="Nombre" class="form-input" placeholder="Nombre" />
+            </div>
+            <div class="form-group">
+                 <input type="text" name="Apellido" class="form-input" placeholder="Apellido" />
+            </div>
+            <div class="form-group">
+               <input type="text" name="DNI" class="form-input" required placeholder="Documento" />
+            </div>
+            <div class="form-group">
+              <input type="text" name="Email" class="form-input" required placeholder="Email" />
+            </div>
+            <div class="form-group">
+                <input type="text" name="Telefono" class="form-input" placeholder="Telefono" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.MostrarModal)
+{
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Alta de Inmueble</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario del Modal Inmueble -->
+                    <form id="formulario2">
+                        <div class="mb-3">
+                             <label for="exampleInputEmail1" class="form-label">Nombre :@Model.Apellido</label>
+                                <input type="hidden" name="Name" value="@Model.Apellido" />
+                        </div>
+                        <div class="mb-3">
+                             <label for="exampleInputEmail1" class="form-label">Documento :@Model.Documento</label>
+                                <input type="hidden" name="Dni" value="@Model.Documento" />
+                        </div>
+                        <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Id :@Model.Id</label>
+                                <input type="hidden" name="Id" value="@Model.Id" />
+                        </div>
+                        <div class="mb-3">
+                            <p>Cual es su Uso</p>
+                            <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
+                                <option selected></option>
+                                <option value="Comercial">Comercial</option>
+                                <option value="Residencial">Residencial</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <p>Tipo de inmueble</p>
+                            <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
+                                <option selected></option>
+                                <option value="Local">Local</option>
+                                <option value="Deposito">Deposito</option>
+                                <option value="Casa">Casa</option>
+                                <option value="Departamento">Departamento</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <p>Cantidad de ambientes</p>
+                            <select class="form-select form-select-sm" name="Cantidad_habitacion" aria-label=".form-select-sm example">
+                                <option selected></option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+								                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div id="map" style="height: 400px;"></div>
+                            <input type="hidden" name="longitud" id="lng" />
+                            <input type="hidden" name="latitud" id="lat" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="Direccion" class="form-input" required placeholder="Direccion" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="Precio" class="form-input" required placeholder="Precio" />
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="cargarInmobiliaria()">Cargar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cerrarModal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Volver</a>
+</div>
+
+@section Scripts {
+    <script>
+        function cargarInmobiliaria() {
+            var formulario = document.getElementById("formulario2");
+            formulario.action = "/Inmueble/CargarInmueble";
+            formulario.submit();
+        }
+    </script>
+}
+
