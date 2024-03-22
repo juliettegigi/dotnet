@@ -8,15 +8,23 @@ public class Inquilino
 {
     
 	public int Id { get; set; }
-    [Required(ErrorMessage="Campo obligatorio.")]
+
+    [Required(ErrorMessage="Campo DNI obligatorio.")]
     public String? DNI {get;set;}
+
+    [Required(ErrorMessage="Campo DNI obligatorio.")]
 	public String? Nombre { get; set; }
+
+    [Required(ErrorMessage="Campo APellido obligatorio.")]
     public String? Apellido { get; set; }
     
-    [Display(Name = "Teléfono")]
+   
+    [Required(ErrorMessage = "El teléfono es obligatorio"),StringLength(15, ErrorMessage = "El teléfono no puede tener más de 15 caracteres")]
+    [RegularExpression(@"^[0-9]+$", ErrorMessage = "El teléfono solo puede contener números")]
     public String? Telefono { get; set; }
     [Required, EmailAddress]
     public String? Email { get; set; }
+    [Required(ErrorMessage="Campo Domicilio obligatorio.")]
     public String? Domicilio { get; set; }
     public List<Contrato> ListaContratos{get;set;}
 
