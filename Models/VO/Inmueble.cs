@@ -18,7 +18,11 @@ public class Inmueble
 	public int CantidadAmbientes {get;set;}
 	public TipoUso Uso { get; set; }
 	public Coordenada? Coordenadas {get;set;}
-	public decimal Precio{get;set;}
+	
+	 public override string ToString()
+        {
+            return $"Id: {Id}, PropietarioId: {PropietarioId}, Dirección: {Direccion}, Tipo: {Tipo}, Cantidad de Ambientes: {CantidadAmbientes}, Uso: {Uso}, Coordenadas: {Coordenadas}";
+        }
 }
 
 

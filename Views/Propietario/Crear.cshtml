@@ -23,7 +23,7 @@
           
         });
               function iniciarMap() {
-        var coord = { lat: -34.5956145, lng: -58.4431949 };
+        var coord = { lat: -33.29501, lng:  -66.33563 };
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 10,
             center: coord
@@ -135,15 +135,13 @@
                         </div>
                         <div class="mb-3">
                             <div id="map" style="height: 400px;"></div>
-                            <input type="hidden" name="longitud" id="lng" />
-                            <input type="hidden" name="latitud" id="lat" />
+                            <input type="hidden" name="longitud" id="lng" value="-34.5956145" />
+                            <input type="hidden" name="latitud" id="lat" value="-58.4431949" />
                         </div>
                         <div class="mb-3">
                             <input type="text" name="Direccion" class="form-input" required placeholder="Direccion" />
                         </div>
-                        <div class="mb-3">
-                            <input type="text" name="Precio" class="form-input" required placeholder="Precio" />
-                        </div>
+                       
                         <button type="submit" class="btn btn-primary" onclick="cargarInmobiliaria()">Cargar</button>
                     </form>
                 </div>

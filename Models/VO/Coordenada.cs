@@ -9,5 +9,9 @@ public class Coordenada
         Cx=x;
         Cy=y;
     }
+    public override string ToString()
+        {
+            return $"({Cx}, {Cy})";
+        }
 }
 
