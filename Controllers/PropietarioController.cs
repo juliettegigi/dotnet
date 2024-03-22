@@ -27,17 +27,20 @@ public class PropietarioController : Controller
 
 	
 	public IActionResult Editar(int id)
-	{ModalViewModel viewModel = new ModalViewModel();
-        viewModel.MostrarModal = false;
-		if(id > 0)
-		{  
-        viewModel.MostrarModal = false;
-			
-			var propietario = rp.GetPropietario(id);
-			return View(propietario);
-		} else {
-			return View();
-		}
+    {  
+            ModalViewModel viewModel = new ModalViewModel();
+            viewModel.MostrarModal = false;
+		    if(id > 0){  
+				viewModel.MostrarModal = false;
+				var propietario = rp.GetPropietario(id);
+				return View(propietario);
+		    } 
+			else {
+				return View();
+		     }
+	   
+	
+	
 	}
 	public IActionResult Crear(int id)
     {  

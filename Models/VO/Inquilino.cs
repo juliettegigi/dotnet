@@ -6,13 +6,16 @@ solicitando sus datos personales. ABM inquilino. DNI, nombre
 completo y datos de contacto.*/
 public class Inquilino
 {
+    
 	public int Id { get; set; }
+    [Required(ErrorMessage="Campo obligatorio.")]
     public String? DNI {get;set;}
 	public String? Nombre { get; set; }
     public String? Apellido { get; set; }
     
     [Display(Name = "Teléfono")]
     public String? Telefono { get; set; }
+    [Required, EmailAddress]
     public String? Email { get; set; }
     public String? Domicilio { get; set; }
     public List<Contrato> ListaContratos{get;set;}

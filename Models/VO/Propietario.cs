@@ -12,7 +12,7 @@ public class Propietario
 	public int Id { get; set; }
 	public string? Nombre { get; set; }
 	public string? Apellido { get; set; }
-
+    [Required(ErrorMessage="Campo obligatorio.")]
 	public String? DNI {get;set;}
 
 	[Display(Name = "Teléfono")]

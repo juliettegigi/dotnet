@@ -24,19 +24,18 @@ public class InquilinoController : Controller
 
 	
 	public IActionResult Editar(int id)
-	{
-		if(id > 0)
-		{
-			RepositorioInquilino rp = new();
-			var inquilino = rp.GetInquilino(id);
-			return View(inquilino);
-		} else {
-			return View();
-		}
+	{   
+           if(id > 0){
+			   RepositorioInquilino rp = new();
+			   var inquilino = rp.GetInquilino(id);
+			   return View(inquilino);
+		    } 
+			else return View();
+		
 	}
 	[HttpPost]
 	public IActionResult Guardar(Inquilino inquilino)
-	{
+	{  if (ModelState.IsValid){
 		RepositorioInquilino rp = new RepositorioInquilino();
 		
 		if(inquilino.Id > 0)
@@ -44,6 +43,8 @@ public class InquilinoController : Controller
 		else
 			rp.AltaInquilino(inquilino);
 		return RedirectToAction(nameof(Index));
+		}
+		else return RedirectToAction(nameof(Editar));;
 	}
 
 	public IActionResult Eliminar(int id)
