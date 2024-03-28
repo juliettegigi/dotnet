@@ -15,9 +15,10 @@ public class Propietario
     [Required(ErrorMessage="Campo obligatorio.")]
 	public String? DNI {get;set;}
 
-	[Display(Name = "Teléfono")]
+	//[Display(Name = "Teléfono")]
 	public String? Telefono  { get; set; }
     public String? Email  { get; set; }
+	public String? Domicilio { get; set; }
 	public Inmueble? ListaInmuebles {get;set;}
 	
 	

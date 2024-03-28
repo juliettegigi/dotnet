@@ -32,7 +32,7 @@ public class InmuebleController : Controller
         inmueble.PropietarioId = new Propietario(); 
         inmueble.PropietarioId.Id=Id;
         inmueble.Direccion=Direccion;
-        inmueble.Tipo=Uso;
+        inmueble.InmuebleTipoId=Uso;
         inmueble.CantidadAmbientes=Cantidad_habitacion;
         decimal latitudDecimal;
         decimal longitudDecimal;

@@ -19,7 +19,13 @@ public class RepositorioPropietario:RepositorioBase
 		Propietario? Propietario = null;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Propietario.Id)}, {nameof(Propietario.DNI)},{nameof(Propietario.Nombre)},{nameof(Propietario.Apellido)}, {nameof(Propietario.Email)},{nameof(Propietario.Telefono)}
+			var sql = @$"SELECT {nameof(Propietario.Id)}, 
+			                    {nameof(Propietario.DNI)},
+								{nameof(Propietario.Nombre)},
+								{nameof(Propietario.Apellido)}, 
+								{nameof(Propietario.Email)},
+								{nameof(Propietario.Telefono)},
+								{nameof(Propietario.Domicilio)}
 			             FROM Propietarios
 			             WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)};
                          ";
@@ -39,6 +45,7 @@ public class RepositorioPropietario:RepositorioBase
                             Apellido = reader.GetString(nameof(Propietario.Apellido)),
 							Email = reader.GetString(nameof(Propietario.Email)),
 							Telefono = reader.GetString(nameof(Propietario.Telefono)),
+							Domicilio = reader[nameof(Propietario.Domicilio)]==DBNull.Value ? "" : reader.GetString(reader.GetString(nameof(Propietario.Domicilio))),
 						};
 					}
 				}
@@ -54,7 +61,13 @@ public class RepositorioPropietario:RepositorioBase
 		var Propietarios = new List<Propietario>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Propietario.Id)}, {nameof(Propietario.DNI)},{nameof(Propietario.Nombre)},{nameof(Propietario.Apellido)}, {nameof(Propietario.Email)},{nameof(Propietario.Telefono)}
+			var sql = @$"SELECT {nameof(Propietario.Id)}, 
+			                    {nameof(Propietario.DNI)},
+								{nameof(Propietario.Nombre)},
+								{nameof(Propietario.Apellido)}, 
+								{nameof(Propietario.Email)},
+								{nameof(Propietario.Telefono)},
+								{nameof(Propietario.Domicilio)}
 			             FROM Propietarios;
                          ";
 			 //var sql=""
@@ -73,8 +86,8 @@ public class RepositorioPropietario:RepositorioBase
                             Apellido = reader.GetString(nameof(Propietario.Apellido)),
 							Email = reader.GetString(nameof(Propietario.Email)),
                             Telefono = reader.GetString(nameof(Propietario.Telefono)),
-
-							
+							Domicilio = reader[nameof(Propietario.Domicilio)]==DBNull.Value ? "" : reader.GetString(reader.GetString(nameof(Propietario.Domicilio))),
+                           //Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(nameof(Propietario.Domicilio)),
 							//Tipo = (TipoInquilino)reader.GetInt32(nameof(Inquilino.Tipo))
 						});
 						
@@ -94,9 +107,21 @@ public class RepositorioPropietario:RepositorioBase
 		int id = 0;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"INSERT INTO Propietarios ({nameof(Propietario.DNI)}, {nameof(Propietario.Nombre)}, {nameof(Propietario.Apellido)}, {nameof(Propietario.Email)}, {nameof(Propietario.Telefono)})
-				VALUES (@{nameof(Propietario.DNI)}, @{nameof(Propietario.Nombre)}, @{nameof(Propietario.Apellido)}, @{nameof(Propietario.Email)}, @{nameof(Propietario.Telefono)});
-				SELECT LAST_INSERT_ID();";
+			var sql = @$"INSERT INTO Propietarios ({nameof(Propietario.DNI)}, 
+			                                       {nameof(Propietario.Nombre)}, 
+												   {nameof(Propietario.Apellido)}, 
+			                                       {nameof(Propietario.Email)}, 
+												   {nameof(Propietario.Telefono)},
+												   {nameof(Propietario.Domicilio)}
+												   )
+				                           VALUES (@{nameof(Propietario.DNI)}, 
+				                                   @{nameof(Propietario.Nombre)}, 
+				                           		   @{nameof(Propietario.Apellido)}, 
+				                           		   @{nameof(Propietario.Email)}, 
+				                           		   @{nameof(Propietario.Telefono)},
+				                           		   @{nameof(Propietario.Domicilio)}
+				                           		   );
+				        SELECT LAST_INSERT_ID();";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Propietario.DNI)}", propietario.DNI);
@@ -104,6 +129,7 @@ public class RepositorioPropietario:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Apellido)}", propietario.Apellido);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", propietario.Email);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Telefono)}", propietario.Telefono);
+				command.Parameters.AddWithValue($"@{nameof(Propietario.Domicilio)}", propietario.Domicilio);
 				
 
 				connection.Open();
@@ -121,12 +147,13 @@ public class RepositorioPropietario:RepositorioBase
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
 			var sql = @$"UPDATE Propietarios
-				SET {nameof(Propietario.DNI)} = @{nameof(Propietario.DNI)},
-				{nameof(Propietario.Nombre)} = @{nameof(Propietario.Nombre)},
-				{nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},
-				{nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
-				{nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)}
-				WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)};";
+				         SET {nameof(Propietario.DNI)} = @{nameof(Propietario.DNI)},
+				             {nameof(Propietario.Nombre)} = @{nameof(Propietario.Nombre)},
+				             {nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},
+				             {nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
+				             {nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)}
+				             {nameof(Propietario.Domicilio)} = @{nameof(Propietario.Domicilio)}
+				         WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)};";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Propietario.DNI)}", propietario.DNI);
@@ -134,6 +161,7 @@ public class RepositorioPropietario:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Apellido)}", propietario.Apellido);
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", propietario.Email);
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Telefono)}", propietario.Telefono);
+                command.Parameters.AddWithValue($"@{nameof(Propietario.Domicilio)}", propietario.Domicilio);
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Id)}", propietario.Id);
 				connection.Open();
 				command.ExecuteNonQuery();
@@ -149,7 +177,7 @@ public class RepositorioPropietario:RepositorioBase
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
 			var sql = @$"DELETE FROM Propietarios
-				WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)}";
+				         WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)}";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Id)}", id);

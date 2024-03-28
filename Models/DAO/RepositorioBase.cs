@@ -11,6 +11,6 @@ public abstract class RepositorioBase
 		protected readonly string? ConnectionString ;
 
 		protected RepositorioBase()
-		{  ConnectionString="Server=localhost;Database=InmobiliariaGutierrez;User=root;Password=;";
+		{  ConnectionString="Server=localhost;Database=InmobiliariaDotNet;User=root;Password=;";
 		}
 	}

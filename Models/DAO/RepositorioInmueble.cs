@@ -19,10 +19,30 @@ public class RepositorioInmueble:RepositorioBase
 		Inmueble inmueble = null;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Inmueble.Id)}, {nameof(Inmueble.PropietarioId)},{nameof(Inmueble.Direccion)},{nameof(Inmueble.Tipo)}, {nameof(Inmueble.CantidadAmbientes)},{nameof(Inmueble.Uso)},Cx,Cy
-			             FROM Inmuebles
-			             WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};
-                         ";
+			var sql = @$"
+							SELECT inmuebles.id AS idInmueble,
+							       inmuebles.propietarioId,
+							       inmuebles.inmuebleTipoId,
+							       inmuebles.direccion,
+							       inmuebles.cantidadAmbientes,
+							       inmuebles.uso,
+							       inmuebles.precioBase,
+							       inmuebles.cLatitud,
+							       inmuebles.cLongitud,
+							       inmuebles.suspendido,
+							       propietarios.id As idPropietario,
+							       propietarios.dni,
+							       propietarios.nombre,
+							       propietarios.apellido,
+							       propietarios.telefono,
+							       propietarios.email,
+							       propietarios.domicilio,
+							       inmuebleTipos.id AS idInmuebleTipo,
+							       inmuebleTipos.tipo
+							FROM inmuebles
+							INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
+							INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id;
+							                         ";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", id);
@@ -32,14 +52,28 @@ public class RepositorioInmueble:RepositorioBase
 					if(reader.Read())
 					{   
                         var rp=new RepositorioPropietario(); 
-                        var propietario=rp.GetPropietario(reader.GetInt32(nameof(Propietario.Id)));
-						var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.Cx)),reader.GetDecimal(nameof(Inmueble.Coordenadas.Cy)));
+						propietario = new Propietario
+						{
+							Id = reader.GetInt32("idPropietario"),
+							DNI = reader.GetString(nameof(Propietario.DNI)),
+                            Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                            Apellido = reader.GetString(nameof(Propietario.Apellido)),
+							Email = reader.GetString(nameof(Propietario.Email)),
+							Telefono = reader.GetString(nameof(Propietario.Telefono)),
+							Domicilio = reader[nameof(Propietario.Domicilio)]==DBNull.Value ? "" : reader.GetString(reader.GetString(nameof(Propietario.Domicilio))),
+						};
+						tipo = new InmuebleTipo{
+							Id = reader.GetInt32("idInmuebleTipo"),
+							Tipo = reader.GetString(nameof(InmuebleTipo.Tipo))
+						};
+
+						var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)),reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)));
                         inmueble = new Inmueble
 						{
-							Id = reader.GetInt32(nameof(Inmueble.Id)),
+							Id = reader.GetInt32("idInmueble"),
 							PropietarioId = propietario,
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                            Tipo = reader.GetString(nameof(Inmueble.Tipo)),
+                            Tipo = tipo,
 							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
 							Uso = (TipoUso)reader.GetInt32(nameof(Inmueble.Uso)),
 							Coordenadas=coordenada,
@@ -58,8 +92,15 @@ public class RepositorioInmueble:RepositorioBase
 		var inmuebles = new List<Inmueble>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Inmueble.Id)}, {nameof(Inmueble.PropietarioId)},{nameof(Inmueble.Direccion)},{nameof(Inmueble.Tipo)}, {nameof(Inmueble.CantidadAmbientes)},{nameof(Inmueble.Uso)},{nameof(Inmueble.Coordenadas.Cx)},{nameof(Inmueble.Coordenadas.Cy)}
-			             FROM Inquilinos;
+			var sql = @$"SELECT {nameof(Inmueble.Id)}, 
+			                    {nameof(Inmueble.PropietarioId)},
+								{nameof(Inmueble.Direccion)},
+								{nameof(Inmueble.Tipo)},
+								{nameof(Inmueble.CantidadAmbientes)},
+								{nameof(Inmueble.Uso)},
+								{nameof(Inmueble.Coordenadas.CLatitud)},
+								{nameof(Inmueble.Coordenadas.CLongitud)}
+			             FROM Inmuebles;
                          ";
 			 //var sql=""
 			using(var command = new MySqlCommand(sql, connection))
@@ -70,7 +111,7 @@ public class RepositorioInmueble:RepositorioBase
 					while(reader.Read())
 					{    var rp=new RepositorioPropietario();
 					     var propietario=rp.GetPropietario(reader.GetInt32(nameof(Propietario.Id))); 
-                         var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.Cx)), reader.GetDecimal(nameof(Inmueble.Coordenadas.Cy)) );
+                         var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
 						inmuebles.Add(new Inmueble
 						{   Id = reader.GetInt32(nameof(Inmueble.Id)),
 							PropietarioId = propietario,
@@ -97,8 +138,15 @@ public class RepositorioInmueble:RepositorioBase
 		int id = 0;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"INSERT INTO Inmuebles ({nameof(Inmueble.PropietarioId)}, {nameof(Inmueble.Direccion)}, {nameof(Inmueble.Tipo)}, {nameof(Inmueble.CantidadAmbientes)}, {nameof(Inmueble.Uso)}, {nameof(Inmueble.Coordenadas.Cx)},{nameof(Inmueble.Coordenadas.Cy)})
-				VALUES (@{nameof(Inmueble.PropietarioId)}, @{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Tipo)}, @{nameof(Inmueble.CantidadAmbientes)}, @{nameof(Inmueble.Uso)}, @{nameof(Inmueble.Coordenadas.Cx)}, @{nameof(Inmueble.Coordenadas.Cy)});
+			var sql = @$"INSERT INTO Inmuebles ({nameof(Inmueble.PropietarioId)},
+											    {nameof(Inmueble.Direccion)},
+											    {nameof(Inmueble.Tipo)},
+											    {nameof(Inmueble.CantidadAmbientes)},
+											    {nameof(Inmueble.Uso)},
+											    {nameof(Inmueble.Coordenadas.CLatitud)},
+											    {nameof(Inmueble.Coordenadas.CLongitud)}
+											   )
+				VALUES (@{nameof(Inmueble.PropietarioId)}, @{nameof(Inmueble.Direccion)}, @{nameof(Inmueble.Tipo)}, @{nameof(Inmueble.CantidadAmbientes)}, @{nameof(Inmueble.Uso)}, @{nameof(Inmueble.Coordenadas.CLatitud)}, @{nameof(Inmueble.Coordenadas.CLongitud)});
 				SELECT LAST_INSERT_ID();";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -107,8 +155,8 @@ public class RepositorioInmueble:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.Tipo)}", inmueble.Tipo);
 				command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
 				command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
-				command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.Cx)}", inmueble.Coordenadas.Cx);
-				command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.Cy)}", inmueble.Coordenadas.Cy);
+				command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
+				command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
 				
 
 				connection.Open();
@@ -121,7 +169,7 @@ public class RepositorioInmueble:RepositorioBase
 	}
 
 
-	public int ModificaInquilino(Inmueble inmueble)
+	public int ModificaInmueble(Inmueble inmueble)
 	{
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
@@ -131,8 +179,8 @@ public class RepositorioInmueble:RepositorioBase
 				{nameof(Inmueble.Tipo)} = @{nameof(Inmueble.Tipo)},
 				{nameof(Inmueble.CantidadAmbientes)} = @{nameof(Inmueble.CantidadAmbientes)},
 				{nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
-				{nameof(Inmueble.Coordenadas.Cx)} = @{nameof(Inmueble.Coordenadas.Cx)},
-				{nameof(Inmueble.Coordenadas.Cy)} = @{nameof(Inmueble.Coordenadas.Cy)}
+				{nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
+				{nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)}
 				WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -141,8 +189,8 @@ public class RepositorioInmueble:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.Tipo)}", inmueble.Tipo);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
                 command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.Cx)}", inmueble.Coordenadas.Cx);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.Cy)}", inmueble.Coordenadas.Cy);
+                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
+                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
 				command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", inmueble.Id);
 				connection.Open();
 				command.ExecuteNonQuery();
@@ -153,7 +201,7 @@ public class RepositorioInmueble:RepositorioBase
 	}
 
 
-	public int EliminaInquilino(int id)
+	public int EliminaInmueble(int id)
 	{
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
@@ -176,7 +224,7 @@ public IList<Inmueble> GetInmueblesXpropietario(int PropietarioId)
 		var Inmuebles = new List<Inmueble>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Inmueble.Id)}, {nameof(Inmueble.PropietarioId)},{nameof(Inmueble.Direccion)},{nameof(Inmueble.Tipo)}, {nameof(Inmueble.CantidadAmbientes)},{nameof(Inmueble.Uso)},{nameof(Inmueble.Coordenadas.Cx)},{nameof(Inmueble.Coordenadas.Cy)}
+			var sql = @$"SELECT {nameof(Inmueble.Id)}, {nameof(Inmueble.PropietarioId)},{nameof(Inmueble.Direccion)},{nameof(Inmueble.InmuebleTipoId)}, {nameof(Inmueble.CantidadAmbientes)},{nameof(Inmueble.Uso)},{nameof(Inmueble.Coordenadas.CLatitud)},{nameof(Inmueble.Coordenadas.CLongitud)}
 			             FROM inmuebles, propietarios
                          WHERE inmuebles.propietarioId=@{nameof(Inmueble.PropietarioId)} 
                          ;
@@ -187,7 +235,7 @@ public IList<Inmueble> GetInmueblesXpropietario(int PropietarioId)
 				using(var reader = command.ExecuteReader())
 				{   var rp=new RepositorioPropietario(); 
                     var propietario=rp.GetPropietario(reader.GetInt32(nameof(Propietario.Id)));
-					var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.Cx)),reader.GetDecimal(nameof(Inmueble.Coordenadas.Cy)));
+					var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)),reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)));
 					while(reader.Read())
 					{
 						Inmuebles.Add(new Inmueble
@@ -195,7 +243,7 @@ public IList<Inmueble> GetInmueblesXpropietario(int PropietarioId)
                             Id = reader.GetInt32(nameof(Inmueble.Id)),
 							PropietarioId = propietario,
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                            Tipo = reader.GetString(nameof(Inmueble.Tipo)),
+                            Tipo = reader.GetString(nameof(Inmueble.InmuebleTipoId)),
 							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
 							Uso = (TipoUso)reader.GetInt32(nameof(Inmueble.Uso)),
 							Coordenadas=coordenada,

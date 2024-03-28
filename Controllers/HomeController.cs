@@ -14,13 +14,19 @@ public class HomeController : Controller
     }
 
     public IActionResult Index()
-    {
+    {   if(TempData.ContainsKey("dato"))
+           ViewBag.dato=TempData["dato"];
         return View();
     }
 
     public IActionResult Privacy()
     {
         return View();
+    }
+
+     public IActionResult MiAction()
+    {  TempData["dato"]="ALgo , algo";
+       return RedirectToAction(nameof(Index));
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
