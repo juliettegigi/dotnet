@@ -7,6 +7,12 @@ namespace InmobiliariaGutierrez.Models.DAO;
 
 public class RepositorioContrato:RepositorioBase
 {
+	
+
+
+   						  
+
+
 	//readonly string ConnectionString = "Server=localhost;Database=InmobiliariaGutierrez;User=root;Password=;";
 
 	public RepositorioContrato():base()
@@ -236,6 +242,102 @@ public IList<Contrato> GetContratosXinquilino(int idInquilino)
 		}
 		return Contratos;
 	}
+
+
+/* Listar todos los contratos que terminen en 30, 60 o 90 días (permitir elegir o especificar plazo). 
+*/
+public IList<Contrato> GetContratosTerminan(int dias)
+	{
+		var Contratos = new List<Contrato>();
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$" select {getCamposContrato("contratos")},
+			                     {getCamposInquilino("inquilinos")},
+								 {getCamposInmueble("inmuebleCompleto")}, 
+						         {getCamposInmuebleTipo("inmuebleCompleto")},
+								 {getCamposPropietario("inmuebleCompleto")}
+						  from contratos 
+	                      inner join inquilinos on contratos.inquilinoId=inquilinos.id
+                          inner join (   select {getCamposInmueble("inmuebles")}, 
+                                                {getCamposInmuebleTipo("inmuebleTipos")},
+									   		    {getCamposPropietario("propietarios")}
+                                         from inmuebles 
+                                         inner join Inmuebletipos on inmuebles.inmuebletipoId=inmuebletipos.id
+                                         inner join propietarios on inmuebles.propietarioId=propietarios.id
+									  ) AS inmuebleCompleto 
+                               on contratos.inmuebleId=inmuebleCompleto.idInmueble
+                        where datediff(fechaFin,curdate())=30;
+                         
+                         ";		 
+			 //var sql=""
+			using(var command = new MySqlCommand(sql, connection))
+			{   
+				command.Parameters.AddWithValue("dias", dias);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{  
+					while(reader.Read())
+					{
+						var inquilino=new Inquilino{
+							Id=reader.GetInt32("idInquilino"),
+							DNI=reader.GetString("dniInq"),
+							Nombre=reader.GetString("nombreInq"),
+							Apellido=reader.GetString("apellidoInq"),
+							Telefono=reader.GetString("telefonoInq"),
+							Email=reader.GetString("emailInq"),
+							Domicilio=reader.GetString("domicilioInq"),
+						};
+						var propietario=new Propietario{
+							Id=reader.GetInt32("idPropietario"),
+							DNI=reader.GetString("dni"),
+							Nombre=reader.GetString("nombre"),
+							Apellido=reader.GetString("apellido"),
+							Telefono=reader.GetString("telefono"),
+							Email=reader.GetString("email"),
+							Domicilio=reader.GetString("domicilio"),
+						};
+
+						var inmuebleTipo=new InmuebleTipo{
+							Id=reader.GetInt32("idInmuebleTipo"),
+							Tipo=reader.GetString("tipo")
+						};
+
+                        
+						string valorUso = reader.GetString("uso");
+						TipoUso uso;
+						Enum.TryParse(valorUso, out uso);
+						
+						var inmueble=new Inmueble{
+							Id=reader.GetInt32("idInmueble"),
+							PropietarioId=propietario,
+							InmuebleTipoId=inmuebleTipo,
+							Direccion=reader.GetString("direccion"),
+							CantidadAmbientes=reader.GetInt32("cantidadAmbientes"),
+							Uso=uso,
+							PrecioBase=reader.GetDecimal("precioBase"),
+							Coordenadas=new Coordenada(reader.GetDecimal("cLatitud"),reader.GetDecimal("cLongitud")),
+							Suspendido=reader.GetBoolean("suspendido"),
+							Disponible=reader.GetBoolean("disponible")
+						};
+						Contratos.Add(new Contrato
+						{   
+                            InmuebleId=inmueble,                              
+							Id = reader.GetInt32(nameof(Contrato.Id)),
+							InquilinoId=inquilino,
+                            FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                            FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+                            PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
+                            Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+						});
+					}
+				}
+                
+			}
+             connection.Close();
+		}
+		return Contratos;
+	}
+
 	
 }
 

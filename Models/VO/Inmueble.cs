@@ -17,13 +17,14 @@ public class Inmueble
   
 	public int CantidadAmbientes {get;set;}
 	public bool Suspendido {get;set;}
-	public decimal precioBase {get;set;}
+	public bool Disponible {get;set;}
+	public decimal PrecioBase {get;set;}
 	public TipoUso Uso { get; set; }
 	public Coordenada? Coordenadas {get;set;}
 	
 	 public override string ToString()
         {
-            return $" PropietarioId: {PropietarioId}, Dirección: {Direccion}, Tipo: {InmuebleTipoId}, Cantidad de Ambientes: {CantidadAmbientes}, Uso: {Uso}, Coordenadas: {Coordenadas}, Precio: {precioBase}";
+            return $" PropietarioId: {PropietarioId}, Dirección: {Direccion}, Tipo: {InmuebleTipoId}, Cantidad de Ambientes: {CantidadAmbientes}, Uso: {Uso}, Coordenadas: {Coordenadas}, Precio: {PrecioBase}";
         }
 }
 

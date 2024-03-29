@@ -174,7 +174,7 @@ public int AltaInmueble(Inmueble inmueble)
                             {nameof(Inmueble.InmuebleTipoId)},
                             {nameof(Inmueble.CantidadAmbientes)},
                             {nameof(Inmueble.Uso)},
-                            {nameof(Inmueble.precioBase)},
+                            {nameof(Inmueble.PrecioBase)},
                             {nameof(Inmueble.Coordenadas.CLatitud)},
                             {nameof(Inmueble.Coordenadas.CLongitud)},
                             {nameof(Inmueble.Suspendido)}
@@ -185,7 +185,7 @@ public int AltaInmueble(Inmueble inmueble)
                             @{nameof(Inmueble.InmuebleTipoId)}, 
                             @{nameof(Inmueble.CantidadAmbientes)},
                             @{nameof(Inmueble.Uso)}, 
-                            @{nameof(Inmueble.precioBase)}, 
+                            @{nameof(Inmueble.PrecioBase)}, 
                             @{nameof(Inmueble.Coordenadas.CLatitud)}, 
                             @{nameof(Inmueble.Coordenadas.CLongitud)}, 
                             @{nameof(Inmueble.Suspendido)}
@@ -199,7 +199,7 @@ public int AltaInmueble(Inmueble inmueble)
             command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
-            command.Parameters.AddWithValue($"@{nameof(Inmueble.precioBase)}", inmueble.precioBase);
+            command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Suspendido)}", inmueble.Suspendido);

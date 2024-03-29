@@ -40,7 +40,7 @@ public class InmuebleController : Controller
         inmueble.CantidadAmbientes=Cantidad_habitacion;
         decimal latitudDecimal;
         decimal longitudDecimal;
-        inmueble.precioBase=decimal.Parse(Precio);
+        inmueble.PrecioBase=decimal.Parse(Precio);
       
          
         CultureInfo cultura = CultureInfo.InvariantCulture;
