@@ -19,9 +19,18 @@ public class RepositorioContrato:RepositorioBase
 		Contrato? Contrato = null;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Contrato.Id)}, {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)},{nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFin)},{nameof(Contrato.PrecioXmes)}
+			var sql = @$"SELECT {nameof(Contrato.Id)}, 
+			                    {nameof(Contrato.InquilinoId)},
+								{nameof(Contrato.InmuebleId)},
+								{nameof(Contrato.FechaInicio)},
+								{nameof(Contrato.FechaFin)},
+								{nameof(Contrato.FechaFinAnticipada)},
+								{nameof(Contrato.PrecioXmes)},
+								{nameof(Contrato.Estado)},
 			             FROM Contratos
-			             WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)} and {nameof(Contrato.Estado)} = true ;
+			             WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)} 
+						       and 
+							   {nameof(Contrato.Estado)} = true ;
                          ";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -39,6 +48,7 @@ public class RepositorioContrato:RepositorioBase
                             InmuebleId = rinm.GetInmueble(reader.GetInt32(nameof(Contrato.InmuebleId))),
                             FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
 							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
 							Estado = true
 						};
 					}
@@ -55,7 +65,13 @@ public class RepositorioContrato:RepositorioBase
 		var Contratos = new List<Contrato>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {nameof(Contrato.Id)}, {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)},{nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFin)},{nameof(Contrato.PrecioXmes)}
+			var sql = @$"SELECT {nameof(Contrato.Id)},
+								{nameof(Contrato.InquilinoId)},
+								{nameof(Contrato.InmuebleId)},
+								{nameof(Contrato.FechaInicio)},
+								{nameof(Contrato.FechaFin)},
+								{nameof(Contrato.FechaFinAnticipada)},
+								{nameof(Contrato.PrecioXmes)}
 			             FROM Contratos
                          WHERE  {nameof(Contrato.Estado)} = true ;/
                          ";
@@ -74,10 +90,9 @@ public class RepositorioContrato:RepositorioBase
                             InmuebleId = rinm.GetInmueble(reader.GetInt32(nameof(Contrato.InmuebleId))),
                             FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
 							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
 							Estado = true
 
-							
-							//Tipo = (TipoContrato)reader.GetInt32(nameof(Contrato.Tipo))
 						});
 					}
 				}
@@ -88,14 +103,23 @@ public class RepositorioContrato:RepositorioBase
 		return Contratos;
 	}
 
-	public int AltaContrato(Contrato contrato)
-	{   Console.WriteLine("-----------------------------------------------------prrr");
-        Console.WriteLine(contrato);
+	public int AltaContrato(Contrato contrato){
+
 		int id = 0;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"INSERT INTO Contratos{nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)},{nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFin)},{nameof(Contrato.PrecioXmes)}
-				VALUES ( @{nameof(Contrato.InquilinoId)}, @{nameof(Contrato.InmuebleId)}, @{nameof(Contrato.FechaInicio)}, @{nameof(Contrato.FechaFin)}, @{nameof(Contrato.PrecioXmes)});
+			var sql = @$"INSERT INTO Contratos{nameof(Contrato.InquilinoId)},
+											  {nameof(Contrato.InmuebleId)},
+											  {nameof(Contrato.FechaInicio)},
+											  {nameof(Contrato.FechaFin)},
+											  {nameof(Contrato.FechaFinAnticipada)},
+											  {nameof(Contrato.PrecioXmes)}
+				VALUES ( @{nameof(Contrato.InquilinoId)},
+				         @{nameof(Contrato.InmuebleId)},
+				         @{nameof(Contrato.FechaInicio)},
+				         @{nameof(Contrato.FechaFin)},
+				         @{nameof(Contrato.FechaFinAnticipada)},
+				         @{nameof(Contrato.PrecioXmes)});
 				SELECT LAST_INSERT_ID();";
 			using(var command = new MySqlCommand(sql, connection))
 			{
@@ -103,6 +127,7 @@ public class RepositorioContrato:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Contrato.InmuebleId)}", contrato.InmuebleId.Id);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.FechaInicio)}", contrato.FechaInicio);
 				command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFin)}", contrato.FechaFin);
+				command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFinAnticipada)}", contrato.FechaFinAnticipada);
 				command.Parameters.AddWithValue($"@{nameof(Contrato.PrecioXmes)}", contrato.PrecioXmes);
 				
 
@@ -125,6 +150,7 @@ public class RepositorioContrato:RepositorioBase
                              {nameof(Contrato.InmuebleId)} = @{nameof(Contrato.InmuebleId)},
 				             {nameof(Contrato.FechaInicio)} = @{nameof(Contrato.FechaInicio)},
 				             {nameof(Contrato.FechaFin)} = @{nameof(Contrato.FechaFin)},
+				             {nameof(Contrato.FechaFinAnticipada)} = @{nameof(Contrato.FechaFinAnticipada)},
 				             {nameof(Contrato.PrecioXmes)} = @{nameof(Contrato.PrecioXmes)},
 				             {nameof(Contrato.Estado)} = @{nameof(Contrato.Estado)}
 				          WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
@@ -134,6 +160,7 @@ public class RepositorioContrato:RepositorioBase
                 command.Parameters.AddWithValue($"@{nameof(Contrato.InmuebleId)}", contrato.InmuebleId.Id);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.FechaInicio)}", contrato.FechaInicio);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFin)}", contrato.FechaFin);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFinAnticipada)}", contrato.FechaFinAnticipada);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.PrecioXmes)}", contrato.PrecioXmes);
                 command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", contrato.Estado);
 				command.Parameters.AddWithValue($"@{nameof(Contrato.Id)}", contrato.Id);
@@ -170,7 +197,13 @@ public IList<Contrato> GetContratosXinquilino(int idInquilino)
 		var Contratos = new List<Contrato>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT Contratos.{nameof(Contrato.Id)}, {nameof(Contrato.InquilinoId)},{nameof(Contrato.InmuebleId)},{nameof(Contrato.FechaInicio)}, {nameof(Contrato.FechaFin)},{nameof(Contrato.PrecioXmes)}
+			var sql = @$"SELECT {nameof(Contrato.Id)}, 
+			                    {nameof(Contrato.InquilinoId)},
+								{nameof(Contrato.InmuebleId)},
+								{nameof(Contrato.FechaInicio)}, 
+								{nameof(Contrato.FechaFin)},
+								{nameof(Contrato.FechaFinAnticipada)},
+								{nameof(Contrato.PrecioXmes)}
 			             FROM Contratos,Inquilinos
                          WHERE Contratos.inquilinoId=@{nameof(Contrato.InquilinoId)} 
                          ;
@@ -205,8 +238,6 @@ public IList<Contrato> GetContratosXinquilino(int idInquilino)
 	}
 	
 }
-
-
 
 
 

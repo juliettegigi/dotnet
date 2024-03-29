@@ -18,6 +18,7 @@ public class Contrato
     
 	public DateTime FechaInicio { get; set; }
 	public DateTime FechaFin { get; set; }
+	public DateTime FechaFinAnticipada { get; set; }
 	public decimal PrecioXmes { get; set; }
     public bool Estado{ get; set; }
   
