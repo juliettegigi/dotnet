@@ -9,12 +9,6 @@ public class RepositorioContrato:RepositorioBase
 {
 	
 
-
-   						  
-
-
-	//readonly string ConnectionString = "Server=localhost;Database=InmobiliariaGutierrez;User=root;Password=;";
-
 	public RepositorioContrato():base()
 	{
 		

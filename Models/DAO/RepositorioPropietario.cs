@@ -7,7 +7,7 @@ namespace InmobiliariaGutierrez.Models.DAO;
 
 public class RepositorioPropietario:RepositorioBase
 {
-	//readonly string ConnectionString = "Server=localhost;Database=InmobiliariaGutierrez;User=root;Password=;";
+
 
 	public RepositorioPropietario():base()
 	{
@@ -45,7 +45,7 @@ public class RepositorioPropietario:RepositorioBase
                             Apellido = reader.GetString(nameof(Propietario.Apellido)),
 							Email = reader.GetString(nameof(Propietario.Email)),
 							Telefono = reader.GetString(nameof(Propietario.Telefono)),
-							Domicilio = reader[nameof(Propietario.Domicilio)]==DBNull.Value ? "" : reader.GetString(reader.GetString(nameof(Propietario.Domicilio))),
+							Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(reader.GetOrdinal(nameof(Propietario.Domicilio))),
 						};
 					}
 				}
@@ -86,13 +86,13 @@ public class RepositorioPropietario:RepositorioBase
                             Apellido = reader.GetString(nameof(Propietario.Apellido)),
 							Email = reader.GetString(nameof(Propietario.Email)),
                             Telefono = reader.GetString(nameof(Propietario.Telefono)),
-							Domicilio = reader[nameof(Propietario.Domicilio)]==DBNull.Value ? "" : reader.GetString(reader.GetString(nameof(Propietario.Domicilio))),
+							Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(reader.GetOrdinal(nameof(Propietario.Domicilio))),
                            //Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(nameof(Propietario.Domicilio)),
 							//Tipo = (TipoInquilino)reader.GetInt32(nameof(Inquilino.Tipo))
 						});
 						
 		                Console.WriteLine("----------------------------------------------------------¡Hola, mundo!");
-		                Console.WriteLine(Propietarios[^1]);
+		               
 					}
 				}
                 
@@ -102,6 +102,8 @@ public class RepositorioPropietario:RepositorioBase
 		
 		return Propietarios;
 	}
+		
+	
 
 	public int AltaPropietario(Propietario propietario){
 		int id = 0;
