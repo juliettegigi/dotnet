@@ -10,7 +10,7 @@ public class InmuebleTipo
 	
 	 public override string ToString()
         {
-            return $"Id: {Id},  Tipo: {Tipo}";
+            return $"tablaexternaInmuble: {Id},  Tipotablaexternainmueble: {Tipo}";
         }
 }
 

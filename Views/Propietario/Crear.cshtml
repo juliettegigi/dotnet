@@ -111,10 +111,10 @@
                             <p>Tipo de inmueble</p>
                             <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
                                 <option selected></option>
-                                <option value="Local">Local</option>
-                                <option value="Deposito">Deposito</option>
-                                <option value="Casa">Casa</option>
-                                <option value="Departamento">Departamento</option>
+                                <option value="1">Local</option>
+                                <option value="2">Deposito</option>
+                                <option value="3">Casa</option>
+                                <option value="4">Departamento</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -140,6 +140,18 @@
                         </div>
                         <div class="mb-3">
                             <input type="text" name="Direccion" class="form-input" required placeholder="Direccion" />
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="Precio" class="form-input" required placeholder="Precio base" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <p>Esta listo para alquilar </p>
+                            <select class="form-select form-select-sm" name="alquilar" aria-label=".form-select-sm example">
+                                <option selected></option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
                         </div>
                        
                         <button type="submit" class="btn btn-primary" onclick="cargarInmobiliaria()">Cargar</button>
