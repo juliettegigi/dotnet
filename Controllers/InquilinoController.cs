@@ -53,4 +53,11 @@ public class InquilinoController : Controller
 		rp.EliminaInquilino(id);
 		return RedirectToAction(nameof(Index));
 	}
+
+	public IActionResult ContratarAlquiler(int id)
+	{
+		var ri=new RepositorioInmueble();
+		
+		return View(ri.GetInmueblesPaginado(10,1));
+	}
 }

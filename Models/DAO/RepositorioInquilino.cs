@@ -60,7 +60,7 @@ public class RepositorioInquilino:RepositorioBase
                          ";
 			 //var sql=""
 			using(var command = new MySqlCommand(sql, connection))
-			{
+			{   
 				connection.Open();
 				using(var reader = command.ExecuteReader())
 				{

@@ -158,6 +158,55 @@ public Inmueble? GetInmueble(int id)
 		return inmuebles;
 	}
 
+
+
+    public IList<Inmueble> GetInmueblesPaginado(int limite, int offset)
+	{
+		var inmuebles = new List<Inmueble>();
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"SELECT {getCamposInmueble("inmuebles")}, 
+			                    {getCamposPropietario("propietarios")},
+								{getCamposInmuebleTipo("inmuebleTipos")}
+			             
+						  FROM inmuebles
+            INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
+            INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+            limit @limite offset @offset;
+            "; 
+
+			using(var command = new MySqlCommand(sql, connection))
+			{   command.Parameters.AddWithValue("limite", limite);
+			    command.Parameters.AddWithValue("offset", offset);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{
+					while(reader.Read())
+					{    
+                         var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
+					    
+					
+						inmuebles.Add(new Inmueble
+						{   Id = reader.GetInt32("idInmueble"),
+							PropietarioId = crearPropietario(reader),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            InmuebleTipoId = crearInmuebleTipo(reader),
+							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
+                            PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
+							Uso = crearUso(reader),
+                            Coordenadas=coordenada
+							
+							
+						});
+					}
+				}
+                
+			}
+             connection.Close();
+		}
+		return inmuebles;
+	}
+
 public int AltaInmueble(Inmueble inmueble)
 {   
     Console.WriteLine("-----------------------------------------------------prrr");

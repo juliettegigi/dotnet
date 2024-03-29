@@ -66,4 +66,35 @@ public abstract class RepositorioBase
 	}	
 
 
+	public Propietario crearPropietario(MySqlDataReader reader){
+		return new Propietario{
+							Id=reader.GetInt32("idPropietario"),
+							DNI=reader.GetString("dni"),
+							Nombre=reader.GetString("nombre"),
+							Apellido=reader.GetString("apellido"),
+							Telefono=reader.GetString("telefono"),
+							Email=reader.GetString("email"),
+							Domicilio = reader.GetString("domicilio")
+						}; 
 	}
+
+	public InmuebleTipo crearInmuebleTipo(MySqlDataReader reader){
+		return new InmuebleTipo{
+							Id=reader.GetInt32("idInmuebleTipo"),
+							Tipo=reader.GetString("tipo")
+						};
+	}
+
+
+public TipoUso crearUso(MySqlDataReader reader){
+	                    string valorUso = reader.GetString("uso");
+						TipoUso uso;
+						Enum.TryParse(valorUso, out uso);
+						return uso;
+}
+
+	}
+
+
+
+	
