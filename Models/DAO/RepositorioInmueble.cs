@@ -42,20 +42,19 @@ public Inmueble? GetInmueble(int id)
             FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
-            WHERE inmuebles.id = @id"; // Añadido filtro por id
+            WHERE inmuebles.id = @id";
         using (var command = new MySqlCommand(sql, connection))
         {
-            command.Parameters.AddWithValue("@id", id); // Corregido nombre del parámetro
+            command.Parameters.AddWithValue("@id", id);
             connection.Open();
             using (var reader = command.ExecuteReader())
             {
                 if (reader.Read())
                 {
-                    // Declaración de variables
                     Propietario propietario;
                     InmuebleTipo tipo;
+                    TipoUso uso;
 
-                    // Lectura de propietario
                     propietario = new Propietario
                     {
                         Id = reader.GetInt32("idPropietario"),
@@ -64,25 +63,24 @@ public Inmueble? GetInmueble(int id)
                         Apellido = reader.GetString("apellido"),
                         Email = reader.GetString("email"),
                         Telefono = reader.GetString("telefono"),
-                        Domicilio = reader.IsDBNull(reader.GetOrdinal("domicilio")) ? "" : reader.GetString("domicilio"), // Corregida lectura del valor de la base de datos
+                        Domicilio = reader.IsDBNull(reader.GetOrdinal("domicilio")) ? "" : reader.GetString("domicilio"),
                     };
 
-                    // Lectura de tipo de inmueble
                     tipo = new InmuebleTipo
                     {
                         Id = reader.GetInt32("idInmuebleTipo"),
                         Tipo = reader.GetString("tipo")
                     };
 
-                    // Lectura de coordenadas
                     var coordenada = new Coordenada(
                         reader.GetDecimal("cLatitud"),
                         reader.GetDecimal("cLongitud")
                     );
-				
-								
 
-                    // Creación del objeto inmueble
+                    // Lectura del uso y conversión a TipoUso
+                    var usoString = reader.GetString("uso");
+                    Enum.TryParse<TipoUso>(usoString, out uso);
+
                     inmueble = new Inmueble
                     {
                         Id = reader.GetInt32("idInmueble"),
@@ -90,13 +88,12 @@ public Inmueble? GetInmueble(int id)
                         Direccion = reader.GetString("direccion"),
                         InmuebleTipoId = tipo,
                         CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
-                        Uso = (TipoUso)reader.GetInt32("uso"),
+                        Uso = uso,
                         Coordenadas = coordenada,
                     };
                 }
             }
         }
-        connection.Close();
     }
     return inmueble;
 }
@@ -382,8 +379,77 @@ public int getCantidadRegistros()
 		}
         
 		return cantidad;
-	}
+	}public IList<Inmueble> GetInmueblesPorId(int id)
+{
+    var inmuebles = new List<Inmueble>();
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"
+            SELECT i.id AS idInmueble,
+                   i.propietarioId,
+                   i.inmuebleTipoId,
+                   i.direccion,
+                   i.cantidadAmbientes,
+                   i.uso,
+                   i.precioBase,
+                   i.cLatitud,
+                   i.cLongitud,
+                   i.suspendido,
+                   p.id AS idPropietario,
+                   p.dni,
+                   p.nombre,
+                   p.apellido,
+                   p.telefono,
+                   p.email,
+                   p.domicilio,
+                   it.id AS idInmuebleTipo,
+                   it.tipo
+            FROM inmuebles i
+            INNER JOIN propietarios p ON i.propietarioId = p.id
+            INNER JOIN inmuebleTipos it ON i.inmuebleTipoId = it.id
+            WHERE i.id = @id
+            ORDER BY i.id";
+                     
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@id", id);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var coordenada = new Coordenada(reader.GetDecimal("cLatitud"), reader.GetDecimal("cLongitud"));
 
+                    inmuebles.Add(new Inmueble
+                    {
+                        Id = reader.GetInt32("idInmueble"),
+                        PropietarioId = new Propietario
+                        {
+                            Id = reader.GetInt32("idPropietario"),
+                            DNI = reader.GetString("dni"),
+                            Nombre = reader.GetString("nombre"),
+                            Apellido = reader.GetString("apellido"),
+                            Email = reader.GetString("email"),
+                            Telefono = reader.GetString("telefono"),
+                            Domicilio = reader.IsDBNull(reader.GetOrdinal("domicilio")) ? "" : reader.GetString("domicilio"),
+                        },
+                        Direccion = reader.GetString("direccion"),
+                        InmuebleTipoId = new InmuebleTipo
+                        {
+                            Id = reader.GetInt32("idInmuebleTipo"),
+                            Tipo = reader.GetString("tipo")
+                        },
+                        CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
+                        PrecioBase = reader.GetDecimal("precioBase"),
+                        Uso = (TipoUso)reader.GetInt32("uso"),
+                        Coordenadas = coordenada
+                    });
+                }
+            }
+        }
+    }
+    return inmuebles;
+}
 
 	
 }

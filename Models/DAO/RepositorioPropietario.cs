@@ -151,9 +151,8 @@ public class RepositorioPropietario:RepositorioBase
 			var sql = @$"UPDATE Propietarios
 				         SET {nameof(Propietario.DNI)} = @{nameof(Propietario.DNI)},
 				             {nameof(Propietario.Nombre)} = @{nameof(Propietario.Nombre)},
-				             {nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},
-				             {nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
-				             {nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)}
+				             {nameof(Propietario.Apellido)} = @{nameof(Propietario.Apellido)},				             {nameof(Propietario.Telefono)} = @{nameof(Propietario.Telefono)},
+							 {nameof(Propietario.Email)} = @{nameof(Propietario.Email)},
 				             {nameof(Propietario.Domicilio)} = @{nameof(Propietario.Domicilio)}
 				         WHERE {nameof(Propietario.Id)} = @{nameof(Propietario.Id)};";
 			using(var command = new MySqlCommand(sql, connection))
@@ -162,8 +161,9 @@ public class RepositorioPropietario:RepositorioBase
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Nombre)}", propietario.Nombre);
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Apellido)}", propietario.Apellido);
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", propietario.Email);
+				command.Parameters.AddWithValue($"@{nameof(Propietario.Domicilio)}", propietario.Domicilio);
                 command.Parameters.AddWithValue($"@{nameof(Propietario.Telefono)}", propietario.Telefono);
-                command.Parameters.AddWithValue($"@{nameof(Propietario.Domicilio)}", propietario.Domicilio);
+                
 				command.Parameters.AddWithValue($"@{nameof(Propietario.Id)}", propietario.Id);
 				connection.Open();
 				command.ExecuteNonQuery();

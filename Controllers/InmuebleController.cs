@@ -23,8 +23,26 @@ public class InmuebleController : Controller
 		
 		return View();
 	}
+public IActionResult VerInmueble(Propietario propietario)
+{
+    RepositorioInmueble ri = new RepositorioInmueble();
+    IList<Inmueble> inmuebles = ri.GetInmueblesPorId(propietario.Id);
+
+    return View("Index");
+}
+  	public IActionResult NuevoInmueble(Propietario propietario)
+	{
+		 ModalViewModel viewModel = new ModalViewModel();
+         viewModel.MostrarModal = true;
+				 viewModel.Apellido = propietario.Nombre+" "+propietario.Apellido;
+				 viewModel.Documento = propietario.DNI;
+				 viewModel.Id = propietario.Id;
+				 
+			      return View("~/Views/Propietario/Crear.cshtml", viewModel);
+	
+	}
       
-   public IActionResult CargarInmueble(int Id, string Direccion, string Uso, string Tipo, int Cantidad_habitacion, string latitud, string longitud, string Precio,string alquilar)
+   public IActionResult CargarInmueble(int Id, string Name,string Dni,string Direccion, string Uso, string Tipo, int Cantidad_habitacion, string latitud, string longitud, string Precio,string alquilar,string nextinmuebles)
    
    {  
     try
@@ -60,17 +78,32 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
            inmueble.Suspendido=true;
          }
        
-        if(Uso=="Comercial")
+        if(Uso=="1")
         {inmueble.Uso=TipoUso.Comercial;}
         else
         { inmueble.Uso=TipoUso.Residencial;}
           
          RepositorioInmueble repo = new RepositorioInmueble(); 
-         Console.WriteLine(inmueble.ToString());
+         Console.WriteLine(Uso,"generacion");
         repo.AltaInmueble(inmueble);
          ViewBag.CurrentUrl = Request.Path;
+         
+         if(nextinmuebles=="1"){
+          ModalViewModel viewModel=new ModalViewModel();
+          viewModel.MostrarModal = true;
+				 viewModel.Apellido = Name;
+				 viewModel.Documento = Dni;
+				 viewModel.Id = Id;
+				 
+			      return View("~/Views/Propietario/Crear.cshtml", viewModel);
+          
 
-        return View("~/Views/Home/Index.cshtml");
+         }
+         else{
+            return View("~/Views/Home/Index.cshtml");
+
+         }
+      
        
     }
     catch (Exception ex)

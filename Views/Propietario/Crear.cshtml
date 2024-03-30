@@ -67,6 +67,9 @@
             <div class="form-group">
                 <input type="text" name="Telefono" class="form-input" placeholder="Telefono" />
             </div>
+              <div class="form-group">
+                <input type="text" name="Direccion" class="form-input" placeholder="Direccion" />
+            </div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
@@ -103,8 +106,8 @@
                             <p>Cual es su Uso</p>
                             <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
                                 <option selected></option>
-                                <option value="Comercial">Comercial</option>
-                                <option value="Residencial">Residencial</option>
+                                <option value="1">Comercial</option>
+                                <option value="0">Residencial</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -146,14 +149,21 @@
                         </div>
                         
                         <div class="mb-3">
-                            <p>Esta listo para alquilar </p>
+                            <p>¿Esta listo para alquilar? </p>
                             <select class="form-select form-select-sm" name="alquilar" aria-label=".form-select-sm example">
                                 <option selected></option>
                                 <option value="1">Si</option>
                                 <option value="0">No</option>
                             </select>
                         </div>
-                       
+                        <div class="mb-3">
+                            <p>¿Desea agregar un nuevo inmueble? </p>
+                            <select class="form-select form-select-sm" name="nextinmuebles" aria-label=".form-select-sm example">
+                                <option selected></option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary" onclick="cargarInmobiliaria()">Cargar</button>
                     </form>
                 </div>
