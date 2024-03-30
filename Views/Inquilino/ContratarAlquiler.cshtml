@@ -1,4 +1,4 @@
-@model IEnumerable<InmobiliariaGutierrez.Models.VO.Inmueble>
+@model InmobiliariaGutierrez.Views.Inquilino.ContratarAlquilerView
 
 <div>
 <h1>ContratarAlquiler</h1>
@@ -6,8 +6,8 @@
 </div>
 
 
-<table class="display" style="width:100%">
-        <thead>
+<table class="table table-hover table-sm align-middle table-responsive" >
+        <thead class="table-dark">
             <tr>
 				<th>ID</th>
                 <th>propietario</th>
@@ -18,36 +18,88 @@
                 <th></th>
             </tr>
 		</thead>
-        <tbody>
-			@foreach (var item in Model){
+        <tbody >
+      @{int i=0;}
+			@foreach (var item in Model.Lista){
             		<tr>
-            		    <td>@item.Id</td>
-            		    <td>@item.PropietarioId.Nombre</td>
-            		    <td>@item.InmuebleTipoId.Tipo</td>
-            		    <td>@item.Direccion</td>
-            		    <td>@item.PrecioBase</td>
-            		    <td>@item.Uso</td>
-						<td class="d-flex">
-						</td>
-            		</tr>
+            		      <td>                           
+                          @item.Id
+                      </td>
+            		      <td>
+                            <p class="d-inline-flex gap-1">
+                                 <button type="button" class="btn btn-outline-secondary btn-sm collapsed"  
+                                         data-bs-toggle="collapse" 
+                                         data-bs-target="#infoPersona@(i)" 
+                                         aria-expanded="false" 
+                                         aria-controls="infoPersona@(i)" > @item.PropietarioId.Nombre @item.PropietarioId.Apellido
+                                 </button>
+                            </p>
+                            <div class="collapse" id="infoPersona@(i)" >
+                                <div class="card card-body">
+                                    <p>Documento: @item.PropietarioId.DNI</p>
+                                    <p>Email: @item.PropietarioId.Email</p>
+                                 </div> 
+                            </div>
+                            
+                      </td>
+            		      <td>@item.InmuebleTipoId.Tipo</td>
+            		      <td>@item.Direccion</td>
+            		      <td>@item.PrecioBase</td>
+            		      <td>@item.Uso</td>
+                     @{i++;}
+            	</tr>
            }
 		</tbody>
 	</table>
 
 <nav aria-label="Page navigation example">
   <ul class="pagination">
+     @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Previous">
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
+
+    
+      @for(i=0;i<@Model.Lista.Count;i++){
+         string active = Model.Page == Model.PrimerNumero ? "active" : "";
+        <li class="page-item @active">
+          <a class="page-link"
+             asp-controller="Inquilino"
+             asp-action="ContratarAlquiler"       
+             asp-route-page="@Model.PrimerNumero">
+             @Model.PrimerNumero
+          </a>
+        </li>
+         Model.PrimerNumero++;
+    }
+  
+    
+    @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
+    <li>
+      <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Filtrar</button>
+
+    </li>
   </ul>
 </nav> 
+
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header border-secondary">
+    <h5 class="offcanvas-title border-secondary" id="offcanvasRightLabel">Filtros</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div>  
+      <span class="placeholder col-12 placeholder-xs"></span>
+  </div>
+  <div class="offcanvas-body ">
+    ...
+  </div>
+</div>

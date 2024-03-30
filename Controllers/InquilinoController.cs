@@ -2,8 +2,8 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
+using InmobiliariaGutierrez.Views.Inquilino;
 using InmobiliariaGutierrez.Models.DAO;
-
 namespace InmobiliariaGutierrez.Controllers;
 
 public class InquilinoController : Controller
@@ -54,10 +54,25 @@ public class InquilinoController : Controller
 		return RedirectToAction(nameof(Index));
 	}
 
-	public IActionResult ContratarAlquiler(int id)
-	{
+	public IActionResult ContratarAlquiler(int page,int limit=5)
+	{    
+		int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();
+		IList<Inmueble>lista =ri.GetInmueblesPaginado(limit,offset);
+		int totalReg=ri.getCantidadRegistros();
+		int cantidadPaginas=totalReg/limit;
+		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
+		var objetoView=new ContratarAlquilerView{Lista=lista};
+		objetoView.PrimerNumero=page%5!=0?(page/5)*5+1:((page-1)/5)*5+1;
+		objetoView.Page=page;
+		objetoView.CantidadPaginas=cantidadPaginas;
+		Console.WriteLine("------------------------------------------------------");
+		Console.WriteLine(objetoView.PrimerNumero);
 		
-		return View(ri.GetInmueblesPaginado(10,1));
+		
+		
+		return View(objetoView);
 	}
+	
 }
+

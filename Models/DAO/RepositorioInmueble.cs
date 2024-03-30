@@ -172,6 +172,7 @@ public Inmueble? GetInmueble(int id)
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+            order by idInmueble
             limit @limite offset @offset;
             "; 
 
@@ -359,5 +360,32 @@ public IList<Inmueble> GetInmueblesXpropietario(int PropietarioId)
 		}
 		return Inmuebles;
 	}
+
+public int getCantidadRegistros()
+	{   int cantidad=0;
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"  SELECT COUNT(*) AS cantidadRegistros
+                           FROM Inmuebles;";
+			using(var command = new MySqlCommand(sql, connection))
+			{    
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+                {
+                       if (reader.Read())
+                          cantidad=reader.GetInt32("cantidadRegistros");
+                }
+				
+				
+			}
+            connection.Close();
+		}
+        
+		return cantidad;
+	}
+
+
 	
 }
+
+
