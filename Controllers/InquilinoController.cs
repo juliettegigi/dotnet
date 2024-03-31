@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
-using InmobiliariaGutierrez.Views.Inquilino;
+using InmobiliariaGutierrez.Views.InquilinoView;
 using InmobiliariaGutierrez.Models.DAO;
 namespace InmobiliariaGutierrez.Controllers;
 

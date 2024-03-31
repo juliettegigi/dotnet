@@ -15,8 +15,8 @@ public abstract class RepositorioBase
 		}
 
 
-		public String getCamposContrato(String nombreTabla){
-         return @$"{nombreTabla}.id as idContrato, 
+		public String getCamposContrato(String nombreTabla, String id,String como){
+         return @$"{nombreTabla}.{id } as {como}, 
 	               {nombreTabla}.inquilinoId,
 				   {nombreTabla}.inmuebleId,
 				   {nombreTabla}.fechaInicio,
@@ -25,8 +25,8 @@ public abstract class RepositorioBase
 				   {nombreTabla}.precioXmes,
 				   {nombreTabla}.estado";
 	}
-    public String getCamposInquilino(String nombreTabla){
-             return @$"{nombreTabla}.id as idInquilino,
+    public String getCamposInquilino(String nombreTabla, String id,String como){
+             return @$"{nombreTabla}.{id} as {como},
 	                   {nombreTabla}.dni as dniInq,
 					   {nombreTabla}.nombre as nombreInq,
 					   {nombreTabla}.apellido as apellidoInq,
@@ -34,9 +34,9 @@ public abstract class RepositorioBase
 					   {nombreTabla}.email as emailInq,
 					   {nombreTabla}.domicilio as domicilioInq";
 	}
-	public String getCamposInmueble(String nombreTabla){
+	public String getCamposInmueble(String nombreTabla, String id,String como){
           return  @$"
-	                  {nombreTabla}.id as idInmueble,
+	                  {nombreTabla}.{id } as {como},
 	                  {nombreTabla}.propietarioId,
 	                  {nombreTabla}.inmuebleTipoId,
 	                  {nombreTabla}.direccion,
@@ -50,13 +50,13 @@ public abstract class RepositorioBase
                      ";
 	               }
 
-	public String getCamposInmuebleTipo(String nombreTabla){
-		return @$"{nombreTabla}.id as idInmuebleTipo,
+	public String getCamposInmuebleTipo(String nombreTabla, String id,String como){
+		return @$"{nombreTabla}.{id} as {como},
                   {nombreTabla}.tipo";
 	}			
 
-	public String getCamposPropietario(String nombreTabla){
-		return @$"{nombreTabla}.id as idPropietario,
+	public String getCamposPropietario(String nombreTabla, String id,String como){
+		return @$"{nombreTabla}.{id } as {como},
                   {nombreTabla}.dni,
                   {nombreTabla}.nombre,
                   {nombreTabla}.apellido,
@@ -93,7 +93,57 @@ public TipoUso crearUso(MySqlDataReader reader){
 						return uso;
 }
 
+
+public Inquilino crearInquilino(MySqlDataReader reader){
+	return new Inquilino
+						{
+							Id = reader.GetInt32("idInquilino"),
+							DNI = reader.GetString($"{nameof(Inquilino.DNI)}Inq"),
+                            Nombre = reader.GetString($"{nameof(Inquilino.Nombre)}Inq"),
+                            Apellido = reader.GetString($"{nameof(Inquilino.Apellido)}Inq"),
+							Email = reader.GetString($"{nameof(Inquilino.Email)}Inq"),
+							Telefono = reader.GetString($"{nameof(Inquilino.Telefono)}Inq"),
+							Domicilio = reader.GetString($"{nameof(Inquilino.Domicilio)}Inq"),
+						};
+					}
+
+
+
+
+
+	public Inmueble crearInmueble(MySqlDataReader reader,Propietario propietario,InmuebleTipo tipo ,Coordenada coordenada,TipoUso uso){
+	return  new Inmueble
+                    {
+                        Id = reader.GetInt32("idInmueble"),
+                        PropietarioId = propietario,
+                        Direccion = reader.GetString("direccion"),
+                        InmuebleTipoId = tipo,
+                        CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
+                        Uso = uso,
+                        Coordenadas = coordenada,
+                    };			
+}
+
+
+public Coordenada crearCoordenadas(MySqlDataReader reader){
+	return new Coordenada(
+                        reader.GetDecimal("cLatitud"),
+                        reader.GetDecimal("cLongitud")
+                    );
+}
+
+	
 	}
+
+
+	
+
+
+
+
+
+
+
 
 
 

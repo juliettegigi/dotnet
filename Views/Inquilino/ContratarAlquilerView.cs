@@ -1,6 +1,6 @@
 using System.Data;
 using InmobiliariaGutierrez.Models.VO;
-namespace InmobiliariaGutierrez.Views.Inquilino;
+namespace InmobiliariaGutierrez.Views.InquilinoView;
 public class ContratarAlquilerView{
 	public int PrimerNumero {get;set;}
 	public int Page {get;set;}

@@ -162,9 +162,9 @@ public Inmueble? GetInmueble(int id)
 		var inmuebles = new List<Inmueble>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"SELECT {getCamposInmueble("inmuebles")}, 
-			                    {getCamposPropietario("propietarios")},
-								{getCamposInmuebleTipo("inmuebleTipos")}
+			var sql = @$"SELECT {getCamposInmueble("inmuebles","id","id")}, 
+			                    {getCamposPropietario("propietarios","id","idPropietario")},
+								{getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")}
 			             
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
@@ -345,9 +345,9 @@ public int getCantidadRegistros()
     using (var connection = new MySqlConnection(ConnectionString))
     {
         var sql = @$"
-            SELECT  {getCamposInmueble("inmuebles")},
-                    {getCamposPropietario("propietarios")},
-                    {getCamposInmuebleTipo("inmuebleTipos")}
+            SELECT  {getCamposInmueble("inmuebles","id","id")},
+                    {getCamposPropietario("propietarios","id","idPropietario")},
+                    {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")}
                     FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id

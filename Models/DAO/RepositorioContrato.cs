@@ -173,7 +173,7 @@ public class RepositorioContrato:RepositorioBase
 	}
 
 
-	public int EliminaContrato(int id)
+	public int EliminarContrato(int id)
 	{
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
@@ -245,21 +245,21 @@ public IList<Contrato> GetContratosTerminan(int dias)
 		var Contratos = new List<Contrato>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$" select {getCamposContrato("contratos")},
-			                     {getCamposInquilino("inquilinos")},
-								 {getCamposInmueble("inmuebleCompleto")}, 
-						         {getCamposInmuebleTipo("inmuebleCompleto")},
-								 {getCamposPropietario("inmuebleCompleto")}
+			var sql = @$" select {getCamposContrato("contratos","id","id")},
+			                     {getCamposInquilino("inquilinos","id","idInquilino")},
+								 {getCamposInmueble("inmuebleCompleto","idInmueble","idInmueble")}, 
+						         {getCamposInmuebleTipo("inmuebleCompleto","idInmuebleTipo","idInmuebleTipo")},
+								 {getCamposPropietario("inmuebleCompleto","idPropietario","idPropietario")}
 						  from contratos 
 	                      inner join inquilinos on contratos.inquilinoId=inquilinos.id
-                          inner join (   select {getCamposInmueble("inmuebles")}, 
-                                                {getCamposInmuebleTipo("inmuebleTipos")},
-									   		    {getCamposPropietario("propietarios")}
+                          inner join (   select {getCamposInmueble("inmuebles","id","idInmueble")}, 
+                                                {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")},
+									   		    {getCamposPropietario("propietarios","id","idPropietario")}
                                          from inmuebles 
                                          inner join Inmuebletipos on inmuebles.inmuebletipoId=inmuebletipos.id
                                          inner join propietarios on inmuebles.propietarioId=propietarios.id
 									  ) AS inmuebleCompleto 
-                               on contratos.inmuebleId=inmuebleCompleto.idInmueble
+                          on contratos.inmuebleId=inmuebleCompleto.idInmueble
                         where datediff(fechaFin,curdate())=30;
                          
                          ";		 
@@ -332,8 +332,105 @@ public IList<Contrato> GetContratosTerminan(int dias)
 		return Contratos;
 	}
 
-	
+
+	public IList<Contrato> GetContratosPaginado(int limite, int offset)
+	{
+		var contratos = new List<Contrato>();
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"SELECT {getCamposContrato("contratos","id","id")}, 
+			                    {getCamposInquilino("inquilinos","id","idInquilino")},
+								{getCamposInmueble("inmueblesCompleto","idInmueble","idInmueble")},
+								{getCamposPropietario("inmueblesCompleto","idPropietario","idPropietario")},
+								{getCamposInmuebleTipo("inmueblesCompleto","idInmuebleTipo","idInmuebleTipo")}
+						FROM contratos
+                        
+						INNER JOIN inquilinos 
+						ON contratos.inquilinoId=Inquilinos.id
+                        
+						INNER JOIN (   SELECT {getCamposInmueble("inmuebles","id","idInmueble")},
+						                      {getCamposPropietario("propietarios","id","idPropietario")},
+								              {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")} 
+		                               FROM inmuebles
+                                       
+									   INNER JOIN propietarios 
+									   on inmuebles.propietarioId=propietarios.id
+                                       
+									   INNER JOIN inmuebleTipos 
+									   on inmuebles.inmuebleTipoId=inmuebleTipos.id
+									) as inmueblesCompleto
+	                    ON contratos.inmuebleId=idInmueble
+						
+						order by id
+                        limit 5 offset 0;
+ 
+
+            "; 
+			Console.WriteLine(sql);
+
+			using(var command = new MySqlCommand(sql, connection))
+			{   command.Parameters.AddWithValue("limite", limite);
+			    command.Parameters.AddWithValue("offset", offset);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{
+					while(reader.Read())
+					{    
+                         var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
+					    
+					
+						contratos.Add(new Contrato
+						{   Id = reader.GetInt32("idInmueble"),
+							InquilinoId= crearInquilino(reader),
+							InmuebleId= crearInmueble(reader,crearPropietario(reader),crearInmuebleTipo(reader),crearCoordenadas(reader),crearUso(reader)),
+                            FechaInicio= reader.GetDateTime(nameof(Contrato.FechaInicio)),
+							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
+                            PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
+                            Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+							
+							
+						});
+					}
+				}
+                
+			}
+             connection.Close();
+		}
+		return contratos;
+	}
+
+	public int getCantidadRegistros()
+	{   int cantidad=0;
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"  SELECT COUNT(*) AS cantidadRegistros
+                           FROM contratos;";
+			using(var command = new MySqlCommand(sql, connection))
+			{    
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+                {
+                       if (reader.Read())
+                          cantidad=reader.GetInt32("cantidadRegistros");
+                }
+				
+				
+			}
+            connection.Close();
+		}
+        
+		return cantidad;
+	}
+    
 }
 
 
 
+
+
+
+
+
+
+ 
