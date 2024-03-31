@@ -352,7 +352,7 @@ public int getCantidadRegistros()
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
             WHERE propietarioId = @id
-            ORDER BY idInmueble";
+            ORDER BY id";
                      
         using (var command = new MySqlCommand(sql, connection))
         {
@@ -364,7 +364,7 @@ public int getCantidadRegistros()
                 {
                     var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
 					inmuebles.Add(new Inmueble
-						{   Id = reader.GetInt32("idInmueble"),
+						{   Id = reader.GetInt32("id"),
 							PropietarioId = crearPropietario(reader),
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                             InmuebleTipoId = crearInmuebleTipo(reader),
