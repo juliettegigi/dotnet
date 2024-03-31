@@ -169,7 +169,7 @@ public Inmueble? GetInmueble(int id)
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
-            order by idInmueble
+            order by id
             limit @limite offset @offset;
             "; 
 
@@ -185,7 +185,7 @@ public Inmueble? GetInmueble(int id)
 					    
 					
 						inmuebles.Add(new Inmueble
-						{   Id = reader.GetInt32("idInmueble"),
+						{   Id = reader.GetInt32("id"),
 							PropietarioId = crearPropietario(reader),
                             Direccion = reader.GetString(nameof(Inmueble.Direccion)),
                             InmuebleTipoId = crearInmuebleTipo(reader),

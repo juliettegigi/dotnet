@@ -1,7 +1,15 @@
 @model InmobiliariaGutierrez.Views.ContratoView.IndexView
 
 <div>
-<h1>Lista de contratos</h1>
+<h1 class="d-flex">Lista de contratos
+    <form asp-action="Editar"  method="post">
+        <button type="submit"  class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+             <i class="bi bi-plus"></i>
+        </button>
+    </form>
+    
+
+</h1>
 
 </div>
 
@@ -122,3 +130,8 @@
     </li>
   </ul>
 </nav> 
+<script>
+    $(document).ready(function(){
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>
