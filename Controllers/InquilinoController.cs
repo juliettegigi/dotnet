@@ -58,16 +58,19 @@ public class InquilinoController : Controller
 	{    
 		int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();
+		var rit=new RepositorioInmuebleTipo();
+		IList<InmuebleTipo>listaTipos =rit.GetInmuebleTipos();
 		IList<Inmueble>lista =ri.GetInmueblesPaginado(limit,offset);
+
 		int totalReg=ri.getCantidadRegistros();
 		int cantidadPaginas=totalReg/limit;
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
+		
 		var objetoView=new ContratarAlquilerView{Lista=lista};
 		objetoView.PrimerNumero=page%5!=0?(page/5)*5+1:((page-1)/5)*5+1;
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
-		Console.WriteLine("------------------------------------------------------");
-		Console.WriteLine(objetoView.PrimerNumero);
+		objetoView.ListaTipos=listaTipos;
 		
 		
 		
