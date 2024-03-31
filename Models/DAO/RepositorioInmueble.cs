@@ -312,51 +312,7 @@ public int AltaInmueble(Inmueble inmueble)
 	}
 
 
-public IList<Inmueble> GetInmueblesXpropietario(int PropietarioId)
-	{
-		var Inmuebles = new List<Inmueble>();
-		using(var connection = new MySqlConnection(ConnectionString))
-		{
-			var sql = @$"SELECT {nameof(Inmueble.Id)}, {nameof(Inmueble.PropietarioId)},{nameof(Inmueble.Direccion)},{nameof(Inmueble.InmuebleTipoId)}, {nameof(Inmueble.CantidadAmbientes)},{nameof(Inmueble.Uso)},{nameof(Inmueble.Coordenadas.CLatitud)},{nameof(Inmueble.Coordenadas.CLongitud)}
-			             FROM inmuebles, propietarios
-                         WHERE inmuebles.propietarioId=@{nameof(Inmueble.PropietarioId)} 
-                         ;
-                         ";
-			using(var command = new MySqlCommand(sql, connection))
-			{
-				connection.Open();
-				using(var reader = command.ExecuteReader())
-				{   var rp=new RepositorioPropietario(); 
-                    var propietario=rp.GetPropietario(reader.GetInt32(nameof(Propietario.Id)));
-					var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)),reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)));
-					while(reader.Read())
-					{
-                         	   var tipo = new InmuebleTipo
-                    {
-                        Id = reader.GetInt32("idInmuebleTipo"),
-                        Tipo = reader.GetString("tipo")
-                    };
 
-
-						Inmuebles.Add(new Inmueble
-						{   
-                            Id = reader.GetInt32(nameof(Inmueble.Id)),
-							PropietarioId = propietario,
-                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
-                           
-							InmuebleTipoId = tipo,
-							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
-							Uso = (TipoUso)reader.GetInt32(nameof(Inmueble.Uso)),
-							Coordenadas=coordenada,
-						});
-					}
-				}
-                
-			}
-             connection.Close();
-		}
-		return Inmuebles;
-	}
 
 public int getCantidadRegistros()
 	{   int cantidad=0;
@@ -379,71 +335,46 @@ public int getCantidadRegistros()
 		}
         
 		return cantidad;
-	}public IList<Inmueble> GetInmueblesPorId(int id)
+	}
+    
+    
+    
+    public IList<Inmueble> GetInmueblesPorIdPropietario(int propietarioId)
 {
     var inmuebles = new List<Inmueble>();
     using (var connection = new MySqlConnection(ConnectionString))
     {
-        var sql = @"
-            SELECT i.id AS idInmueble,
-                   i.propietarioId,
-                   i.inmuebleTipoId,
-                   i.direccion,
-                   i.cantidadAmbientes,
-                   i.uso,
-                   i.precioBase,
-                   i.cLatitud,
-                   i.cLongitud,
-                   i.suspendido,
-                   p.id AS idPropietario,
-                   p.dni,
-                   p.nombre,
-                   p.apellido,
-                   p.telefono,
-                   p.email,
-                   p.domicilio,
-                   it.id AS idInmuebleTipo,
-                   it.tipo
-            FROM inmuebles i
-            INNER JOIN propietarios p ON i.propietarioId = p.id
-            INNER JOIN inmuebleTipos it ON i.inmuebleTipoId = it.id
-            WHERE i.id = @id
-            ORDER BY i.id";
+        var sql = @$"
+            SELECT  {getCamposInmueble("inmuebles")},
+                    {getCamposPropietario("propietarios")},
+                    {getCamposInmuebleTipo("inmuebleTipos")}
+                    FROM inmuebles
+            INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
+            INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+            WHERE propietarioId = @id
+            ORDER BY idInmueble";
                      
         using (var command = new MySqlCommand(sql, connection))
         {
-            command.Parameters.AddWithValue("@id", id);
+            command.Parameters.AddWithValue("@id", propietarioId);
             connection.Open();
             using (var reader = command.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    var coordenada = new Coordenada(reader.GetDecimal("cLatitud"), reader.GetDecimal("cLongitud"));
-
-                    inmuebles.Add(new Inmueble
-                    {
-                        Id = reader.GetInt32("idInmueble"),
-                        PropietarioId = new Propietario
-                        {
-                            Id = reader.GetInt32("idPropietario"),
-                            DNI = reader.GetString("dni"),
-                            Nombre = reader.GetString("nombre"),
-                            Apellido = reader.GetString("apellido"),
-                            Email = reader.GetString("email"),
-                            Telefono = reader.GetString("telefono"),
-                            Domicilio = reader.IsDBNull(reader.GetOrdinal("domicilio")) ? "" : reader.GetString("domicilio"),
-                        },
-                        Direccion = reader.GetString("direccion"),
-                        InmuebleTipoId = new InmuebleTipo
-                        {
-                            Id = reader.GetInt32("idInmuebleTipo"),
-                            Tipo = reader.GetString("tipo")
-                        },
-                        CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
-                        PrecioBase = reader.GetDecimal("precioBase"),
-                        Uso = (TipoUso)reader.GetInt32("uso"),
-                        Coordenadas = coordenada
-                    });
+                    var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
+					inmuebles.Add(new Inmueble
+						{   Id = reader.GetInt32("idInmueble"),
+							PropietarioId = crearPropietario(reader),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            InmuebleTipoId = crearInmuebleTipo(reader),
+							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
+                            PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
+							Uso = crearUso(reader),
+                            Coordenadas=coordenada
+							
+							
+						});
                 }
             }
         }

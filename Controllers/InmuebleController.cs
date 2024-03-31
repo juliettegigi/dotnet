@@ -26,9 +26,9 @@ public class InmuebleController : Controller
 public IActionResult VerInmueble(Propietario propietario)
 {
     RepositorioInmueble ri = new RepositorioInmueble();
-    IList<Inmueble> inmuebles = ri.GetInmueblesPorId(propietario.Id);
+    IList<Inmueble> inmuebles = ri.GetInmueblesPorIdPropietario(propietario.Id);
 
-    return View("Index");
+     return RedirectToAction(nameof(Index));
 }
   	public IActionResult NuevoInmueble(Propietario propietario)
 	{
@@ -113,11 +113,6 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
     }
 }
 	
-//------------------------------------------------------------------------------------------------
-
-
-
-//-------------------------------------------------------------------------------
     
    
 	
