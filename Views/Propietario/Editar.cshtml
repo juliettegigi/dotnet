@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
 	<div class="col-md-4">
-		<form asp-action="Guardar" method="post">
+		<form id="formulario" asp-action="Guardar" method="post">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" name="Id" class="form-control" value="@id"  />
 			<div class="form-group">
@@ -36,8 +36,19 @@
 				<input asp-for="Telefono" class="form-control" />
 				<span asp-validation-for="Telefono" class="text-danger"></span>
 			</div>
+			  <div class="form-group">
+				<label asp-for="Domicilio" class="control-label"></label>
+				<input asp-for="Domicilio" class="form-control" />
+				<span asp-validation-for="Domicilio" class="text-danger"></span>
+			</div>
 			<div class="form-group">
 				<input type="submit" value="Guardar" class="btn btn-primary" />
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary" onclick="nuevo()">Nuevo inmueble</button>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary" onclick="actualizar()">Actualizar Inmueble</button>
 			</div>
 		</form>
 	</div>
@@ -46,3 +57,17 @@
 <div>
 	<a asp-action="Index">Volver</a>
 </div>
+@section Scripts {
+    <script>
+        function nuevo() {
+            var formulario = document.getElementById("formulario");
+            formulario.action = "/Inmueble/NuevoInmueble";
+            formulario.submit();
+        }
+		 function actualizar() {
+            var formulario = document.getElementById("formulario");
+            formulario.action = "/Inmueble/VerInmueble";
+            formulario.submit();
+        }
+    </script>
+}
