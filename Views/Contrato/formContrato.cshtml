@@ -1,36 +1,32 @@
+@model InmobiliariaGutierrez.Models.VO.Contrato
 <h4>Contrato</h4>
-<hr />
 <div class="row">
   <div class="col-md-4">
     <form asp-action="Guardar" method="post">
-      <div asp-validation-summary="ModelOnly" class="text-danger"></div>  @if(Model != null){ 
-        <input type="hidden" name="Id" class="form-control" value="@Model.Id" />
-      }
 
-      <div class="form-group">
-        <label asp-for="Nombre" class="control-label"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>  </div>
-      <div class="form-group">
-        <label asp-for="Apellido" class="control-label"></label>
-        <input asp-for="Apellido" class="form-control" />
-        <span asp-validation-for="Apellido" class="text-danger"></span>  </div>
-      <div class="form-group">
-        <label asp-for="DNI" class="control-label"></label>
-        <input asp-for="DNI" class="form-control" />
-        <span asp-validation-for="DNI" class="text-danger"></span>  </div>
-      <div class="form-group">
-        <label asp-for="Email" class="control-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>  </div>
-      <div class="form-group">
-        <label asp-for="Telefono" class="control-label"></label>
-        <input asp-for="Telefono" class="form-control" />
-        <span asp-validation-for="Telefono" class="text-danger"></span>  </div>
-      <div class="form-group">
-        <label asp-for="Domicilio" class="control-label"></label>
-        <input asp-for="Domicilio" class="form-control" />
-        <span asp-validation-for="Domicilio" class="text-danger"></span>  </div>
+           <div class="form-group">
+              <label asp-for="FechaInicio" class="control-label"></label>
+              <input asp-for="FechaInicio" class="form-control" />
+              <span asp-validation-for="FechaInicio" class="text-danger"></span>  
+          </div>
+           <div class="form-group">
+              <label asp-for="FechaFin" class="control-label"></label>
+              <input asp-for="FechaFin" class="form-control" />
+              <span asp-validation-for="FechaFin" class="text-danger"></span>  
+          </div>
+           <div class="form-group">
+              <label asp-for="PrecioXmes" class="control-label"></label>
+              <input asp-for="PrecioXmes" class="form-control" />
+              <span asp-validation-for="PrecioXmes" class="text-danger"></span>  
+          </div>
+          <div class="form-group">
+              <label asp-for="InquilinoId.Nombre" class="control-label">Nombre del inquilino</label>
+              <input asp-for="InquilinoId.Nombre" class="form-control" />
+              <span asp-validation-for="InquilinoId.Nombre" class="text-danger"></span>  
+          </div>
+
+      
+    
       <div class="form-group">
         <input type="submit" value="Guardar" class="btn btn-primary" />
       </div>

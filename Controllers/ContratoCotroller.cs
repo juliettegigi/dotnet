@@ -47,4 +47,12 @@ public class ContratoController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
+
+    public IActionResult FormContrato(int id)
+	{   
+            return View();
+		
+	}
 }

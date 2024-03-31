@@ -46,6 +46,14 @@
             		      <td>@item.Direccion</td>
             		      <td>@item.PrecioBase</td>
             		      <td>@item.Uso</td>
+                      <td> 
+                          <a asp-controller="Contrato" asp-action="FormContrato" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+                              <button type="button"  asp-controller="Contrato" asp-action="FormContrato" class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+                                   <i class="bi bi-plus"></i>
+                              </button>
+                          </a>
+                          
+                      </td>
                      @{i++;}
             	</tr>
            }
@@ -142,3 +150,8 @@
     </div>
   </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>
