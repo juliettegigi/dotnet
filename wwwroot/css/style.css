@@ -34,3 +34,6 @@
     height: 500px;
     width: 100%;
   }
+  .no-search .dataTables_filter {
+    display: none;
+}

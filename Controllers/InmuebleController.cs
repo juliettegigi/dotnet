@@ -18,18 +18,32 @@ public class InmuebleController : Controller
         rp = new RepositorioPropietario();
 	}
 
-	public IActionResult Index()
-	{
-		
-		return View();
-	}
+	public IActionResult Index(string searchTerm)
+        {   Console.WriteLine("Search",searchTerm); 
+            RepositorioInmueble ri = new RepositorioInmueble();
+            var inmuebles = ri.GetInmueblesPaginadoData(7, 0, searchTerm);
+            
+            return View(inmuebles);
+        }
 public IActionResult VerInmueble(Propietario propietario)
-{
-    RepositorioInmueble ri = new RepositorioInmueble();
-    IList<Inmueble> inmuebles = ri.GetInmueblesPorIdPropietario(propietario.Id);
+            {
+                RepositorioInmueble ri = new RepositorioInmueble();
+                IList<Inmueble> inmuebles = ri.GetInmueblesPorIdPropietario(propietario.Id);
 
-     return RedirectToAction(nameof(Index));
-}
+                return RedirectToAction(nameof(Index));
+            }
+
+
+
+    	public IActionResult Editar(int id)
+            {  
+                RepositorioInmueble ri = new RepositorioInmueble();
+                var inmueble = ri.GetInmueble(id);
+                
+                return View(inmueble);
+            }
+
+
   	public IActionResult NuevoInmueble(Propietario propietario)
 	{
 		 ModalViewModel viewModel = new ModalViewModel();

@@ -380,7 +380,55 @@ public int getCantidadRegistros()
         }
     }
     return inmuebles;
+}public IList<Inmueble> GetInmueblesPaginadoData(int limite, int offset, string searchTerm)
+{
+    var inmuebles = new List<Inmueble>();
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @$"SELECT {getCamposInmueble("inmuebles","id","id")}, 
+                            {getCamposPropietario("propietarios","id","idPropietario")},
+                            {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")}
+                         
+                      FROM inmuebles
+                      INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
+                      INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+                      WHERE inmuebles.Direccion LIKE @searchTerm OR
+                            inmuebles.Uso LIKE @searchTerm OR
+                            propietarios.Nombre LIKE @searchTerm -- Agrega todas las columnas que deseas buscar
+                      ORDER BY id
+                      LIMIT @limite OFFSET @offset;";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@limite", limite);
+            command.Parameters.AddWithValue("@offset", offset);
+            command.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%"); // Agrega % alrededor del término de búsqueda para buscar coincidencias parciales
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var coordenada = new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)));
+
+                    inmuebles.Add(new Inmueble
+                    {
+                        Id = reader.GetInt32("id"),
+                        PropietarioId = crearPropietario(reader),
+                        Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                        InmuebleTipoId = crearInmuebleTipo(reader),
+                        CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
+                        PrecioBase = reader.GetDecimal(nameof(Inmueble.PrecioBase)),
+                        Uso = crearUso(reader),
+                        Coordenadas = coordenada
+                    });
+                }
+            }
+        }
+        connection.Close();
+    }
+    return inmuebles;
 }
+
 
 	
 }
