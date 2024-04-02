@@ -32,8 +32,20 @@ public IActionResult VerInmueble(Propietario propietario)
 
                 return RedirectToAction(nameof(Index));
             }
-
-
+         public IActionResult Nuevo(int id)
+            {  
+                RepositorioInmueble ri = new RepositorioInmueble();
+                var inmueble = ri.GetInmueble(id);
+                
+                return View(inmueble);
+            }
+                 public IActionResult Detalle(int id)
+            {  
+                RepositorioInmueble ri = new RepositorioInmueble();
+                var inmueble = ri.GetInmueble(id);
+                
+               return Json(inmueble);
+            }
 
     	public IActionResult Editar(int id)
             {  
