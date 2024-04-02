@@ -1,51 +1,139 @@
 @model InmobiliariaGutierrez.Models.VO.Inmueble
 @{
-	ViewData["Title"] = "Inmueble";
-	int id = Model == null? 0 : Model.Id;
-}
+    ViewData["Title"] = "Home Page";
+}  
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js" integrity="sha384-vVLAXFZdBnVG2FNWV7XyzYZEUksVe2b6GOa5n5Z9lghxFAQB5VBlm5uVKXjy6CP4" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-<h4>Inmueble</h4>
+<script>
+    $(document).ready(function () {
+        iniciarMap();
+    });
+
+    function iniciarMap() {
+        var coord = { lat: -33.29501, lng:  -66.33563 };
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: coord
+        });
+        marker = new google.maps.Marker({
+            position: coord,
+            map: map,
+            draggable: true // Permite arrastrar el marcador
+        });
+
+        // Agrega un listener para el evento de arrastre del marcador
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            document.getElementById('lat').value = event.latLng.lat();
+            document.getElementById('lng').value = event.latLng.lng();
+        });
+    }
+</script>
+    
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDu7va6ywpsO9cysQN_Z7d9goMR2Xw6Sr8&callback=iniciarMap" async defer></script>
+
+<h4>Propietario</h4>
 <hr />
-<div class="row">
-	<div class="col-md-4">
-		<form id="formulario" asp-action="Guardar" method="post">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" name="Id" class="form-control" value="@id"  />
-			<div class="form-group">
-				<label asp-for="Direccion" class="control-label"></label>
-				<input asp-for="Direccion" class="form-control" />
-				<span asp-validation-for="Direccion" class="text-danger"></span>
-			</div>
-            <div class="form-group">
-				<label asp-for="CantidadAmbientes" class="control-label"></label>
-				<input asp-for="CantidadAmbientes" class="form-control" />
-				<span asp-validation-for="CantidadAmbientes" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Uso" class="control-label"></label>
-				<input asp-for="Uso" class="form-control" />
-				<span asp-validation-for="Uso" class="text-danger"></span>
-			</div>
-		
-           
-			  <div class="form-group">
-				<label asp-for="PrecioBase" class="control-label"></label>
-				<input asp-for="PrecioBase" class="form-control" />
-				<span asp-validation-for="PrecioBase" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Guardar" class="btn btn-primary" />
-			</div>
-			
-		</form>
-	</div>
-</div>
+  
 
 <div>
-	<a asp-action="Index">Volver</a>
+    <!-- Formulario de Inmueble -->
+    <form id="formulario2" action="/Inmueble/CargarInmueble" method="post">
+        <div class="mb-3">
+            <label for="nombrePropietario" class="form-label">Nombre : @Model.PropietarioId.Nombre</label>
+            <label for="PropietarioId" class="form-label">Id Propietario : @Model.PropietarioId.Id</label>
+            <input type="hidden" name="NombrePropietario" value="@Model.PropietarioId.Nombre" />
+             <input type="hidden" name="nextinmuebles" value="0" />
+             <input type="hidden" name="PropietarioId" value="@Model.PropietarioId.Id" />
+        </div>
+        <div class="mb-3">
+            <label for="documentoPropietario" class="form-label">Documento : @Model.PropietarioId.DNI</label>
+            <input type="hidden" name="DocumentoPropietario" value="@Model.PropietarioId.DNI" />
+        </div>
+        <div class="mb-3">
+            <label for="idInmueble" class="form-label">ID Inmueble: @Model.Id</label>
+            <input type="hidden" name="IdInmueble" value="@Model.Id" />
+        </div>
+        <div class="mb-3">
+            <p>Cual es su Uso</p>
+            <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
+                <option selected>@Model.Uso</option>
+                <option value="1">Comercial</option>
+                <option value="0">Residencial</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <p>Tipo de inmueble</p>
+            <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
+                <option selected>@Model.InmuebleTipoId.Tipo</option>
+                <option value="1">Local</option>
+                <option value="2">Deposito</option>
+                <option value="3">Casa</option>
+                <option value="4">Departamento</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <p>Cantidad de ambientes</p>
+            <select class="form-select form-select-sm" name="CantidadAmbientes" aria-label=".form-select-sm example">
+                <option selected>@Model.CantidadAmbientes</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <div id="map" style="height: 400px;"></div>
+            <input type="hidden" name="Longitud" id="lng" value="-34.5956145" />
+            <input type="hidden" name="Latitud" id="lat" value="-58.4431949" />
+        </div>
+        <div class="mb-3"
+            <label for="Direccion">Direccion</label>
+            <input type="text" name="Direccion" class="form-control" value="@Model.Direccion" required placeholder="Direccion" />
+        </div>
+        <div class="mb-3">
+             <label for="PrecioBase">Precio</label>
+            <input type="text" name="Precio" class="form-control" value="@Model.PrecioBase" required placeholder="Precio base" />
+        </div>
+        <div class="mb-3">
+            <p>¿Está listo para alquilar?</p>
+            <select class="form-select form-select-sm" name="Alquilar" aria-label=".form-select-sm example">
+                <option selected>@Model.Disponible</option>
+                <option value="1">Si</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+
+                        <button type="submit" class="btn btn-primary" onclick="cargarInmobiliaria()">Cargar</button>
+                    </form>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Volver</a>
 </div>
+
 @section Scripts {
     <script>
-   
+        function cargarInmobiliaria() {
+            var formulario = document.getElementById("formulario2");
+            formulario.action = "/Inmueble/CargarInmueble";
+            formulario.submit();
+        }
     </script>
 }
+
+
+          

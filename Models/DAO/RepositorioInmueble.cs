@@ -90,6 +90,7 @@ public Inmueble? GetInmueble(int id)
                         CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
                         Uso = uso,
                         Coordenadas = coordenada,
+                        PrecioBase=reader.GetDecimal("precioBase"),
                     };
                 }
             }
@@ -259,39 +260,39 @@ public int AltaInmueble(Inmueble inmueble)
     }
     
     return id;
-}
+    }
 
-	public int ModificaInmueble(Inmueble inmueble)
-	{
-		using(var connection = new MySqlConnection(ConnectionString))
-		{
-			var sql = @$"UPDATE Inquilinos
-				SET {nameof(Inmueble.PropietarioId)} = @{nameof(Inmueble.PropietarioId)},
-				{nameof(Inmueble.Direccion)} = @{nameof(Inmueble.Direccion)},
-				{nameof(Inmueble.InmuebleTipoId)} = @{nameof(Inmueble.InmuebleTipoId)},
-				{nameof(Inmueble.CantidadAmbientes)} = @{nameof(Inmueble.CantidadAmbientes)},
-				{nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
-				{nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
-				{nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)}
-				WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
-			using(var command = new MySqlCommand(sql, connection))
-			{
-				command.Parameters.AddWithValue($"@{nameof(Inmueble.PropietarioId)}", inmueble.PropietarioId.Id);
-				command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
-                command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
-				command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", inmueble.Id);
-				connection.Open();
-				command.ExecuteNonQuery();
-				connection.Close();
-				
-			}
-		}
-		return 0;
-	}
+        public int ModificaInmueble(Inmueble inmueble)
+        { Console.WriteLine("Modificadooooooooo");
+            using(var connection = new MySqlConnection(ConnectionString))
+            {
+                var sql = @$"UPDATE Inmuebles
+               
+                   SET  {nameof(Inmueble.Direccion)} = @{nameof(Inmueble.Direccion)},
+                    {nameof(Inmueble.InmuebleTipoId)} = @{nameof(Inmueble.InmuebleTipoId)},
+                    {nameof(Inmueble.CantidadAmbientes)} = @{nameof(Inmueble.CantidadAmbientes)},
+                    {nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
+                    {nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
+                    {nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)}
+                    WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
+                using(var command = new MySqlCommand(sql, connection))
+                {
+                    
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", inmueble.Id);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                    
+                }
+            }
+            return 0;
+        }
 
 
 	public int EliminaInmueble(int id)

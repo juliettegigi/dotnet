@@ -39,10 +39,19 @@ public IActionResult VerInmueble(Propietario propietario)
             {  
                 RepositorioInmueble ri = new RepositorioInmueble();
                 var inmueble = ri.GetInmueble(id);
-                
+                 Console.WriteLine(inmueble.PropietarioId.Id+"cabeszon");
+                   Console.WriteLine(inmueble.Id+"caca");
                 return View(inmueble);
             }
 
+      public IActionResult Guardar(Inmueble inmueble)
+            {  RepositorioInmueble ri = new RepositorioInmueble();
+           
+           Console.WriteLine(inmueble.ToString()+"cabeszon");
+
+            ri.ModificaInmueble(inmueble);
+                return RedirectToAction(nameof(Index));
+            }
 
   	public IActionResult NuevoInmueble(Propietario propietario)
 	{
@@ -56,7 +65,7 @@ public IActionResult VerInmueble(Propietario propietario)
 	
 	}
       
-   public IActionResult CargarInmueble(int Id, string Name,string Dni,string Direccion, string Uso, string Tipo, int Cantidad_habitacion, string latitud, string longitud, string Precio,string alquilar,string nextinmuebles)
+   public IActionResult CargarInmueble(int Id, string Name,string Dni,string Direccion, string Uso, string Tipo, int Cantidad_habitacion, string latitud, string longitud, string Precio,string alquilar,string nextinmuebles, int IdInmueble,int PropietarioId)
    
    {  
     try
@@ -64,7 +73,12 @@ public IActionResult VerInmueble(Propietario propietario)
        
         Inmueble inmueble = new Inmueble();
         inmueble.PropietarioId = new Propietario(); 
+        if(Id>0){
         inmueble.PropietarioId.Id=Id;
+        }
+        if(PropietarioId>0){
+           inmueble.PropietarioId.Id=PropietarioId; 
+        }
         inmueble.Direccion=Direccion;
         
         inmueble.InmuebleTipoId = new InmuebleTipo( );
@@ -99,8 +113,18 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
           
          RepositorioInmueble repo = new RepositorioInmueble(); 
          Console.WriteLine(Uso,"generacion");
-        repo.AltaInmueble(inmueble);
-         ViewBag.CurrentUrl = Request.Path;
+         if(IdInmueble>0){
+            inmueble.Id=IdInmueble;
+            Console.WriteLine(IdInmueble+" InmuebleId");
+            Console.WriteLine(inmueble.PropietarioId.Id+" PropietarioId");
+            repo.ModificaInmueble(inmueble);
+         }
+         else
+        
+        {
+            Console.WriteLine("lololololol  ");
+            repo.AltaInmueble(inmueble);
+         ViewBag.CurrentUrl = Request.Path;}
          
          if(nextinmuebles=="1"){
           ModalViewModel viewModel=new ModalViewModel();

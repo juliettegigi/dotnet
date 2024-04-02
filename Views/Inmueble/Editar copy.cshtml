@@ -1,0 +1,101 @@
+@model InmobiliariaGutierrez.Models.VO.Inmueble
+@{
+	ViewData["Title"] = "Inmueble";
+	int id = Model == null? 0 : Model.Id;
+}
+
+<h4>Inmueble</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form id="formulario" asp-action="Guardar" method="post">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="Id" class="form-control" value="@id"  />
+                <input type="hidden" name="PropietarioId" class="form-control" value="@Model.PropietarioId.Id" />
+
+            
+			<div class="form-group">
+				<label asp-for="Direccion" type="casa" class="control-label"></label>
+				<input asp-for="Direccion" class="form-control" />
+				<span asp-validation-for="Direccion" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label asp-for="CantidadAmbientes" class="control-label"></label>
+				<input asp-for="CantidadAmbientes" class="form-control" />
+				<span asp-validation-for="CantidadAmbientes" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label asp-for="InmuebleTipoId" class="control-label">Tipo de inmueble</label>
+				    <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
+                                <option selected>@Model.InmuebleTipoId.Tipo</option>
+                                <option value="1">Local</option>
+                                <option value="2">Deposito</option>
+                                <option value="3">Casa</option>
+                                <option value="4">Departamento</option>
+                            </select>
+                            <input asp-for="InmuebleTipoId" class="form-control" />
+				<span asp-validation-for="InmuebleTipoId" class="text-danger"></span>
+			</div>
+		<div class="form-group">
+            <label asp-for="Uso" class="control-label"></label>
+                <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
+                    
+                        @if (Model.Uso == InmobiliariaGutierrez.Models.VO.TipoUso.Comercial){
+                            <option value="1" selected >Comercial</option>
+                        <option value="0">Residencial</option>
+                        }
+                        else{
+                        <option value="1" >Comercial</option>
+                        <option value="0" selected>Residencial</option>
+
+                        }
+                    
+                    
+                </select>
+            <span asp-validation-for="Uso" class="text-danger"></span>
+        </div>
+
+		
+           
+			  <div class="form-group">
+				<label asp-for="PrecioBase" class="control-label"></label>
+				<input value="@Model.PrecioBase" class="form-control" />
+				<span asp-validation-for="PrecioBase" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label asp-for="Coordenadas.CLatitud" class="control-label"></label>
+				<input asp-for="Coordenadas.CLatitud" class="form-control" />
+				<span asp-validation-for="Coordenadas.CLatitud" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label asp-for="Coordenadas.CLongitud" class="control-label"></label>
+				<input asp-for="Coordenadas.CLongitud" class="form-control" />
+				<span asp-validation-for="Coordenadas.CLongitud" class="text-danger"></span>
+			</div>
+            <div class="form-group">
+				<label asp-for="Disponible" class="control-label"></label>
+			    <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
+                                <option selected>@Model.Disponible</option>
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                           
+                            </select>
+				<span asp-validation-for="Disponible" class="text-danger"></span>
+			</div>
+            
+			<div class="form-group">
+				<input type="submit" value="Guardar" class="btn btn-primary" />
+			</div>
+			
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Volver</a>
+</div>
+@section Scripts {
+    <script>
+   
+    </script>
+}

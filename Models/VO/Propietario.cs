@@ -1,4 +1,4 @@
-/* Si el propietario no estaba ingresado desde antes, hay que
+	/* Si el propietario no estaba ingresado desde antes, hay que
 agregarlo al sistema solicitando su DNI, apellido, nombre y sus
 datos de contacto.
 */
