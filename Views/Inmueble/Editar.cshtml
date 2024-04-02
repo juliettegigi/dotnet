@@ -1,5 +1,5 @@
-@model InmobiliariaGutierrez.Models.VO.Inmueble
-@{
+@model InmobiliariaGutierrez.Models.VO.Inmueble;
+ @{
     ViewData["Title"] = "Home Page";
 }  
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -58,38 +58,89 @@
         </div>
         <div class="mb-3">
             <p>Cual es su Uso</p>
-            <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
-                <option selected>@Model.Uso</option>
-                <option value="1">Comercial</option>
-                <option value="0">Residencial</option>
-            </select>
+           <select class="form-select form-select-sm" name="Uso" aria-label=".form-select-sm example">
+ 
+                @if (Model.Uso==InmobiliariaGutierrez.Models.VO.TipoUso.Comercial)
+                {
+        <option value="ja" selected>Comercial</option>
+        <option value="jo">Residencial</option>
+    }
+    else if (Model.Uso==InmobiliariaGutierrez.Models.VO.TipoUso.Residencial)
+    {
+        <option value="ja">Comercial</option>
+        <option value="jo" selected>Residencial</option>
+    }
+    else
+    {
+        <option value="ja">Comercial</option>
+        <option value="jo">Residencial</option>
+    }
+    
+</select>
+
         </div>
         <div class="mb-3">
             <p>Tipo de inmueble</p>
             <select class="form-select form-select-sm" name="Tipo" aria-label=".form-select-sm example">
-                <option selected>@Model.InmuebleTipoId.Tipo</option>
-                <option value="1">Local</option>
-                <option value="2">Deposito</option>
-                <option value="3">Casa</option>
-                <option value="4">Departamento</option>
-            </select>
+    @if (Model.InmuebleTipoId.Tipo == "Local")
+    {
+        <option value="1" selected>Local</option>
+        <option value="2">Depósito</option>
+        <option value="3">Casa</option>
+        <option value="4">Departamento</option>
+    }
+    else if (Model.InmuebleTipoId.Tipo == "Depósito")
+    {
+        <option value="1">Local</option>
+        <option value="2" selected>Depósito</option>
+        <option value="3">Casa</option>
+        <option value="4">Departamento</option>
+    }
+    else if (Model.InmuebleTipoId.Tipo == "Casa")
+    {
+        <option value="1">Local</option>
+        <option value="2">Depósito</option>
+        <option value="3" selected>Casa</option>
+        <option value="4">Departamento</option>
+    }
+    else if (Model.InmuebleTipoId.Tipo == "Departamento")
+    {
+        <option value="1">Local</option>
+        <option value="2">Depósito</option>
+        <option value="3">Casa</option>
+        <option value="4" selected>Departamento</option>
+    }
+    else
+    {
+        <option value="1">Local</option>
+        <option value="2">Depósito</option>
+        <option value="3">Casa</option>
+        <option value="4">Departamento</option>
+    }
+</select>
+
         </div>
         <div class="mb-3">
             <p>Cantidad de ambientes</p>
-            <select class="form-select form-select-sm" name="CantidadAmbientes" aria-label=".form-select-sm example">
-                <option selected>@Model.CantidadAmbientes</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
+
+<select class="form-select form-select-sm" id="cantidadAmbientes" name="Cantidad_habitacion" aria-label=".form-select-sm example">
+    @for (int i = 1; i <= 10; i++)
+    {
+        <option value="@i">@i</option>
+    }
+</select>
+
+<script>
+    // Espera a que el documento esté completamente cargado
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtiene el valor de CantidadAmbientes del modelo
+        var selectedValue = "@Model.CantidadAmbientes";
+        // Selecciona el elemento <select> por su ID
+        var selectElement = document.getElementById("cantidadAmbientes");
+        // Establece el valor seleccionado del <select> usando el valor del modelo
+        selectElement.value = selectedValue;
+    });
+</script>
         <div class="mb-3">
             <div id="map" style="height: 400px;"></div>
             <input type="hidden" name="Longitud" id="lng" value="-34.5956145" />
@@ -105,10 +156,17 @@
         </div>
         <div class="mb-3">
             <p>¿Está listo para alquilar?</p>
-            <select class="form-select form-select-sm" name="Alquilar" aria-label=".form-select-sm example">
-                <option selected>@Model.Disponible</option>
-                <option value="1">Si</option>
-                <option value="0">No</option>
+           <select class="form-select form-select-sm" name="Alquilar" aria-label=".form-select-sm example">
+                @if (Model.Disponible)
+                {
+                    <option value="1" selected>Si</option>
+                    <option value="0">No</option>
+                }
+                else
+                {
+                    <option value="1">Si</option>
+                    <option value="0" selected>No</option>
+                }
             </select>
         </div>
 

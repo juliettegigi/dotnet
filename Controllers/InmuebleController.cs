@@ -87,6 +87,15 @@ public IActionResult VerInmueble(Propietario propietario)
         decimal latitudDecimal;
         decimal longitudDecimal;
         inmueble.PrecioBase=decimal.Parse(Precio);
+        if(Uso=="ja")
+        {inmueble.Uso=InmobiliariaGutierrez.Models.VO.TipoUso.Comercial;
+         Console.WriteLine(inmueble.Uso+"comercial");}
+
+        else
+        { inmueble.Uso=InmobiliariaGutierrez.Models.VO.TipoUso.Residencial;
+        Console.WriteLine(inmueble.Uso+"Residencial");
+        }
+          
       
          
         CultureInfo cultura = CultureInfo.InvariantCulture;
@@ -105,12 +114,10 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
          else{
            inmueble.Suspendido=true;
          }
+
+        
        
-        if(Uso=="1")
-        {inmueble.Uso=TipoUso.Comercial;}
-        else
-        { inmueble.Uso=TipoUso.Residencial;}
-          
+        
          RepositorioInmueble repo = new RepositorioInmueble(); 
          Console.WriteLine(Uso,"generacion");
          if(IdInmueble>0){

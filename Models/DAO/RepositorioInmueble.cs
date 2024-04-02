@@ -263,7 +263,7 @@ public int AltaInmueble(Inmueble inmueble)
     }
 
         public int ModificaInmueble(Inmueble inmueble)
-        { Console.WriteLine("Modificadooooooooo");
+        { Console.WriteLine("Modificadooooooooo++++",inmueble.Uso);
             using(var connection = new MySqlConnection(ConnectionString))
             {
                 var sql = @$"UPDATE Inmuebles
@@ -272,6 +272,7 @@ public int AltaInmueble(Inmueble inmueble)
                     {nameof(Inmueble.InmuebleTipoId)} = @{nameof(Inmueble.InmuebleTipoId)},
                     {nameof(Inmueble.CantidadAmbientes)} = @{nameof(Inmueble.CantidadAmbientes)},
                     {nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
+                    {nameof(Inmueble.PrecioBase)} = @{nameof(Inmueble.PrecioBase)},
                     {nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
                     {nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)}
                     WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
@@ -281,7 +282,9 @@ public int AltaInmueble(Inmueble inmueble)
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}",(Enum)inmueble.Uso);
+
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", inmueble.Id);
