@@ -54,15 +54,28 @@ public class InquilinoController : Controller
 		return RedirectToAction(nameof(Index));
 	}
 
-	public IActionResult ContratarAlquiler(int page,int limit=5)
+	
+	[HttpGet]
+	[HttpPost]
+	public IActionResult ContratarAlquiler(int page,int filtrar,ViewInquilinoFiltrarInmueble? filtro,int limit=5)
 	{    
-		int offset=(page-1)*limit;
+		
+         int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();
 		var rit=new RepositorioInmuebleTipo();
 		IList<InmuebleTipo>listaTipos =rit.GetInmuebleTipos();
-		IList<Inmueble>lista =ri.GetInmueblesPaginado(limit,offset);
+		IList<Inmueble>lista;
+		lista=ri.GetInmueblesPaginadoFiltrado(5,offset,filtro);
+		
+		if(filtrar==1){
+			     ViewBag.Filtros=filtro ;			
+			     ViewBag.Filtrar=1 ;
+			}
+		
 
-		int totalReg=ri.getCantidadRegistros();
+		
+		
+		int totalReg=ri.getCantidadRegistrosFiltrado(filtro);
 		int cantidadPaginas=totalReg/limit;
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
 		
@@ -76,6 +89,8 @@ public class InquilinoController : Controller
 		
 		return View(objetoView);
 	}
+
 	
+
 }
 

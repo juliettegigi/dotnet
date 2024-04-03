@@ -24,7 +24,7 @@ public class Inmueble
 	
 	 public override string ToString()
         {
-            return $" PropietarioId: {PropietarioId}, Dirección: {Direccion}, Tipo: {InmuebleTipoId}, Cantidad de Ambientes: {CantidadAmbientes}, Uso: {Uso}, Coordenadas: {Coordenadas}, Precio: {PrecioBase}";
+            return $" Id:{Id} , PropietarioId: {PropietarioId}, Dirección: {Direccion}, Tipo: {InmuebleTipoId}, Cantidad de Ambientes: {CantidadAmbientes}, Uso: {Uso}, Coordenadas: {Coordenadas}, Precio: {PrecioBase}";
         }
 }
 

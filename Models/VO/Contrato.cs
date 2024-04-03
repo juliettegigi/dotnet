@@ -24,7 +24,7 @@ public class Contrato
   
     public override string ToString()
         {
-            return $"Id: {Id}, InquilinoId: {InquilinoId}, InmuebleId: {InmuebleId}, FechaInicio: {FechaInicio}, FechaFin: {FechaFin}, PrecioXmes: {PrecioXmes}";
+            return $"Id: {Id},\n InquilinoId: {InquilinoId},\n  InmuebleId: {InmuebleId},\n  FechaInicio: {FechaInicio},\n  FechaFin: {FechaFin},\n  FechaFinAnticipada: {FechaFinAnticipada},\n PrecioXmes: {PrecioXmes},\n  Estado: {Estado},";
         }
       
 }

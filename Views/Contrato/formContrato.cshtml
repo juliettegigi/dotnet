@@ -2,8 +2,12 @@
 <h4>Contrato</h4>
 <div class="row">
   <div class="col-md-4">
-    <form asp-action="Guardar" method="post">
-
+    <form asp-action="FormContrato" asp-route-id="@ViewBag.id" method="post">
+            <input type="hidden" name="Id" value="0" /> 
+            <input type="hidden" name="Estado" value="true" /> 
+            <input type="hidden" name="InmuebleId.Id" value="@ViewBag.id" /> 
+            <input type="hidden" name="FechaFinAnticipada" value="1-1-1" /> 
+           
            <div class="form-group">
               <label asp-for="FechaInicio" class="control-label"></label>
               <input asp-for="FechaInicio" class="form-control" />
