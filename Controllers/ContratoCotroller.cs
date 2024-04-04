@@ -51,11 +51,17 @@ public class ContratoController : Controller
 
 [HttpGet]
 [HttpPost]
-    public IActionResult FormContrato(int id=0,Contrato? contrato=null){
+    public IActionResult FormContrato(Contrato? contrato){
+            var rc=new RepositorioContrato();
+            Console.WriteLine("oooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
             Console.WriteLine(contrato.ToString());
             //RepositorioContrato rc=new RepositorioCotrato();
             //rc.AltaContrato(contrato);
-            ViewBag.id=id;
+            ViewBag.id=4;
+            ViewBag.iquilinoId=4;
+          /*  if(contrato.InquilinoId!=null){rc.AltaContrato(contrato);
+           Console.WriteLine("seee");
+           } */
             return View();
 		
 	}

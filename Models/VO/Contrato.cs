@@ -23,8 +23,9 @@ public class Contrato
     public bool Estado{ get; set; }
   
     public override string ToString()
-        {
-            return $"Id: {Id},\n InquilinoId: {InquilinoId},\n  InmuebleId: {InmuebleId},\n  FechaInicio: {FechaInicio},\n  FechaFin: {FechaFin},\n  FechaFinAnticipada: {FechaFinAnticipada},\n PrecioXmes: {PrecioXmes},\n  Estado: {Estado},";
+        {  string inquilino=InquilinoId!=null?InquilinoId.ToString():" ";
+           string inm=InmuebleId!=null?InmuebleId.ToString():" ";
+            return $"Id: {Id},\n InquilinoId: {inquilino},\n  InmuebleId: {inm},\n  FechaInicio: {FechaInicio},\n  FechaFin: {FechaFin},\n  FechaFinAnticipada: {FechaFinAnticipada},\n PrecioXmes: {PrecioXmes},\n  Estado: {Estado},";
         }
       
 }

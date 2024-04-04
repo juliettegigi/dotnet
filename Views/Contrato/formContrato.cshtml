@@ -1,4 +1,8 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
+@{  bool inquilino=false;
+  if(ViewBag.inquilinoId==null)
+     inquilino=true;
+}
 <h4>Contrato</h4>
 <div class="row">
   <div class="col-md-4">
@@ -6,6 +10,10 @@
             <input type="hidden" name="Id" value="0" /> 
             <input type="hidden" name="Estado" value="true" /> 
             <input type="hidden" name="InmuebleId.Id" value="@ViewBag.id" /> 
+            @if(inquilino==false)
+               { 
+                  <input type="hidden" name="InquilinoId.Id" value="@inquilino" /> 
+               }
             <input type="hidden" name="FechaFinAnticipada" value="1-1-1" /> 
            
            <div class="form-group">
@@ -23,11 +31,15 @@
               <input asp-for="PrecioXmes" class="form-control" />
               <span asp-validation-for="PrecioXmes" class="text-danger"></span>  
           </div>
+          @if(inquilino==false)
+          { 
           <div class="form-group">
               <label asp-for="InquilinoId.Nombre" class="control-label">Nombre del inquilino</label>
               <input asp-for="InquilinoId.Nombre" class="form-control" />
               <span asp-validation-for="InquilinoId.Nombre" class="text-danger"></span>  
           </div>
+          }
+
 
       
     

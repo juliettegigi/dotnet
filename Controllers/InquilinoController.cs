@@ -56,7 +56,7 @@ public class InquilinoController : Controller
 
 	
 	[HttpGet]
-	public IActionResult ContratarAlquiler(int page,int filtrar,ViewInquilinoFiltrarInmueble? filtro,int limit=5)
+	public IActionResult ContratarAlquiler(int page,int filtrar,int idInquilino,ViewInquilinoFiltrarInmueble? filtro,int limit=5)
 	{    Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
 	   Console.WriteLine(filtro);
 		
@@ -84,6 +84,7 @@ public class InquilinoController : Controller
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
 		objetoView.ListaTipos=listaTipos;
+		objetoView.IdInquilino=idInquilino;
 		
 		
 		

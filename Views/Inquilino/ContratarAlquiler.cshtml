@@ -3,6 +3,15 @@
   if(ViewBag.filtros!=null){
     filtro = ViewBag.filtros;
   }
+  else{
+     filtro=new ViewInquilinoFiltrarInmueble{
+     CantidadAmbientes=0,
+     CbComercial=false,
+     CbResidencial=false,
+     PrecioMin=0,
+     PrecioMax=0
+     };
+  }
 }
 <div>
 <h1>ContratarAlquiler</h1>
@@ -53,7 +62,7 @@
             		      <td>@item.PrecioBase</td>
             		      <td>@item.Uso</td>
                       <td> 
-                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-id="@item.Id" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-id="@item.Id" asp-route-idInquilino="@Model.IdInquilino" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                               <button type="button"   class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                                    <i class="bi bi-plus"></i>
                               </button>
@@ -70,7 +79,7 @@
   <ul class="pagination">
      @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)"  asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")" 
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)" asp-route-idInquilino="@Model.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")" 
       asp-route-filtro="@filtro" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
@@ -85,6 +94,7 @@
              asp-action="ContratarAlquiler"       
              asp-route-page="@Model.PrimerNumero"
              asp-route-filtrar="@(filtro == null ? "0" : "1")"
+             asp-route-idInquilino="@Model.IdInquilino"
              >
              @Model.PrimerNumero
           </a>
@@ -95,7 +105,7 @@
     
     @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)"  asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")"
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)" asp-route-idInquilino="@Model.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")"
      asp-route-cantidadAmbientes="@filtro.CantidadAmbientes" 
      asp-route-cbComercial="@filtro.CbComercial" 
      asp-route-cbResidencial="@filtro.CbResidencial" 
@@ -124,7 +134,7 @@
       <span class="placeholder col-12 placeholder-xs"></span>
   </div>
   <div class="offcanvas-body ">
-    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" method="get">
+    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" asp-route-idInquilino="@Model.IdInquilino" method="get">
          <div>
             <h4>Uso</h4>
             <div>
