@@ -16,7 +16,7 @@ public class ContratoController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index(int page,int limit=5)
+    public IActionResult Index(int page,int limit=2)
     {   int offset=(page-1)*limit;
 		var rc=new RepositorioContrato();
         IList<Contrato>lista =rc.GetContratosPaginado(limit,offset);
@@ -25,7 +25,7 @@ public class ContratoController : Controller
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
 		
 		var objetoView=new IndexView{ListaContratos=lista};
-		objetoView.PrimerNumero=page%5!=0?(page/5)*5+1:((page-1)/5)*5+1;
+		objetoView.PrimerNumero=page%limit!=0?(page/limit)*limit+1:((page-1)/limit)*limit+1;
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
 		
@@ -36,10 +36,10 @@ public class ContratoController : Controller
 
 
     public IActionResult Eliminar(int id)
-	{
+	{   
 		RepositorioContrato rp = new RepositorioContrato();
 		rp.EliminarContrato(id);
-		return RedirectToAction(nameof(Index));
+		return RedirectToAction(nameof(Index),new { page = 1});
 	}
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -51,17 +51,19 @@ public class ContratoController : Controller
 
 [HttpGet]
 [HttpPost]
-    public IActionResult FormContrato(Contrato? contrato){
+    public IActionResult FormContrato(Contrato? contrato,int idInq=0,int idInm=0){
             var rc=new RepositorioContrato();
-            Console.WriteLine("oooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-            Console.WriteLine(contrato.ToString());
-            //RepositorioContrato rc=new RepositorioCotrato();
-            //rc.AltaContrato(contrato);
-            ViewBag.id=4;
-            ViewBag.iquilinoId=4;
-          /*  if(contrato.InquilinoId!=null){rc.AltaContrato(contrato);
-           Console.WriteLine("seee");
-           } */
+
+            
+            if(idInq!=0){
+
+            ViewBag.idInq=idInq;
+            ViewBag.idInm=idInm;
+            }
+            
+          if(contrato.InquilinoId!=null){
+            rc.AltaContrato(contrato);
+           } 
             return View();
 		
 	}

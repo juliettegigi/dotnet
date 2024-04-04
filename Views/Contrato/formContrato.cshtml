@@ -1,6 +1,6 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
 @{  bool inquilino=false;
-  if(ViewBag.inquilinoId==null)
+  if(ViewBag.idInq!=null)
      inquilino=true;
 }
 <h4>Contrato</h4>
@@ -9,10 +9,10 @@
     <form asp-action="FormContrato" asp-route-id="@ViewBag.id" method="post">
             <input type="hidden" name="Id" value="0" /> 
             <input type="hidden" name="Estado" value="true" /> 
-            <input type="hidden" name="InmuebleId.Id" value="@ViewBag.id" /> 
-            @if(inquilino==false)
+            <input type="hidden" name="InmuebleId.Id" value="@ViewBag.idInm" /> 
+            @if(inquilino==true)
                { 
-                  <input type="hidden" name="InquilinoId.Id" value="@inquilino" /> 
+                  <input type="hidden" name="InquilinoId.Id" value="@ViewBag.idInq" /> 
                }
             <input type="hidden" name="FechaFinAnticipada" value="1-1-1" /> 
            
@@ -31,15 +31,21 @@
               <input asp-for="PrecioXmes" class="form-control" />
               <span asp-validation-for="PrecioXmes" class="text-danger"></span>  
           </div>
-          @if(inquilino==false)
+       @*    @if(inquilino==false)
           { 
           <div class="form-group">
-              <label asp-for="InquilinoId.Nombre" class="control-label">Nombre del inquilino</label>
-              <input asp-for="InquilinoId.Nombre" class="form-control" />
-              <span asp-validation-for="InquilinoId.Nombre" class="text-danger"></span>  
+              <label asp-for="InquilinoId.DNI" class="control-label">DNI del inquilino</label>
+              <input type="text" asp-for="InquilinoId.DNI" class="form-control" />
+              <span asp-validation-for="InquilinoId.DNI" class="text-danger"></span>  
+          </div>
+
+          <div class="form-group">
+              <label asp-for="InmuebleId.Propietario.DNI" class="control-label">DNI del inquilino</label>
+              <input type="text" asp-for="InmuebleId.Propietario.DNI" class="form-control" />
+              <span asp-validation-for="InmuebleId.Propietario.DNI" class="text-danger"></span>  
           </div>
           }
-
+ *@
 
       
     

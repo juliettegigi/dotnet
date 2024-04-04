@@ -17,6 +17,7 @@
 <table class="table table-hover table-sm align-middle table-responsive" >
         <thead class="table-dark">
             <tr>
+              <th>ID</th>
                 <th>Inquilino</th>
                 <th>Inmueble</th>
                 <th>Fechas</th>
@@ -29,7 +30,7 @@
       @{int i=0;}
 			@foreach (var item in Model.ListaContratos){
             		<tr>
-            		      
+            		      <td>@item.Id</td>
             		      <td>
                             <p class="d-inline-flex gap-1">
                                  <button type="button" class="btn btn-outline-secondary btn-sm collapsed"  
@@ -102,7 +103,7 @@
   <ul class="pagination">
      @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Contrato" asp-action="Index" asp-route-page="@(anterior)" aria-label="Previous">
+      <a class="page-link"  asp-controller="Contrato" asp-action="Index" asp-route-page="@(anterior)"  aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
@@ -112,9 +113,7 @@
          string active = Model.Page == Model.PrimerNumero ? "active" : "";
         <li class="page-item @active">
           <a class="page-link"
-             asp-controller="Contrato"
-             asp-action="Index"       
-             asp-route-page="@Model.PrimerNumero">
+             >
              @Model.PrimerNumero
           </a>
         </li>

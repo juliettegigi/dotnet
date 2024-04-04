@@ -14,7 +14,7 @@
   }
 }
 <div>
-<h1>ContratarAlquiler</h1>
+<h1>Lista de inmuebles</h1>
 
 </div>
 
@@ -62,7 +62,7 @@
             		      <td>@item.PrecioBase</td>
             		      <td>@item.Uso</td>
                       <td> 
-                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-id="@item.Id" asp-route-idInquilino="@Model.IdInquilino" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-idInm="@item.Id" asp-route-idInq="@Model.IdInquilino" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                               <button type="button"   class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                                    <i class="bi bi-plus"></i>
                               </button>
