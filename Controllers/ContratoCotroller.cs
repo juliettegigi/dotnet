@@ -28,7 +28,8 @@ public class ContratoController : Controller
 		objetoView.PrimerNumero=page%limit!=0?(page/limit)*limit+1:((page-1)/limit)*limit+1;
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
-		
+		Console.WriteLine(objetoView.CantidadPaginas);
+        Console.WriteLine("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 		
 		
 		return View(objetoView);

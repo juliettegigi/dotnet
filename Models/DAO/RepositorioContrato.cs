@@ -180,11 +180,9 @@ public class RepositorioContrato:RepositorioBase
 	{
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
-			var sql = @$"DELETE FROM Contratos
-				WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
-				Console.WriteLine("*******************************************delete");
-				Console.WriteLine(sql);
-				Console.WriteLine(id);
+			var sql = @$"UPDATE Contratos
+                         SET {nameof(Contrato.Estado)} = 0
+				        WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
 
 			using(var command = new MySqlCommand(sql, connection))
 			{
