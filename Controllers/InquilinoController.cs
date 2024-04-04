@@ -56,9 +56,9 @@ public class InquilinoController : Controller
 
 	
 	[HttpGet]
-	[HttpPost]
 	public IActionResult ContratarAlquiler(int page,int filtrar,ViewInquilinoFiltrarInmueble? filtro,int limit=5)
-	{    
+	{    Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+	   Console.WriteLine(filtro);
 		
          int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();

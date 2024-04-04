@@ -1,5 +1,5 @@
 namespace InmobiliariaGutierrez.Models;
-[Serializable]
+
 public class ViewInquilinoFiltrarInmueble
 {
     public bool CbComercial { get; set; }

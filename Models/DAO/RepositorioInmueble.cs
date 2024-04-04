@@ -463,6 +463,8 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
 
 public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewInquilinoFiltrarInmueble? filtros)
 	{
+        Console.WriteLine("33333333333333333333333333333333333333333333333333333333333");
+        Console.WriteLine(filtros);
         List<string> listaDeFiltros = new List<string>();
         string where="";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
@@ -481,7 +483,7 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
                 }
             where+=listaDeFiltros[i];
         }
-
+ 
 		var inmuebles = new List<Inmueble>();
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
@@ -496,7 +498,10 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
             order by id
             limit @limite offset @offset;
             "; 
-           
+           Console.WriteLine("33333333333333333333333333333333333333333333333333333333333");
+        Console.WriteLine(sql);
+         Console.WriteLine(limite);
+         Console.WriteLine(offset);
 
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);

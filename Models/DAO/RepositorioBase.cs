@@ -46,8 +46,7 @@ public abstract class RepositorioBase
 	                  {nombreTabla}.cLatitud,
 	                  {nombreTabla}.cLongitud,
 					  {nombreTabla}.suspendido, 
-					  {nombreTabla}.disponible
-                     ";
+					  {nombreTabla}.disponible";
 	               }
 
 	public String getCamposInmuebleTipo(String nombreTabla, String id,String como){

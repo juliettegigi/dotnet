@@ -1,7 +1,7 @@
 @model InmobiliariaGutierrez.Views.InquilinoView.ContratarAlquilerView
 @{ ViewInquilinoFiltrarInmueble filtro=null; 
-  if(ViewBag.filtro!=null){
-    filtro = ViewBag.filtro;
+  if(ViewBag.filtros!=null){
+    filtro = ViewBag.filtros;
   }
 }
 <div>
@@ -70,7 +70,8 @@
   <ul class="pagination">
      @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)"  asp-route-filtrar="@(filtro == null ? "0" : "1")" aria-label="Previous">
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)"  asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")" 
+      asp-route-filtro="@filtro" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
@@ -94,7 +95,14 @@
     
     @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)" asp-route-filtrar="@(filtro == null ? "0" : "1")"  aria-label="Next">
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)"  asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")"
+     asp-route-cantidadAmbientes="@filtro.CantidadAmbientes" 
+     asp-route-cbComercial="@filtro.CbComercial" 
+     asp-route-cbResidencial="@filtro.CbResidencial" 
+     asp-route-precioMin="@filtro.PrecioMin" 
+     asp-route-precioMax="@filtro.PrecioMax" 
+     
+     aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
@@ -116,10 +124,12 @@
       <span class="placeholder col-12 placeholder-xs"></span>
   </div>
   <div class="offcanvas-body ">
-    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" method="post">
+    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" method="get">
          <div>
             <h4>Uso</h4>
             <div>
+              <input type="hidden" name="page" value="1"/>
+              <input type="hidden" name="filtrar" value="1"/>
                <input type="checkbox" id="cbComercial" name="cbComercial" value="true"  @(filtro != null && filtro.CbComercial ? "checked" : "")>
                <label for="cbComercial">Comercial</label>
                <input type="checkbox" id="cbResidencial" name="cbResidencial" value="true"  @(filtro != null && filtro.CbResidencial ? "checked" : "")>
