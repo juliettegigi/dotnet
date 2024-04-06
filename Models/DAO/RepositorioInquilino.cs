@@ -88,6 +88,56 @@ public class RepositorioInquilino:RepositorioBase
 		return inquilinos;
 	}
 
+
+
+// ****************************************************************************************************
+public IList<Inquilino>  BuscarPorTodosLosCampos(string input){
+    List<Inquilino> inquilinos =new List<Inquilino>();
+	using(var connection=new MySqlConnection(ConnectionString))
+	{
+		var sql=@$"SELECT id,dni,nombre,apellido,telefono,domicilio,email
+                   FROM inquilinos
+                  WHERE id LIKE @input OR
+                          dni LIKE CONCAT('%', @input, '%') OR
+                          nombre LIKE CONCAT('%', @input, '%') OR
+                          apellido LIKE CONCAT('%', @input, '%') OR
+                          telefono LIKE CONCAT('%', @input, '%') OR
+                          domicilio LIKE CONCAT('%', @input, '%') OR
+                          email LIKE CONCAT('%', @input, '%');
+				";
+	    	using(var command = new MySqlCommand(sql, connection))
+			{   command.Parameters.AddWithValue($"@input", input);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{  
+					  while(reader.Read())
+					  {
+					  	inquilinos.Add(new Inquilino
+					  	{
+					  		Id = reader.GetInt32(nameof(Inquilino.Id)),
+					  		DNI = reader.GetString(nameof(Inquilino.DNI)),
+                              Nombre = reader.GetString(nameof(Inquilino.Nombre)),
+                              Apellido = reader.GetString(nameof(Inquilino.Apellido)),
+					  		Email = reader.GetString(nameof(Inquilino.Email)),
+                              Telefono = reader.GetString(nameof(Inquilino.Telefono)),
+                              Domicilio = reader.GetString(nameof(Inquilino.Domicilio)),
+  
+					  		
+					  		//Tipo = (TipoInquilino)reader.GetInt32(nameof(Inquilino.Tipo))
+					  	});
+					  
+					}
+				}
+                
+			}
+             connection.Close();			
+	}
+	return inquilinos;
+}
+
+
+
+
 	public int AltaInquilino(Inquilino inquilino)
 	{   Console.WriteLine("-----------------------------------------------------prrr");
         Console.WriteLine(inquilino);
@@ -165,6 +215,9 @@ public class RepositorioInquilino:RepositorioBase
 		}
 		return 0;
 	}
+
+
+
 
 
 

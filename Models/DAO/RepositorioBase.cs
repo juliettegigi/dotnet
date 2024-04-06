@@ -26,13 +26,13 @@ public abstract class RepositorioBase
 				   {nombreTabla}.estado";
 	}
     public String getCamposInquilino(String nombreTabla, String id,String como){
-             return @$"{nombreTabla}.{id} as {como},
-	                   {nombreTabla}.dni as dniInq,
-					   {nombreTabla}.nombre as nombreInq,
-					   {nombreTabla}.apellido as apellidoInq,
-					   {nombreTabla}.telefono as telefonoInq,
-					   {nombreTabla}.email as emailInq,
-					   {nombreTabla}.domicilio as domicilioInq";
+             return @$"{(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}{id} as {como},
+	                   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}dni as dniInq,
+					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}nombre as nombreInq,
+					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}apellido as apellidoInq,
+					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}telefono as telefonoInq,
+					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}email as emailInq,
+					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}domicilio as domicilioInq";
 	}
 	public String getCamposInmueble(String nombreTabla, String id,String como){
           return  @$"

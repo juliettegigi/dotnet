@@ -7,7 +7,7 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-<a asp-Controller="Home" asp-action="miAction"> a ver....</a>
+<a href=@Url.RouteUrl( "default",new{tipo="hola"})> a ver....</a>
 
 @{
     if(ViewBag.dato!=null){

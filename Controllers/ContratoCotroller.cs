@@ -28,9 +28,6 @@ public class ContratoController : Controller
 		objetoView.PrimerNumero=page%limit!=0?(page/limit)*limit+1:((page-1)/limit)*limit+1;
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
-		Console.WriteLine(objetoView.CantidadPaginas);
-        Console.WriteLine("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-		
 		
 		return View(objetoView);
     }
@@ -42,6 +39,22 @@ public class ContratoController : Controller
 		rp.EliminarContrato(id);
 		return RedirectToAction(nameof(Index),new { page = 1});
 	}
+
+    public IActionResult Editar(int id)
+	{   
+		RepositorioContrato rc = new RepositorioContrato();
+        RepositorioInquilino ri=new RepositorioInquilino();
+
+		//ri.BuscarPorTodosLosCampos();
+		return View();
+	}
+
+
+
+
+
+
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

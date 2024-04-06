@@ -8,4 +8,5 @@ public class ContratarAlquilerView{
 	public IList<InmuebleTipo> ListaTipos {get;set;}
 	public int CantidadPaginas {get;set;}
 	public int IdInquilino {get;set;}
+	
 }

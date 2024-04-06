@@ -1,4 +1,9 @@
+using InmobiliariaGutierrez.Models.Validacioness; 
+using System.ComponentModel.DataAnnotations;
+
+
 namespace InmobiliariaGutierrez.Models;
+
 
 public class ViewInquilinoFiltrarInmueble
 {
@@ -8,6 +13,25 @@ public class ViewInquilinoFiltrarInmueble
     public int CantidadAmbientes { get; set; }
     public decimal PrecioMin { get; set; }
     public decimal PrecioMax { get; set; }
+    
+     [FechaNoMenorQueLaActual(ErrorMessage = "La fecha no puede ser menor que la actual.")]
+       [DataType(DataType.Date)]
+    [Required(ErrorMessage = "Campo fecha obligatorio.")]
+   
+   
+    public DateTime ApartirDe { get; set; }
+	public DateTime Hasta { get; set; }
+
+    public ViewInquilinoFiltrarInmueble(){
+        CantidadAmbientes=0;
+                           CbComercial=false;
+                           CbResidencial=false;
+                           PrecioMin=0;
+                           PrecioMax=0;
+                           ApartirDe=DateTime.Now;
+                           Hasta=DateTime.Now.AddYears(50);
+                           Tipo="";
+    }
 
      public override string ToString()
         {  
@@ -16,6 +40,11 @@ public class ViewInquilinoFiltrarInmueble
              tipo: {Tipo},
              cantidad de ambientes: {CantidadAmbientes},
              precio mínimo: {PrecioMin},
-             precio mmáximo: {PrecioMax}";
+             precio mmáximo: {PrecioMax},
+             A partir de: {ApartirDe},
+             Hasta: {Hasta}
+             ";
         }
 }
+
+

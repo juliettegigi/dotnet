@@ -1,0 +1,54 @@
+<h4>Inquilino</h4>
+<hr />
+<div class="row">
+  <div class="col-md-4">
+    <form asp-action="Guardar" method="post">  
+      <div class="form-group">
+        <label for="innquilinoDataList">Inquilino</label>
+        <input class="form-control"  name="inquilino"  id="innquilinoDataList" placeholder="cualquier dato del inquilino..." >
+               <ul id="datalistOptions">
+                 
+               </ul> 
+        
+      </div>
+      
+      <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+      </div>
+    </form>
+  </div>
+</div>
+
+<div>
+  <a asp-action="Index">Volver</a>
+</div>
+
+<script>
+    
+    document.getElementById('innquilinoDataList').addEventListener('input', function () {
+        // Obtener el valor del input
+        var valorIngresado = this.value;
+        // Realizar solicitud AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Actualizar el datalist con las nuevas opciones recibidas
+                    var dataList = document.getElementById('datalistOptions');
+                    dataList.innerHTML = xhr.responseText;
+                     console.log('see');
+                } else {
+                    // Manejar errores si es necesario
+                    console.log('Error al obtener las opciones del servidor');
+                }
+            }
+        };
+        // Realizar la solicitud GET al servidor
+        xhr.open('GET', '/Inquilino/GetOpciones?input=' + valorIngresado, true);
+        xhr.send();
+    });
+</script>
+
+@section Scripts {
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

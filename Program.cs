@@ -24,4 +24,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+
+
+
+    app.MapControllerRoute("rutaFija", "nn/{tipo}", new { controller = "Inmueble", action = "Uso", tipo = "defecto" });
+//app.MapControllerRoute("rutaFija", "ruteo/{valor}", new { controller = "Home", action = "Ruta", valor = "defecto" });
 app.Run();

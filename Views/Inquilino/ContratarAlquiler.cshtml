@@ -1,17 +1,15 @@
-@model InmobiliariaGutierrez.Views.InquilinoView.ContratarAlquilerView
-@{ ViewInquilinoFiltrarInmueble filtro=null; 
-  if(ViewBag.filtros!=null){
-    filtro = ViewBag.filtros;
-  }
+@model InmobiliariaGutierrez.Models.ViewInquilinoFiltrarInmueble
+
+@{  ViewInquilinoFiltrarInmueble filtro=null; 
+    var m=ViewBag.obj;
+    if(ViewBag.filtros!=null){
+       filtro = ViewBag.filtros;
+     }
   else{
-     filtro=new ViewInquilinoFiltrarInmueble{
-     CantidadAmbientes=0,
-     CbComercial=false,
-     CbResidencial=false,
-     PrecioMin=0,
-     PrecioMax=0
-     };
-  }
+       filtro=new ViewInquilinoFiltrarInmueble();
+      }
+
+     
 }
 <div>
 <h1>Lista de inmuebles</h1>
@@ -34,7 +32,7 @@
 		</thead>
         <tbody >
       @{int i=0;}
-			@foreach (var item in Model.Lista){
+			@foreach (var item in m.Lista){
             		<tr>
             		      <td>                           
                           @item.Id
@@ -62,7 +60,7 @@
             		      <td>@item.PrecioBase</td>
             		      <td>@item.Uso</td>
                       <td> 
-                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-idInm="@item.Id" asp-route-idInq="@Model.IdInquilino" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+                          <a asp-controller="Contrato" asp-action="FormContrato" asp-route-idInm="@item.Id" asp-route-idInq="@m.IdInquilino" class="mx-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                               <button type="button"   class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
                                    <i class="bi bi-plus"></i>
                               </button>
@@ -77,40 +75,42 @@
 
 <nav aria-label="Page navigation example">
   <ul class="pagination">
-     @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
+     @{int anterior=m.Page==1?m.CantidadPaginas:m.Page-1;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)" asp-route-idInquilino="@Model.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")" 
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(anterior)" asp-route-idInquilino="@m.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")" 
       asp-route-filtro="@filtro" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
 
     
-      @for(i=Model.PrimerNumero;i<=@Model.CantidadPaginas;i++){
-         string active = Model.Page == Model.PrimerNumero ? "active" : "";
+      @for(i=m.PrimerNumero;i<=@m.CantidadPaginas;i++){
+         string active = m.Page == m.PrimerNumero ? "active" : "";
         <li class="page-item @active">
           <a class="page-link"
              asp-controller="Inquilino"
              asp-action="ContratarAlquiler"       
-             asp-route-page="@Model.PrimerNumero"
+             asp-route-page="@m.PrimerNumero"
              asp-route-filtrar="@(filtro == null ? "0" : "1")"
-             asp-route-idInquilino="@Model.IdInquilino"
+             asp-route-idInquilino="@m.IdInquilino"
              >
-             @Model.PrimerNumero
+             @m.PrimerNumero
           </a>
         </li>
-         Model.PrimerNumero++;
+         m.PrimerNumero++;
     }
   
     
-    @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
+    @{m.Page=m.Page==m.CantidadPaginas?0:m.Page;}
     <li class="page-item">
-      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(Model.Page+1)" asp-route-idInquilino="@Model.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")"
+      <a class="page-link"  asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="@(m.Page+1)" asp-route-idInquilino="@m.IdInquilino" asp-route-filtrar="@(ViewBag.filtrar!=null ? "1" : "0")"
      asp-route-cantidadAmbientes="@filtro.CantidadAmbientes" 
      asp-route-cbComercial="@filtro.CbComercial" 
      asp-route-cbResidencial="@filtro.CbResidencial" 
      asp-route-precioMin="@filtro.PrecioMin" 
      asp-route-precioMax="@filtro.PrecioMax" 
+     asp-route-aPartirDe="@filtro.ApartirDe" 
+     asp-route-hasta="@filtro.Hasta" 
      
      aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
@@ -134,7 +134,7 @@
       <span class="placeholder col-12 placeholder-xs"></span>
   </div>
   <div class="offcanvas-body ">
-    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" asp-route-idInquilino="@Model.IdInquilino" method="get">
+    <form asp-controller="Inquilino" asp-action="ContratarAlquiler" asp-route-page="1" asp-route-filtrar="1" asp-route-idInquilino="@m.IdInquilino" method="get" id="miFormulario">
          <div>
             <h4>Uso</h4>
             <div>
@@ -152,7 +152,7 @@
                
                <input class="form-control"  name="tipo" list="datalistOptions" id="exampleDataList" placeholder="Type to search..." value="@((filtro != null ? filtro.Tipo : ""))">
                <datalist id="datalistOptions">
-                  @foreach (var item in Model.ListaTipos){
+                  @foreach (var item in m.ListaTipos){
                       <option value="@item.Tipo">@item.Tipo</option>
                   }
                </datalist>
@@ -161,17 +161,29 @@
          <div>
             <h4>Cantidad de ambientes</h4>
             <div>
-               <input type="number" min="0" name="cantidadAmbientes" step="1" value="@((filtro != null ? filtro.CantidadAmbientes : ""))">
+               <input type="number" min="0" name="cantidadAmbientes" step="1" value='@filtro.CantidadAmbientes'>
            </div>
          </div>
          <div>
             <h4>Precio</h4>
             <div>
                <label for="precioMin">Precio Mínimo:</label>
-               <input type="number" id="precioMin" name="precioMin" min="0" step="0.01" value="@((filtro != null ? filtro.PrecioMin: 0))"> 
+               <input type="number" id="precioMin" name="precioMin" min="0" step="0.01" value="@filtro.PrecioMin"> 
                
                <label for="precioMax">Precio Máximo:</label>
-               <input type="number" id="precioMax" name="precioMax" min="0" step="0.01" value="@((filtro != null ? filtro.PrecioMax: 0))">
+               <input type="number" id="precioMax" name="precioMax" min="0" step="0.01" value="@filtro.PrecioMax">
+           </div>
+         </div>
+         <div>
+            <h4>Fecha</h4>
+            <div>
+               <label asp-for="ApartirDe" class="control-label"></label>
+               <input asp-for="ApartirDe" class="form-control" value='@(filtro.ApartirDe.ToString("yyyy-MM-dd"))'/>
+                <span asp-validation-for="ApartirDe" id="ApartirDe" class="text-danger"></span>
+            </div>
+            <div>    
+               <label for="hasta">Hasta:</label>
+               <input type="date"  name="hasta" id="hasta" class="form-control"  value='@filtro.Hasta.ToString("yyyy-MM-dd")' /> 
            </div>
          </div>
          <div class="form-group">
@@ -181,8 +193,17 @@
     </form>
   </div>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+   
+  
+}
+
+ 
 <script>
     $(document).ready(function(){
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
+
+    
 </script>

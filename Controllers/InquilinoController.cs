@@ -85,13 +85,29 @@ public class InquilinoController : Controller
 		objetoView.CantidadPaginas=cantidadPaginas;
 		objetoView.ListaTipos=listaTipos;
 		objetoView.IdInquilino=idInquilino;
+		ViewBag.obj=objetoView;
 		
 		
-		
-		return View(objetoView);
+		return View(filtro);
 	}
 
-	
+	public ActionResult GetOpciones(string input)
+{
+    // Aquí puedes realizar la lógica para obtener las opciones basadas en el valor proporcionado
+	var ri=new RepositorioInquilino();
+    var opciones = ri.BuscarPorTodosLosCampos(input); // Método hipotético que obtiene las opciones de la base de datos
+
+    // Construir el HTML con las opciones
+    var htmlOptions = "";
+    foreach (var opcion in opciones)
+    {   Console.WriteLine(opcion.Nombre) ;
+        htmlOptions += $"<li>\"{opcion.Nombre} {opcion.Apellido}\"</li>";
+    }
+    
+	 Console.WriteLine("ssssssssssssssssss") ;
+	 Console.WriteLine(htmlOptions) ;
+    return Content(htmlOptions, "text/html");
+}
 
 }
 

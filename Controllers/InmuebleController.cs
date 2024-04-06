@@ -171,6 +171,11 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
 }
 	
     
-   
+   public IActionResult Uso(string tipo)
+  {
+     Console.WriteLine("kktipokkkkkkkkkkkkkkkkkkkkzzzzzz" );
+     Console.WriteLine(tipo );
+     return RedirectToAction("Index", "Home");
+  }
 	
 }
