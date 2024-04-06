@@ -94,4 +94,14 @@ public class PropietarioController : Controller
 		rp.EliminaPropietario(id);
 		return RedirectToAction(nameof(Index));
 	}
+
+
+		public ActionResult GetOpciones(string input)
+           {
+              
+           	var rp=new RepositorioPropietario();
+               var opciones = rp.BuscarPorTodosLosCampos(input); 
+           	
+               return Json(opciones);
+           }
 }

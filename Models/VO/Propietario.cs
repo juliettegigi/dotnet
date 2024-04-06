@@ -19,7 +19,7 @@ public class Propietario
 	public String? Telefono  { get; set; }
     public String? Email  { get; set; }
 	public String? Domicilio { get; set; }
-	public Inmueble? ListaInmuebles {get;set;}
+	public List<Inmueble>? ListaInmuebles {get;set;}
 	
 	
 	public override string ToString()

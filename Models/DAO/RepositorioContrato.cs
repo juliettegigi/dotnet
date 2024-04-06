@@ -26,7 +26,7 @@ public class RepositorioContrato:RepositorioBase
 								{nameof(Contrato.FechaFin)},
 								{nameof(Contrato.FechaFinAnticipada)},
 								{nameof(Contrato.PrecioXmes)},
-								{nameof(Contrato.Estado)},
+								{nameof(Contrato.Estado)}
 			             FROM Contratos
 			             WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)} 
 						       and 
@@ -49,6 +49,7 @@ public class RepositorioContrato:RepositorioBase
                             FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
 							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
 							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
+							PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
 							Estado = true
 						};
 					}
@@ -121,9 +122,11 @@ public class RepositorioContrato:RepositorioBase
 				         @{nameof(Contrato.FechaFin)},
 				         @{nameof(Contrato.FechaFinAnticipada)},
 				         @{nameof(Contrato.PrecioXmes)},
-				         1
+				         true
 						 );
 				SELECT LAST_INSERT_ID();";
+
+				Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);

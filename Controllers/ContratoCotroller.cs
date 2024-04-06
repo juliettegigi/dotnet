@@ -40,10 +40,15 @@ public class ContratoController : Controller
 		return RedirectToAction(nameof(Index),new { page = 1});
 	}
 
-    public IActionResult Editar(int id)
+[HttpGet]
+    public IActionResult Editar(int id=0)
 	{   
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
+        if(id!=0){
+         Contrato c=rc.GetContrato(id);
+         return View(c);
+        }
 
 		//ri.BuscarPorTodosLosCampos();
 		return View();
@@ -81,4 +86,23 @@ public class ContratoController : Controller
             return View();
 		
 	}
+    
+
+[HttpPost]
+	public IActionResult Guardar(Contrato contrato)
+	{  Console.WriteLine("fffffffffffffffffffffffffffffffffff");
+	  Console.WriteLine(contrato);
+        
+
+             Console.WriteLine("fffffffffffffffffffffffffffffffffff");
+		RepositorioContrato rc = new RepositorioContrato();
+		
+		if(contrato.Id > 0)
+			rc.ModificaContrato(contrato);
+		else
+			rc.AltaContrato(contrato);
+		return RedirectToAction(nameof(Index));
+	
+	}
+   
 }

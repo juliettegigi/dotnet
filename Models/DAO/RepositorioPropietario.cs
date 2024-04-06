@@ -190,4 +190,55 @@ public class RepositorioPropietario:RepositorioBase
 		}
 		return 0;
 	}
+
+
+
+	// ****************************************************************************************************
+public IList<Propietario>  BuscarPorTodosLosCampos(string input)
+{
+    List<Propietario> propietarios =new List<Propietario>();
+	RepositorioInmueble ri=new RepositorioInmueble();
+	using(var connection=new MySqlConnection(ConnectionString))
+	{
+		var sql=@$"SELECT id,dni,nombre,apellido,telefono,domicilio,email
+                   FROM propietarios
+                  WHERE id LIKE @input OR
+                          dni LIKE CONCAT('%', @input, '%') OR
+                          nombre LIKE CONCAT('%', @input, '%') OR
+                          apellido LIKE CONCAT('%', @input, '%') OR
+                          telefono LIKE CONCAT('%', @input, '%') OR
+                          domicilio LIKE CONCAT('%', @input, '%') OR
+                          email LIKE CONCAT('%', @input, '%');
+				";
+	    	using(var command = new MySqlCommand(sql, connection))
+			{   command.Parameters.AddWithValue($"@input", input);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{  
+					  while(reader.Read())
+					  {
+					  	propietarios.Add(new Propietario
+					  	{
+					  		Id = reader.GetInt32(nameof(Propietario.Id)),
+					  		DNI = reader.GetString(nameof(Propietario.DNI)),
+                            Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                            Apellido = reader.GetString(nameof(Propietario.Apellido)),
+					  		Email = reader.GetString(nameof(Propietario.Email)),
+                            Telefono = reader.GetString(nameof(Propietario.Telefono)),
+                            Domicilio = reader.GetString(nameof(Propietario.Domicilio)),
+                            ListaInmuebles=ri.GetInmueblesPorIdPropietario(reader.GetInt32(nameof(Propietario.Id))).ToList()
+					  	});
+					  
+					  }
+				}
+                
+			}
+             connection.Close();			
+	}
+	return propietarios;
+}
+
+
+
+
 }

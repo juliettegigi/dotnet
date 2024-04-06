@@ -33,6 +33,8 @@ public class InquilinoController : Controller
 			else return View();
 		
 	}
+
+	
 	[HttpPost]
 	public IActionResult Guardar(Inquilino inquilino)
 	{  if (ModelState.IsValid){
@@ -93,20 +95,11 @@ public class InquilinoController : Controller
 
 	public ActionResult GetOpciones(string input)
 {
-    // Aquí puedes realizar la lógica para obtener las opciones basadas en el valor proporcionado
+   
 	var ri=new RepositorioInquilino();
-    var opciones = ri.BuscarPorTodosLosCampos(input); // Método hipotético que obtiene las opciones de la base de datos
-
-    // Construir el HTML con las opciones
-    var htmlOptions = "";
-    foreach (var opcion in opciones)
-    {   Console.WriteLine(opcion.Nombre) ;
-        htmlOptions += $"<li>\"{opcion.Nombre} {opcion.Apellido}\"</li>";
-    }
-    
-	 Console.WriteLine("ssssssssssssssssss") ;
-	 Console.WriteLine(htmlOptions) ;
-    return Content(htmlOptions, "text/html");
+    var opciones = ri.BuscarPorTodosLosCampos(input); 
+	
+    return Json(opciones);
 }
 
 }

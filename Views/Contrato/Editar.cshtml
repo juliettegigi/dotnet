@@ -1,16 +1,74 @@
-<h4>Inquilino</h4>
+@model InmobiliariaGutierrez.Models.VO.Contrato
+@{
+  Console.WriteLine(Model);
+  if(Model==null){
+    Console.WriteLine("rrrrrrrrrrrrr");
+  }
+}
+<h4>Nuevo contrato</h4>
+
 <hr />
 <div class="row">
   <div class="col-md-4">
+
     <form asp-action="Guardar" method="post">  
+      
+      
       <div class="form-group">
-        <label for="innquilinoDataList">Inquilino</label>
-        <input class="form-control"  name="inquilino"  id="innquilinoDataList" placeholder="cualquier dato del inquilino..." >
-               <ul id="datalistOptions">
-                 
-               </ul> 
+        <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
+        <label asp-for="InquilinoId" class="control-label">Inquilino</label>
+        <input asp-for="InquilinoId" class="form-control"  
+               id="innquilinoDataList" 
+               placeholder="cualquier dato del inquilino..." 
+               data-bs-toggle="collapse" 
+               data-bs-target="#collapseExample" 
+               aria-expanded="false" 
+               aria-controls="collapseExample"
+               value=@(Model!=null? $"{Model.InquilinoId.Nombre} {Model.InquilinoId.Apellido}":"")
+               
+               >
+          <div class="collapse" id="collapseExample">
+             <h5 id="tituloDivInquilino"></h5>
+             <ul id="ulInquilino">
+             </ul>
+           </div>
         
       </div>
+
+
+      <div class="form-group">
+        <input asp-for="InmuebleId.Id" type="hidden" id="inmuebleId">
+        <label for="innquilinoDataList">Propietario</label>
+        <input class="form-control"  
+               id="inputPropietario" 
+               placeholder="cualquier dato del propietario..." 
+               data-bs-toggle="collapse" 
+               data-bs-target="#collapsePropietario" 
+               aria-expanded="false" 
+               aria-controls="collapsePropietario">
+          <div class="collapse" id="collapsePropietario">
+            <h5 id="tituloDivPropietario"></h5>
+             <ul id="ulPropietario">
+             </ul>
+           </div>        
+      </div>
+
+      
+      <div class="form-group">
+              <label asp-for="FechaInicio" class="control-label"></label>
+              <input asp-for="FechaInicio" class="form-control" />
+              <span asp-validation-for="FechaInicio" class="text-danger"></span>  
+          </div>
+           <div class="form-group">
+              <label asp-for="FechaFin" class="control-label"></label>
+              <input asp-for="FechaFin" class="form-control" />
+              <span asp-validation-for="FechaFin" class="text-danger"></span>  
+          </div>
+           <div class="form-group">
+              <label asp-for="PrecioXmes" class="control-label"></label>
+              <input asp-for="PrecioXmes" class="form-control"  />
+              <span asp-validation-for="PrecioXmes" class="text-danger"></span>  
+          </div>
       
       <div class="form-group">
         <input type="submit" value="Guardar" class="btn btn-primary" />
@@ -25,26 +83,101 @@
 
 <script>
     
+     const inputInnquilino=document.getElementById('innquilinoDataList')
     document.getElementById('innquilinoDataList').addEventListener('input', function () {
-        // Obtener el valor del input
+        
         var valorIngresado = this.value;
-        // Realizar solicitud AJAX
+        
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    // Actualizar el datalist con las nuevas opciones recibidas
-                    var dataList = document.getElementById('datalistOptions');
-                    dataList.innerHTML = xhr.responseText;
-                     console.log('see');
+                    var listaInquilinos=JSON.parse(xhr.responseText);
+                    var ulInquilino = document.getElementById("ulInquilino");
+                    ulInquilino.innerHTML = ""; 
+                    document.getElementById("tituloDivInquilino").innerHTML=listaInquilinos.length!=0?"Seleccione un inquilino":"El valor ingresado no coinncide con ningún inquilino.";
+
+                    listaInquilinos.forEach((inquilino)=> {
+                           var li = document.createElement('li');
+                           li.value = inquilino.nombre; 
+                           li.innerHTML=inquilino.nombre;
+                           li.id=inquilino.id;
+                           ulInquilino.appendChild(li);
+                           li.addEventListener("click",(e)=>{
+                                  document.getElementById("inquilinoId").value=e.target.id;
+                                  inputInnquilino.value=e.target.textContent;
+                                  inputInnquilino.setAttribute("aria-expanded","false"); 
+                                   inputInnquilino.click();
+                           })
+                        });
                 } else {
-                    // Manejar errores si es necesario
+                    
                     console.log('Error al obtener las opciones del servidor');
                 }
             }
         };
-        // Realizar la solicitud GET al servidor
+       
         xhr.open('GET', '/Inquilino/GetOpciones?input=' + valorIngresado, true);
+        xhr.send();
+    });
+</script>
+
+
+<script>
+    
+     const inputPropietario=document.getElementById('inputPropietario')
+    document.getElementById('inputPropietario').addEventListener('input', function () {
+        
+        var valorIngresadoPropietario = this.value;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var listaPropietarios=JSON.parse(xhr.responseText);
+                    var ulPropietario = document.getElementById("ulPropietario");
+                    ulPropietario.innerHTML = ""; 
+                    document.getElementById("tituloDivPropietario").innerHTML=listaPropietarios.length!=0?"Seleccione un propietario":"El valor ingresado no coincide con ningún propietario.";
+
+                    listaPropietarios.forEach((opc)=> {
+                           var li = document.createElement('li');
+                           li.innerHTML=opc.nombre;
+                           li.id="propietario-"+opc.id;
+                           ulPropietario.appendChild(li);
+                           li.addEventListener("click",(e)=>{
+                                  document.getElementById("inmuebleId").value=e.target.id;
+                                  inputPropietario.value=e.target.textContent;
+                                  inputPropietario.setAttribute("aria-expanded","false"); 
+                                  //creo lista de inmuebles
+                                  ulPropietario.innerHTML = ""; 
+                                  document.getElementById("tituloDivPropietario").innerHTML=listaPropietarios.length!=0?"Seleccione un inmueble":"";
+
+                                  opc.listaInmuebles.forEach((inmueble)=>{
+                                     var li = document.createElement('li');
+                                     li.id="inmueble-"+inmueble.id;
+                                     console.log(inmueble); 
+                                     li.innerHTML=`${inmueble.direccion}, ${inmueble.inmuebleTipoId.tipo}`;
+                                     ulPropietario.appendChild(li);
+                                     li.addEventListener("click",(e)=>{
+                                      document.getElementById("inmuebleId").value=e.target.id.split("-")[1];
+                                      inputPropietario.value=e.target.textContent;
+                                      inputPropietario.setAttribute("aria-expanded","false"); 
+                                       inputPropietario.click();
+
+                                     })
+
+                                  })
+                                  
+                           })
+                        });
+                } else {
+                    
+                    console.log('Error al obtener las opciones del servidor');
+                }
+            }
+        };
+       
+        xhr.open('GET', '/Propietario/GetOpciones?input=' + valorIngresadoPropietario, true);
         xhr.send();
     });
 </script>
@@ -52,3 +185,4 @@
 @section Scripts {
   @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
