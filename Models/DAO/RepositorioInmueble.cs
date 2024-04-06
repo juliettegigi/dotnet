@@ -208,9 +208,7 @@ public Inmueble? GetInmueble(int id)
 
 public int AltaInmueble(Inmueble inmueble)
 {   
-    Console.WriteLine("-----------------------------------------------------prrr");
-    Console.WriteLine(inmueble);
-    Console.WriteLine("..............................................papaappa");
+    
     
     int id = 0;
     
@@ -263,7 +261,7 @@ public int AltaInmueble(Inmueble inmueble)
     }
 
         public int ModificaInmueble(Inmueble inmueble)
-        { Console.WriteLine("Modificadooooooooo++++",inmueble.Uso);
+        { 
             using(var connection = new MySqlConnection(ConnectionString))
             {
                 var sql = @$"UPDATE Inmuebles
@@ -463,8 +461,7 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
 
 public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewInquilinoFiltrarInmueble? filtros)
 	{
-        Console.WriteLine("33333333333333333333333333333333333333333333333333333333333");
-        Console.WriteLine(filtros);
+        
         List<string> listaDeFiltros = new List<string>();
         string where="";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");

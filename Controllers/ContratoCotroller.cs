@@ -46,6 +46,7 @@ public class ContratoController : Controller
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
+            ViewBag.id=id;
          Contrato c=rc.GetContrato(id);
          return View(c);
         }
@@ -90,18 +91,14 @@ public class ContratoController : Controller
 
 [HttpPost]
 	public IActionResult Guardar(Contrato contrato)
-	{  Console.WriteLine("fffffffffffffffffffffffffffffffffff");
-	  Console.WriteLine(contrato);
-        
-
-             Console.WriteLine("fffffffffffffffffffffffffffffffffff");
+	{ 
 		RepositorioContrato rc = new RepositorioContrato();
 		
 		if(contrato.Id > 0)
 			rc.ModificaContrato(contrato);
 		else
 			rc.AltaContrato(contrato);
-		return RedirectToAction(nameof(Index));
+		return RedirectToAction(nameof(Index),new{page=1});
 	
 	}
    

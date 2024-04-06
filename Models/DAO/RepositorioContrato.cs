@@ -126,7 +126,7 @@ public class RepositorioContrato:RepositorioBase
 						 );
 				SELECT LAST_INSERT_ID();";
 
-				Console.WriteLine(sql);
+				
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);

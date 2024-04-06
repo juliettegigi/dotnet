@@ -34,7 +34,7 @@ public class InquilinoController : Controller
 		
 	}
 
-	
+
 	[HttpPost]
 	public IActionResult Guardar(Inquilino inquilino)
 	{  if (ModelState.IsValid){
@@ -59,8 +59,7 @@ public class InquilinoController : Controller
 	
 	[HttpGet]
 	public IActionResult ContratarAlquiler(int page,int filtrar,int idInquilino,ViewInquilinoFiltrarInmueble? filtro,int limit=5)
-	{    Console.WriteLine("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-	   Console.WriteLine(filtro);
+	{   
 		
          int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();

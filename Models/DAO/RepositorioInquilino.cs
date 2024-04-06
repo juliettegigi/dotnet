@@ -139,8 +139,7 @@ public IList<Inquilino>  BuscarPorTodosLosCampos(string input){
 
 
 	public int AltaInquilino(Inquilino inquilino)
-	{   Console.WriteLine("-----------------------------------------------------prrr");
-        Console.WriteLine(inquilino);
+	{  
 		int id = 0;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{

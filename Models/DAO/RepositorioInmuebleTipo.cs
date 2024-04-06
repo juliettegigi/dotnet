@@ -79,7 +79,7 @@ public class RepositorioInmuebleTipo:RepositorioBase
 
 	public int AltaInmuebleTipo(InmuebleTipo inmuebleTipo)
 	{   
-        Console.WriteLine(inmuebleTipo);
+       
 		int id = 0;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{

@@ -1,10 +1,5 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
-@{
-  Console.WriteLine(Model);
-  if(Model==null){
-    Console.WriteLine("rrrrrrrrrrrrr");
-  }
-}
+
 <h4>Nuevo contrato</h4>
 
 <hr />
@@ -13,7 +8,7 @@
 
     <form asp-action="Guardar" method="post">  
       
-      
+      <input asp-for="Id" type="hidden" value=@(ViewBag.id!=null?ViewBag.id:0)>
       <div class="form-group">
         <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
         <label asp-for="InquilinoId" class="control-label">Inquilino</label>
@@ -155,7 +150,6 @@
                                   opc.listaInmuebles.forEach((inmueble)=>{
                                      var li = document.createElement('li');
                                      li.id="inmueble-"+inmueble.id;
-                                     console.log(inmueble); 
                                      li.innerHTML=`${inmueble.direccion}, ${inmueble.inmuebleTipoId.tipo}`;
                                      ulPropietario.appendChild(li);
                                      li.addEventListener("click",(e)=>{

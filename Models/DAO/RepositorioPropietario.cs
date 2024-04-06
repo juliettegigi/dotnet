@@ -90,8 +90,6 @@ public class RepositorioPropietario:RepositorioBase
                            //Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(nameof(Propietario.Domicilio)),
 							//Tipo = (TipoInquilino)reader.GetInt32(nameof(Inquilino.Tipo))
 						});
-						
-		                Console.WriteLine("----------------------------------------------------------¡Hola, mundo!");
 		               
 					}
 				}
