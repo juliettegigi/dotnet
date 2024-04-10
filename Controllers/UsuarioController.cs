@@ -105,7 +105,7 @@ public async Task<IActionResult> Login(ViewLogin login)
 				{
 					// hasheo la clave
 					string passIngresada = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-						password: login.Clave,
+						password: login.Pass,
 						salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
 						prf: KeyDerivationPrf.HMACSHA1,
 						iterationCount: 1000,
@@ -117,7 +117,7 @@ public async Task<IActionResult> Login(ViewLogin login)
 					//  si puso cualquier email o la pass es culquira
 					if (u == null || u.Pass != passIngresada)
 					{
-						ModelState.AddModelError("", "El email o la clave no son correctos");
+						ModelState.AddModelError("", "El email o la Contraseña no son correctos");
 						TempData["returnUrl"] = returnUrl;
 						return View();
 					}
