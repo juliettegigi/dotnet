@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;  // para usar la anotación  [Authorize]
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
+
 
 namespace InmobiliariaGutierrez.Controllers;
 
@@ -13,9 +15,8 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
-    {   if(TempData.ContainsKey("dato"))
-           ViewBag.dato=TempData["dato"];
+   
+    public IActionResult Index(){
         return View();
     }
 
@@ -34,4 +35,9 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    public ActionResult Restringido()
+		{
+			return View();
+		}
 }
