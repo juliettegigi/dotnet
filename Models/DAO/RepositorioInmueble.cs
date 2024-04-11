@@ -155,6 +155,49 @@ public Inmueble? GetInmueble(int id)
 		}
 		return inmuebles;
 	}
+public IList<Inmueble> GetAllInmuebles()
+{
+    var inmuebles = new List<Inmueble>();
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+         var sql = @$"SELECT {getCamposInmueble("inmuebles","id","id")}, 
+			                    {getCamposPropietario("propietarios","id","idPropietario")},
+								{getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")}
+                         
+                      FROM inmuebles
+                       INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
+                       INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+                       ORDER BY id;";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
+
+                   	inmuebles.Add(new Inmueble
+						{   Id = reader.GetInt32(nameof(Inmueble.Id)),
+							PropietarioId = crearPropietario(reader),
+                            Direccion = reader.GetString(nameof(Inmueble.Direccion)),
+                            InmuebleTipoId = crearInmuebleTipo(reader),
+							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
+                            PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
+							Uso = crearUso(reader),
+                            Coordenadas=coordenada
+							
+							
+						});
+                }
+            }
+        }
+        connection.Close();
+    }
+    return inmuebles;
+}
+
 
 
 
@@ -312,6 +355,22 @@ public int AltaInmueble(Inmueble inmueble)
 		}
 		return 0;
 	}
+  public int EliminaInmueblePropietario(int id)
+{
+    using(var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = $"DELETE FROM Inmuebles WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)}";
+        using(var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", id);
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+    return 0;
+}
+
 
 
 

@@ -16,7 +16,7 @@ public class RepositorioUsuario:RepositorioBase
 	}
 
 	public int AltaUsuario(Usuario e)
-		{
+		{   Console.WriteLine($"zaaaco {e.Rol} ");
 			int res = -1;
 			using (var connection = new MySqlConnection(ConnectionString))
 			{

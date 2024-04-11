@@ -1,0 +1,56 @@
+@model InmobiliariaGutierrez.Models.VO.Inmueble
+@{
+    ViewData["Title"] = "Detalle del Inmueble";
+}
+<html>
+<head>
+</head>
+<body>
+    <h4>Detalle del Inmueble</h4>
+    <hr />
+
+    <div class="row">
+        <h2>Propietario</h2>
+        <div class="col-md-4">
+            <form action="" method="post">
+                  <div class="form-group">
+                    <label for="Propietario">Nombre y apellido del propietario:</label>
+                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.Nombre  @Model.PropietarioId.Apellido" readonly />
+                </div>  
+                  <div class="form-group">
+                    <label for="Propietario">Documento:</label>
+                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.DNI" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Propietario">Telefono:</label>
+                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.Telefono" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Direccion">Dirección:</label>
+                    <input type="text" id="Direccion" name="Direccion" class="form-control" value="@Model.PropietarioId.Domicilio" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Direccion">Email:</label>
+                    <input type="text" id="Direccion" name="Direccion" class="form-control" value="@Model.PropietarioId.Email" readonly />
+                </div>
+
+                 <h2>Inmuebles</h2>
+                <div class="form-group">
+                    <label for="CantidadAmbientes">Cantidad de Ambientes:</label>
+                    <input type="text" id="CantidadAmbientes" name="CantidadAmbientes" class="form-control" value="@Model.CantidadAmbientes" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Uso">Uso:</label>
+                    <input type="text" id="Uso" name="Uso" class="form-control" value="@Model.Uso" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="PrecioBase">Precio Base:</label>
+                    <input type="text" id="PrecioBase" name="PrecioBase" class="form-control" value="@Model.PrecioBase" readonly />
+                </div>
+              
+             
+            </form>
+        </div>
+    </div>
+</body>
+</html>

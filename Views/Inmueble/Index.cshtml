@@ -59,14 +59,15 @@
     <div id="info"></div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        const $dt = $('#example').DataTable();
-      
-        $dt.on('search', function() {
-            $('#info').html('Texto buscado: ' + $('.dataTables_filter input').val());
-        });
-    });
-</script>
+
 </body>
+<script>
+    // Obtener el mensaje de error del TempData
+    var errorMessage = "@TempData["ErrorMessage"]";
+
+    // Verificar si hay un mensaje de error y mostrar un alert
+    if (errorMessage) {
+        alert(errorMessage);
+    }
+</script>
 </html>

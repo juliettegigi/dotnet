@@ -13,7 +13,7 @@ public class PropietarioController : Controller
 
 	public PropietarioController(ILogger<InmuebleController> logger)
 	{
-		_logger = logger;
+		
         rp = new RepositorioPropietario();
 	}
 

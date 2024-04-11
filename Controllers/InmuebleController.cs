@@ -18,12 +18,36 @@ public class InmuebleController : Controller
         rp = new RepositorioPropietario();
 	}
 
-	public IActionResult Index(string searchTerm)
+	public IActionResult Index()
         {  
             RepositorioInmueble ri = new RepositorioInmueble();
-            var inmuebles = ri.GetInmueblesPaginadoData(7, 0, searchTerm);
+         // var inmuebles = ri.GetInmueblesPaginado(19,0);
+          var inmuebles = ri.GetAllInmuebles();
+
+        
+
+
             
             return View(inmuebles);
+        }
+        public IActionResult Eliminar(int id)
+        {  
+           
+            try 
+            {     RepositorioInmueble ri = new RepositorioInmueble();
+                  var inmuebles = ri.EliminaInmueblePropietario(id);
+                  return RedirectToAction("Index");
+            }
+            catch (System.Exception)
+            {
+                
+                TempData["ErrorMessage"] = "No se puede eliminar el inmueble porque está alquilado.";
+                Console.WriteLine("hola");
+            return RedirectToAction("Index");
+            }
+          
+            
+          
         }
 public IActionResult VerInmueble(Propietario propietario)
             {
@@ -44,9 +68,8 @@ public IActionResult VerInmueble(Propietario propietario)
                 RepositorioInmueble ri = new RepositorioInmueble();
                 var inmueble = ri.GetInmueble(id);
                 
-               return Json(inmueble);
+               return Json  (inmueble);
             }
-
     	public IActionResult Editar(int id)
             {  
                 RepositorioInmueble ri = new RepositorioInmueble();
