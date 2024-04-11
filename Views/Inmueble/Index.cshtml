@@ -11,7 +11,7 @@
 
 <div>
     <h1 class="display-4">Lista de Inmueble</h1>
-    <h4><a asp-action="Crear">Crear</a></h4>
+    
 
     <table id="example" class="display" style="width:100%">
         <thead>
@@ -36,7 +36,7 @@
                     <td>@item.Direccion</td>
                     <td>@item.PrecioBase</td>
                     <td>@item.Disponible</td>
-                    <td>@item.PropietarioId.Apellido</td>
+                    <td>@item.PropietarioId.Nombre @item.PropietarioId.Apellido</td>
            <td class="d-flex">
                 <form asp-action="Editar" asp-route-id="@item.Id" method="post">
                     <button type="submit" title="Editar"><i class="bi bi-pencil-square"></i></button>
