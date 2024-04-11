@@ -23,7 +23,7 @@ public class RepositorioUsuario:RepositorioBase
 				string sql = @"INSERT INTO Usuarios 
 					(Nombre, Apellido, Avatar, Email, Pass, Rol) 
 					VALUES (@nombre, @apellido, @avatar, @email, @Pass, @rol);
-					SELECT SCOPE_IDENTITY();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
+					SELECT LAST_INSERT_ID();";//devuelve el id insertado (LAST_INSERT_ID para mysql)
 				using (var command = new MySqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
