@@ -44,8 +44,8 @@ public class UsuarioController : Controller
         [HttpPost]
 		public ActionResult Create(Usuario u)
 		{
-			if (!ModelState.IsValid)
-				return View();
+			
+		
 			try
 			{
 				string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
@@ -55,7 +55,8 @@ public class UsuarioController : Controller
 								iterationCount: 1000,
 								numBytesRequested: 256 / 8));
 				u.Pass = hashed;
-				
+				Console.WriteLine("zaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			Console.WriteLine(u.Pass);
 				
 				
 				
@@ -77,6 +78,8 @@ public class UsuarioController : Controller
 					}
 					repositorio.Modificacion(u);
 				}
+				Console.WriteLine("zaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa2222222222222");
+			Console.WriteLine(u.Pass);
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
