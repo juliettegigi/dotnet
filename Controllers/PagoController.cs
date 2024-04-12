@@ -30,6 +30,10 @@ public class PagoController : Controller
     {
         return View();
     }
+    public IActionResult Prepago(int Id)
+    {    Console.WriteLine(Id);    
+        return View();
+    }
 
      public IActionResult MiAction()
     {  TempData["dato"]="ALgo , algo";

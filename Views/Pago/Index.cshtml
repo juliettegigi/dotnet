@@ -19,6 +19,7 @@
             <th>Inquilino</th>
 			<th>Documento Inquilino</th>
             <th>Dirección del Inmueble</th>
+			<th></th>
         </tr>
     </thead>
     <tbody>
@@ -32,6 +33,11 @@
                 <td>@contrato.InquilinoId.Nombre @contrato.InquilinoId.Apellido</td>
                 <td>@contrato.InquilinoId.DNI</td>
                 <td>@contrato.InmuebleId.Direccion</td>
+				<td>
+				<form asp-action="Prepago" asp-route-id="@contrato.InquilinoId.Id" method="post">
+					<button type="submit" title="Pagar Cuota"><i class="bi bi-cash text-success"></i></button>
+				</form>
+				</td>
             </tr>
         }
     </tbody>
