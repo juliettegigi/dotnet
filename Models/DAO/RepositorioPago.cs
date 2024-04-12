@@ -5,11 +5,11 @@ using MySql.Data.MySqlClient;
 
 namespace InmobiliariaGutierrez.Models.DAO;
 
-public class RepositorioContrato:RepositorioBase
+public class RepositorioPago:RepositorioBase
 {
 	
 
-	public RepositorioContrato():base()
+	public RepositorioPago():base()
 	{
 		
 	}
@@ -429,69 +429,6 @@ public IList<Contrato> GetContratosTerminan(int dias)
         
 		return cantidad;
 	}
-
-public IList<Contrato> GetContratosTodos()
-{
-    var contratos = new List<Contrato>();
-    using(var connection = new MySqlConnection(ConnectionString))
-    {
-        var sql = @$"SELECT {getCamposContrato("contratos","id","id")}, 
-                            {getCamposInquilino("inquilinos","id","idInquilino")},
-                            {getCamposInmueble("inmueblesCompleto","idInmueble","idInmueble")},
-                            {getCamposPropietario("inmueblesCompleto","idPropietario","idPropietario")},
-                            {getCamposInmuebleTipo("inmueblesCompleto","idInmuebleTipo","idInmuebleTipo")}
-                    FROM contratos
-                        
-                    INNER JOIN inquilinos 
-                    ON contratos.inquilinoId=Inquilinos.id
-                        
-                    INNER JOIN (   SELECT {getCamposInmueble("inmuebles","id","idInmueble")},
-                                      {getCamposPropietario("propietarios","id","idPropietario")},
-                                      {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")} 
-                                   FROM inmuebles
-                                       
-                                   INNER JOIN propietarios 
-                                   ON inmuebles.propietarioId=propietarios.id
-                                       
-                                   INNER JOIN inmuebleTipos 
-                                   ON inmuebles.inmuebleTipoId=inmuebleTipos.id
-                                ) as inmueblesCompleto
-                    ON contratos.inmuebleId=idInmueble
-						
-                    ORDER BY id;
- 
-
-            "; 
-
-        using(var command = new MySqlCommand(sql, connection))
-        {   
-            connection.Open();
-            using(var reader = command.ExecuteReader())
-            {
-                while(reader.Read())
-                {    
-                     var coordenada=new Coordenada(reader.GetDecimal(nameof(Inmueble.Coordenadas.CLatitud)), reader.GetDecimal(nameof(Inmueble.Coordenadas.CLongitud)) );
-                        
-                    
-                    contratos.Add(new Contrato
-                    {   Id = reader.GetInt32("id"),
-                        InquilinoId= crearInquilino(reader),
-                        InmuebleId= crearInmueble(reader,crearPropietario(reader),crearInmuebleTipo(reader),crearCoordenadas(reader),crearUso(reader)),
-                        FechaInicio= reader.GetDateTime(nameof(Contrato.FechaInicio)),
-                        FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
-                        FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
-                        PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
-                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
-                    });
-                }
-            }
-                
-        }
-        connection.Close();
-    }
-    return contratos;
-}
-
     
 }
 

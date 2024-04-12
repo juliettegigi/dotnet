@@ -1,0 +1,44 @@
+@model List<InmobiliariaGutierrez.Models.VO.Contrato>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+
+<table id="example" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Precio por Mes</th>
+            <th>Estado</th>
+            <th>Inquilino</th>
+			<th>Documento Inquilino</th>
+            <th>Dirección del Inmueble</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var contrato in Model)
+        {
+            <tr>
+                <td>@contrato.FechaInicio</td>
+                <td>@contrato.FechaFin</td>
+                <td>@contrato.PrecioXmes</td>
+                <td>@contrato.Estado</td>
+                <td>@contrato.InquilinoId.Nombre @contrato.InquilinoId.Apellido</td>
+                <td>@contrato.InquilinoId.DNI</td>
+                <td>@contrato.InmuebleId.Direccion</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+</body>
+</html>
