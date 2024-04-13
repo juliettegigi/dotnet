@@ -99,6 +99,7 @@
 		</tbody>
 	</table>
 
+
 <nav aria-label="Page navigation example">
   <ul class="pagination">
      @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
@@ -109,17 +110,16 @@
     </li>
 
     
-      @for(i=Model.PrimerNumero;i<=@Model.CantidadPaginas;i++){
-         string active = Model.Page == Model.PrimerNumero ? "active" : "";
+      @for(i=Model.PrimerNumero;i<=(Model.PrimerNumero+4) && i<=Model.CantidadPaginas;i++){
+         string active = Model.Page == i ? "active" : "";
         <li class="page-item @active">
           <a class="page-link"
            asp-action="Index"       
-             asp-route-page="@Model.PrimerNumero"
+             asp-route-page="@i"
              >
-             @Model.PrimerNumero
+             @i
           </a>
         </li>
-         Model.PrimerNumero++;
     }
      
   
@@ -132,6 +132,8 @@
     </li>
   </ul>
 </nav> 
+
+
 <script>
     $(document).ready(function(){
         $('[data-bs-toggle="tooltip"]').tooltip();
