@@ -16,8 +16,9 @@ public class ContratoController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index(int page,int limit=2)
-    {   int offset=(page-1)*limit;
+  public IActionResult Index(int page,int limit=2)
+    {   
+        int offset=(page-1)*limit;
 		var rc=new RepositorioContrato();
         IList<Contrato>lista =rc.GetContratosPaginado(limit,offset);
 		int totalReg=rc.getCantidadRegistros();
@@ -25,7 +26,7 @@ public class ContratoController : Controller
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
 		
 		var objetoView=new IndexView{ListaContratos=lista};
-		objetoView.PrimerNumero=page%limit!=0?(page/limit)*limit+1:((page-1)/limit)*limit+1;
+		objetoView.PrimerNumero=page%5==0?page-4:((page/5)*5+1);
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
 		
