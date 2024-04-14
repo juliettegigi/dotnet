@@ -25,14 +25,88 @@ public class PagoController : Controller
 		RepositorioContrato rc=new RepositorioContrato();
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
-    }
+    } 
+      public IActionResult Pagar(int ContratoId,int NumeroPago, DateTime fecha )
+    {   
+         DateTime nuevaFecha = new DateTime(fecha.Year, fecha.Day + 1 , fecha.Month );
+        
+        
+        RepositorioContrato rc=new RepositorioContrato();
+        RepositorioPago rp=new RepositorioPago();
+        Contrato con=new Contrato();
+        con=rc.GetContrato(ContratoId);
+         DateTime fechaActual = DateTime.Now;
+         Pago pago = new Pago();
+         pago.ContratoId = ContratoId;
+         pago.NumeroPago=NumeroPago;
+         pago.Importe=0;
+         decimal numeroDecimal;
+        
+         pago.FechaPago= DateTime.Now;
+         Console.WriteLine(nuevaFecha);
+           Console.WriteLine( con.FechaFin);
+    
+         
+
+         if (nuevaFecha>con.FechaFin)
+        {
+             TempData["dato"]="Tiene que renovar Contrato O tiene que desalojarlo";
+             decimal importe=rp.UpdatePago(pago);
+       return RedirectToAction(nameof(Index));
+   
+       }
+       else{
+        
+        decimal importe=rp.UpdatePago(pago);
+          pago.ContratoId = ContratoId;
+         pago.NumeroPago=NumeroPago+1;
+          fecha=fecha.AddMonths(1);
+         pago.Fecha=nuevaFecha;
+         pago.FechaPago= null;
+         pago.Importe=importe;   
+        
+        rp.InsertPago(pago);
+         
+         
+
+  
+           return RedirectToAction(nameof(Index));  
+       
+       }
+       
+
+ }
+
+
+
+         /*
+
+         INSERT INTO Pagos (ContratoId, Importe, FechaPago)
+VALUES (@ContratoId, @Importe, GETDATE());
+
+
+         */
+
+   
     public IActionResult Privacy()
     {
         return View();
     }
-    public IActionResult Prepago(int Id)
-    {    Console.WriteLine(Id);    
-        return View();
+    public IActionResult Prepago(int Id, string nombre, string apellido, string dni)
+    {    
+ RepositorioPago rp = new RepositorioPago();
+    IList<Pago> pagos = rp.GetPago(Id);
+
+    ModelAuxiliar modelo = new ModelAuxiliar();
+    modelo.Nombre = nombre;
+    modelo.Apellido = apellido;
+    modelo.Dni = dni;
+     modelo.Pagos =new List<Pago>(); 
+     modelo.Pagos=pagos;
+
+    
+   //return Json(pagos);
+    return View("Pago", modelo);
     }
 
      public IActionResult MiAction()

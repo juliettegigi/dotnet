@@ -13,8 +13,14 @@ public abstract class RepositorioBase
 		protected RepositorioBase()
 		{  ConnectionString="Server=localhost;Database=inmobiliariadotnet;User=root;Password=;";
 		}
-
-
+      public string GetCamposPago(string nombreTabla, string id, string como)
+			{
+				return @$"{nombreTabla}.ContratoId as {como},
+				         {nombreTabla}.NumeroPago,
+						{nombreTabla}.Fecha,
+						{nombreTabla}.FechaPago,
+						{nombreTabla}.Importe";
+			}
 		public String getCamposContrato(String nombreTabla, String id,String como){
          return @$"{nombreTabla}.{id } as {como}, 
 	               {nombreTabla}.inquilinoId,

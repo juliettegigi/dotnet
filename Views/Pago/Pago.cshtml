@@ -1,0 +1,65 @@
+@model InmobiliariaGutierrez.Models.VO.ModelAuxiliar
+
+@{
+    string precio = "";
+    if (Model.Pagos != null && Model.Pagos.Count > 0)
+    {
+        precio = Model.Pagos[0].Importe.ToString();
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+<h3>@Model.Apellido @Model.Nombre</h3>
+<h3>@Model.Dni</h3>
+ @if (TempData["dato"] != null)
+    {
+        <div class="alert alert-warning" role="alert">
+            @TempData["dato"]
+        </div>
+    }
+<table id="example" class="display" style="width:100%">
+ 
+
+        <thead>
+            <tr>
+                <th>Número de Pago</th>
+                <th>Fecha a Realizar el Pago</th>
+                <th>Fecha de Pago</th>
+                <th>Importe</th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody>
+           @foreach (var pago in Model.Pagos)
+                {
+                    <tr>
+                        <td>@pago.NumeroPago</td>
+                        <td>@pago.Fecha 
+                        <td style="@(pago.FechaPago != DateTime.MinValue ? "background-color: green;" : "background-color: red;")">
+                            @(pago.FechaPago != DateTime.MinValue ? pago.FechaPago.Value.ToString("dd/MM/yyyy HH:mm:ss"): "------------")
+                        </td>
+                        <td>@pago.Importe</td>
+                        <td class="d-flex">
+                            <form id="formPago" asp-action="Pagar" asp-route-ContratoId="@pago.ContratoId" asp-route-NumeroPago="@pago.NumeroPago" asp-route-fecha="@pago.Fecha" asp-route-importe="@pago.Importe" method="post">
+                                <button id="btnPagar" type="submit" onclick="return confirm('¿Estás seguro que deseas realizar el pago?');" class="btn btn-success"><i class="bi bi-cash"></i> Pagar</button>
+                            </form>
+
+                        <form asp-action="CancelarPago" asp-route-id="@pago.Fecha" method="post">
+                            <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i> Cancelar</button>
+                        </form>
+						</td>
+                    </tr>
+                }
+        </tbody>
+    </table>
+
+
+
+</body>
+</html>
