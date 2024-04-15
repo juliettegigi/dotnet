@@ -103,7 +103,7 @@ public class ContratoController : Controller
 			rc.ModificaContrato(contrato);
 		else{
 			rc.AltaContrato(contrato);
-            var pago=new{
+            var pago=new Pago{
                 NumeroPago=1,
                 ContratoId=contrato.Id,
                 Fecha=contrato.FechaInicio,
