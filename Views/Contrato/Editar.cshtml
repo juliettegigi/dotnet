@@ -3,66 +3,88 @@
 <h4>Nuevo contrato</h4>
 
 <hr />
-<div class="row">
-  <div class="col-md-4">
+
+
+<div class="container position-relative z-1 h-50 w-50">
+ 
+
 
     <form asp-action="Guardar" method="post">  
       
-      <input asp-for="Id" type="hidden" value=@(ViewBag.id!=null?ViewBag.id:0)>
-      <div class="form-group">
-        <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
-        <label asp-for="InquilinoId" class="control-label">Inquilino</label>
-        <input asp-for="InquilinoId" class="form-control"  
-               id="innquilinoDataList" 
-               autocomplete="off"
-               placeholder="cualquier dato del inquilino..." 
-               data-bs-toggle="collapse" 
-               data-bs-target="#collapseExample" 
-               aria-expanded="false" 
-               aria-controls="collapseExample"
-               value=@(Model!=null? $"{Model.InquilinoId.Nombre} {Model.InquilinoId.Apellido}":"")
-               
-               >
-          <div class="collapse" id="collapseExample">
-             <h5 id="tituloDivInquilino"></h5>
-             <ul id="ulInquilino">
-             </ul>
-           </div>
+      
+      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 visible">
+        <div class="form-group">
+          <input asp-for="Id" type="hidden" value=@(ViewBag.id!=null?ViewBag.id:0)>
+          <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
+          <label asp-for="InquilinoId" class="control-label">Inquilino</label>
+          <input asp-for="InquilinoId" class="form-control"
+                 id="innquilinoDataList"
+                 autocomplete="off"
+                 placeholder="cualquier dato del inquilino..."
+                 data-bs-toggle="collapse"
+                 data-bs-target="#collapseExample"
+                 aria-expanded="false"
+                 aria-controls="collapseExample"
+                 value=@(Model!=null? $"{Model.InquilinoId.Nombre} {Model.InquilinoId.Apellido}":"")
         
-      </div>
-      <div>
-        <button type="button" class="btn btn-secondary" id="btnNext1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-               <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-          </svg>
-        </button>
+                 >
+            <div class="collapse" id="collapseExample">
+               <h5 id="tituloDivInquilino"></h5>
+               <ul id="ulInquilino">
+               </ul>
+             </div>
+        
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary disabled" id="btnNext1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+            </svg>
+          </button>
+        </div>
       </div>
       
-      <div class="form-group">
-        @Html.Partial("_tablaContrato.cshtml")     
+      <div class="formularioContrato z-3 position-absolute  top-0 start-0 h-50 w-50 invisible">
+        <div class="form-group">
+           <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
+          @Html.Partial("_tablaContrato.cshtml")
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary disabled" id="btnNext2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
-      
-      <div class="form-group">
-              <label asp-for="FechaInicio" class="control-label"></label>
-              <input asp-for="FechaInicio" class="form-control" />
-              <span asp-validation-for="FechaInicio" class="text-danger"></span>  
-          </div>
-           <div class="form-group">
-              <label asp-for="FechaFin" class="control-label"></label>
-              <input asp-for="FechaFin" class="form-control" />
-              <span asp-validation-for="FechaFin" class="text-danger"></span>  
-          </div>
-           <div class="form-group">
-              <label asp-for="PrecioXmes" class="control-label"></label>
-              <input asp-for="PrecioXmes" class="form-control"  />
-              <span asp-validation-for="PrecioXmes" class="text-danger"></span>  
-          </div>
-      
-      <div class="form-group">
-        <input type="submit" value="Guardar" class="btn btn-primary" />
+      <div class="formularioContrato z-2 position-absolute  top-0 start-0 h-50 w-50 invisible">
+        
+        <div class="form-group">
+                <label asp-for="FechaInicio" class="control-label"></label>
+                <input asp-for="FechaInicio" class="form-control" />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="FechaFin" class="control-label"></label>
+                <input asp-for="FechaFin" class="form-control" />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+                <label asp-for="PrecioXmes" class="control-label"></label>
+                <input asp-for="PrecioXmes" class="form-control"  />
+                <span asp-validation-for="PrecioXmes" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+          <input type="submit" value="Guardar" class="btn btn-primary" />
+        </div>
       </div>
     </form>
+
+
+</div>
+
   </div>
 </div>
 
@@ -70,8 +92,15 @@
   <a asp-action="Index">Volver</a>
 </div>
 
+
+
 <script>
     
+ const registro=document.getElementById("registro");
+    const registroClon2 = registro.cloneNode(true);
+    const btn1=document.getElementById("btnNext1");
+    const btn2=document.getElementById("btnNext2");
+
      const inputInnquilino=document.getElementById('innquilinoDataList')
     document.getElementById('innquilinoDataList').addEventListener('input', function () {
         
@@ -84,7 +113,7 @@
                     var listaInquilinos=JSON.parse(xhr.responseText);
                     var ulInquilino = document.getElementById("ulInquilino");
                     ulInquilino.innerHTML = ""; 
-                    document.getElementById("tituloDivInquilino").innerHTML=listaInquilinos.length!=0?"Seleccione un inquilino":"El valor ingresado no coinncide con ningún inquilino.";
+                    document.getElementById("tituloDivInquilino").innerHTML=listaInquilinos.length!=0?"Seleccione un inquilino":"El valor ingresado no coincide con ningún inquilino.";
 
                     listaInquilinos.forEach((inquilino)=> {
                            var li = document.createElement('li');
@@ -97,6 +126,7 @@
                                   inputInnquilino.value=e.target.textContent;
                                   inputInnquilino.setAttribute("aria-expanded","false"); 
                                    inputInnquilino.click();
+                                   btn1.classList.remove('disabled');
                            })
                         });
                 } else {
@@ -109,15 +139,10 @@
         xhr.open('GET', '/Inquilino/GetOpciones?input=' + valorIngresado, true);
         xhr.send();
     });
-</script>
 
+   
 
-<script>
-    const registro=document.getElementById("registro");
-    const registroClon2 = registro.cloneNode(true);
-    const btn1=document.getElementById("btnNext1");
-
-
+//***********************************************************************************************************************
 
 
 function dibujarTabla(page=1){
@@ -156,6 +181,19 @@ function dibujarTabla(page=1){
                                   registroClon.querySelector('#direccion').textContent+=inm.direccion;
                                   registroClon.querySelector('#precioBase').textContent+=inm.precioBase;
                                   registroClon.querySelector('#uso').textContent+=inm.uso;
+                                  //evennto para cada fila
+                                  registroClon.addEventListener('click',(e)=>{
+                                         const id=document.getElementById("inmuebleId");
+                                         id.value=inm.id;
+                                         const filasActivas = document.querySelectorAll('.table-active');
+                                         filasActivas.forEach(fila => {
+                                             fila.classList.remove('table-active');
+                                          
+                                          });
+                                         (e.currentTarget).classList.toggle('table-active');
+                                         btn2.classList.remove('disabled');
+                                         // cambiar el div
+                                  });
                                   bodyTabla.appendChild(registroClon);
                       });
                     // el nav
@@ -164,14 +202,18 @@ function dibujarTabla(page=1){
                     const navUl=document.getElementById("navUl");
                     navUl.innerHTML = '';
                    const liPrevious = document.createElement('li');
-liPrevious.classList.add('page-item');
-const aPrevious = document.createElement('a');
-aPrevious.classList.add('page-link');
-aPrevious.setAttribute('aria-label', 'Previous');
-aPrevious.innerHTML = '<span aria-hidden="true">&laquo;</span>';
-liPrevious.appendChild(aPrevious);
-navUl.appendChild(liPrevious);
-                   // navUl.innerHTML="";
+                   liPrevious.classList.add('page-item');
+                   const aPrevious = document.createElement('a');
+                   aPrevious.classList.add('page-link');
+                   aPrevious.setAttribute('aria-label', 'Previous');
+                   aPrevious.innerHTML = '<span aria-hidden="true">&laquo;</span>';
+                   liPrevious.appendChild(aPrevious);
+                   liPrevious.addEventListener('click',e=>{
+                                dibujarTabla(objeto.page==1?objeto.cantidadPaginas:objeto.page-1)
+                                })
+                   navUl.appendChild(liPrevious);
+
+
                     for(let i=objeto.primerNumero;i<=objeto.primerNumero+4 && i<=objeto.cantidadPaginas;i++){
                               
                               const li=document.createElement("li");
@@ -189,14 +231,17 @@ navUl.appendChild(liPrevious);
                                 })
                     }
                    const liNext = document.createElement('li');
-liNext.classList.add('page-item');
-liNext.setAttribute('id', 'navNext');
-const aNext = document.createElement('a');
-aNext.classList.add('page-link');
-aNext.setAttribute('aria-label', 'Next');
-aNext.innerHTML = '<span aria-hidden="true">&raquo;</span>';
-liNext.appendChild(aNext);
-navUl.appendChild(liNext);
+                  liNext.classList.add('page-item');
+                  liNext.setAttribute('id', 'navNext');
+                  const aNext = document.createElement('a');
+                  aNext.classList.add('page-link');
+                  aNext.setAttribute('aria-label', 'Next');
+                  aNext.innerHTML = '<span aria-hidden="true">&raquo;</span>';
+                  liNext.appendChild(aNext);                  
+                  liNext.addEventListener('click',e=>{
+                                dibujarTabla(objeto.page==objeto.cantidadPaginas ? 1 : objeto.page+1)
+                                })
+                  navUl.appendChild(liNext);
 
 
 
@@ -222,7 +267,30 @@ navUl.appendChild(liNext);
 
 
 
-    btn1.addEventListener('click', e=>{dibujarTabla(1)});
+    btn1.addEventListener('click', e=>{
+        const visible = document.querySelector(".z-4");
+        const siguiente=document.querySelector(".z-3");
+        siguiente.classList.remove("invisible");
+        siguiente.classList.remove('z-3')
+        siguiente.classList.add('z-4');
+        visible.classList.add('z-3');
+        visible.classList.remove('z-4');        
+        visible.classList.add("invisible");
+        dibujarTabla(1);
+        });
+
+
+    btn2.addEventListener('click', e=>{
+         const visible = document.querySelector(".z-4");
+         const siguiente=document.querySelector(".z-2");
+        siguiente.classList.remove("invisible");
+        siguiente.classList.add("visible");
+        siguiente.classList.remove('z-2')
+        siguiente.classList.add('z-4');
+        visible.classList.add('z-2');
+        visible.classList.remove('z-4');
+        visible.classList.add("invisible");
+        });    
 </script>
 
 @section Scripts {

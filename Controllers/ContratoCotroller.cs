@@ -16,7 +16,7 @@ public class ContratoController : Controller
         _logger = logger;
     }
 
-  public IActionResult Index(int page,int limit=2)
+  public IActionResult Index(int page,int limit=5)
     {   
         int offset=(page-1)*limit;
 		var rc=new RepositorioContrato();
