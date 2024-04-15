@@ -101,6 +101,11 @@ VALUES (@ContratoId, @Importe, GETDATE());
     {    
  RepositorioPago rp = new RepositorioPago();
     IList<Pago> pagos = rp.GetPago(Id);
+    // Obtener la lista de pagos y ordenarla por el número de pago de mayor a menor
+//IList<Pago> pagos = rp.GetPago(Id).OrderByDescending(p => p.NumeroPago).ToList();
+
+     
+
       RepositorioContrato rc=new RepositorioContrato();
         Contrato con=new Contrato();
         con=rc.GetContrato(Id);

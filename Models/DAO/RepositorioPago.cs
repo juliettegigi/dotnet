@@ -28,6 +28,7 @@ public IList<Pago>  GetPago(int id)
                             Importe
                      FROM Pagos
                      WHERE ContratoId = @Id";
+                     
         using (var command = new MySqlCommand(sql, connection))
         {
             command.Parameters.AddWithValue("@Id", id);
@@ -52,6 +53,7 @@ public IList<Pago>  GetPago(int id)
     }
     return pagos;
 }
+
 public void InsertPago(Pago pago)
 {
     using (var connection = new MySqlConnection(ConnectionString))
