@@ -180,7 +180,7 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
 
          }
          else{
-
+             TempData["ErrorMessage"] = "Se Modifico  correctamente el inmueble";
             return RedirectToAction("Index");
 
 

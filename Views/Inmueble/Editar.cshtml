@@ -190,6 +190,12 @@
             formulario.action = "/Inmueble/CargarInmueble";
             formulario.submit();
         }
+          var errorMessage = "@TempData["ErrorMessage"]";
+
+    // Verificar si hay un mensaje de error y mostrar un alert
+    if (errorMessage) {
+        alert(errorMessage);
+    }
     </script>
 }
 

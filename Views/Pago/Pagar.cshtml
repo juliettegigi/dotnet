@@ -64,9 +64,24 @@
                                 }
                             </td>
                             <td>
-                                  <form id="formPago" asp-action="Pagar" asp-route-ContratoId="@pago.ContratoId" asp-route-nombre="@Model.Nombre" asp-route-apellido="@Model.Apellido" asp-route-dni="@Model.Dni" asp-route-NumeroPago="@pago.NumeroPago" asp-route-fecha="@pago.Fecha" asp-route-importe="@pago.Importe" method="post">
-                                        <button id="btnPagar" type="submit" onclick="return confirm('¿Estás seguro que deseas realizar el pago?');" class="btn btn-success"><i class="bi bi-cash"></i> Pagar</button>
+                                
+                               
+                                 @if (pago.FechaPago != DateTime.MinValue) {
+                                        <form id="formEliminar" asp-action="Eliminar" method="post">
+                                        <input type="hidden" name="ContratoId" value="@pago.ContratoId" />
+                                        <input type="hidden" name="NumeroPago" value="@pago.NumeroPago" />
+                                        <input type="hidden" name="fecha" value="@pago.Fecha" />
+                                        <input type="hidden" name="importe" value="@pago.Importe" />
+                                        
+                                        <button type="submit" class="btn btn-success" onclick="return confirm('¿Estás seguro que deseas eliminar este pago?');">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     </form>
+                                                                
+                                 
+                                
+
+                                }
                             </td>
                         </tr>
                     }
