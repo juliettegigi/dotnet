@@ -97,11 +97,20 @@ public class ContratoController : Controller
         Console.WriteLine("************************************************");
         Console.WriteLine(contrato);
 		RepositorioContrato rc = new RepositorioContrato();
+		RepositorioPago rp = new RepositorioPago();
 		
 		if(contrato.Id > 0)
 			rc.ModificaContrato(contrato);
-		else
+		else{
 			rc.AltaContrato(contrato);
+            var pago=new{
+                NumeroPago=1,
+                ContratoId=contrato.Id,
+                Fecha=contrato.FechaInicio,
+                FechaPago=contrato.FechaInicio
+            };
+            rp.InsertPago(pago);
+        }
 		return RedirectToAction(nameof(Index),new{page=1});
 	
 	}
