@@ -125,7 +125,7 @@
   
     
     @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
-    <li class="page-item">
+    <li class="page-item" >
       <a class="page-link"  asp-controller="Contrato" asp-action="Index" asp-route-page="@(Model.Page+1)" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>

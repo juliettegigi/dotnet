@@ -376,24 +376,26 @@ public int AltaInmueble(Inmueble inmueble)
 
 
 public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
-	{   List<string> listaDeFiltros = new List<string>();
-        string where="";
-        if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
-        if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
-        if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
-        if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
-        if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
-        if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
+	{   string where="";
+        if(filtros!=null)
+         { List<string> listaDeFiltros = new List<string>();
+                if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
+                if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
+                if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
+                if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
+                if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
+                if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
 
-        if(listaDeFiltros.Count!=0){
-            where="where ";
-            int i=0;
-            for(i=0;i<listaDeFiltros.Count-1;i++)
-                {
-                    where+=listaDeFiltros[i]+" AND ";
+                if(listaDeFiltros.Count!=0){
+                    where="where ";
+                    int i=0;
+                    for(i=0;i<listaDeFiltros.Count-1;i++)
+                        {
+                            where+=listaDeFiltros[i]+" AND ";
+                        }
+                    where+=listaDeFiltros[i];
                 }
-            where+=listaDeFiltros[i];
-        }
+         }
         
         int cantidad=0;
 		using(var connection = new MySqlConnection(ConnectionString))
@@ -405,12 +407,14 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
             {where};";
 			using(var command = new MySqlCommand(sql, connection))
-			{    if(filtros.CantidadAmbientes != 0)command.Parameters.AddWithValue("c", filtros.CantidadAmbientes);
-                if(filtros.CbComercial == true)command.Parameters.AddWithValue("uc", "Comercial");
-                if(filtros.CbResidencial == true)command.Parameters.AddWithValue("ur", "Residencial");
-                if(filtros.PrecioMax != 0)command.Parameters.AddWithValue("pmax", filtros.PrecioMax );
-                if(filtros.PrecioMin != 0)command.Parameters.AddWithValue("pmin", filtros.PrecioMin );
-                if(filtros.Tipo!="")command.Parameters.AddWithValue("t", filtros.Tipo );
+			{   if(filtros!=null){
+                        if(filtros.CantidadAmbientes != 0)command.Parameters.AddWithValue("c", filtros.CantidadAmbientes);
+                        if(filtros.CbComercial == true)command.Parameters.AddWithValue("uc", "Comercial");
+                        if(filtros.CbResidencial == true)command.Parameters.AddWithValue("ur", "Residencial");
+                        if(filtros.PrecioMax != 0)command.Parameters.AddWithValue("pmax", filtros.PrecioMax );
+                        if(filtros.PrecioMin != 0)command.Parameters.AddWithValue("pmin", filtros.PrecioMin );
+                        if(filtros.Tipo!="")command.Parameters.AddWithValue("t", filtros.Tipo );
+                }
 				connection.Open();
 				using(var reader = command.ExecuteReader())
                 {

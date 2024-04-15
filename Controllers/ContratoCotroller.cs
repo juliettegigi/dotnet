@@ -44,6 +44,7 @@ public class ContratoController : Controller
 [HttpGet]
     public IActionResult Editar(int id=0)
 	{   
+
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
@@ -93,6 +94,8 @@ public class ContratoController : Controller
 [HttpPost]
 	public IActionResult Guardar(Contrato contrato)
 	{ 
+        Console.WriteLine("************************************************");
+        Console.WriteLine(contrato);
 		RepositorioContrato rc = new RepositorioContrato();
 		
 		if(contrato.Id > 0)
@@ -102,5 +105,24 @@ public class ContratoController : Controller
 		return RedirectToAction(nameof(Index),new{page=1});
 	
 	}
+
+
+    public IActionResult GetListaInmueblePag(int page,int limit=5)
+    {   
+        int offset=(page-1)*limit;
+		var ri=new RepositorioInmueble();
+        IList<Inmueble>lista =ri.GetInmueblesPaginado(limit,offset);
+		int totalReg=ri.getCantidadRegistrosFiltrado(null);
+		int cantidadPaginas=totalReg/limit;
+		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
+		
+		var objetoView=new IndexView{ListaInmuebles=lista};
+		objetoView.PrimerNumero=page%limit==0?page-4:((page/limit)*limit+1);
+		objetoView.Page=page;
+		objetoView.CantidadPaginas=cantidadPaginas;
+
+		return Json(objetoView);
+        
+    }
    
 }

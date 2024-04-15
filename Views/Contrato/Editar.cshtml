@@ -14,6 +14,7 @@
         <label asp-for="InquilinoId" class="control-label">Inquilino</label>
         <input asp-for="InquilinoId" class="form-control"  
                id="innquilinoDataList" 
+               autocomplete="off"
                placeholder="cualquier dato del inquilino..." 
                data-bs-toggle="collapse" 
                data-bs-target="#collapseExample" 
@@ -29,23 +30,16 @@
            </div>
         
       </div>
-
-
+      <div>
+        <button type="button" class="btn btn-secondary" id="btnNext1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+               <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+          </svg>
+        </button>
+      </div>
+      
       <div class="form-group">
-        <input asp-for="InmuebleId.Id" type="hidden" id="inmuebleId">
-        <label for="innquilinoDataList">Propietario</label>
-        <input class="form-control"  
-               id="inputPropietario" 
-               placeholder="cualquier dato del propietario..." 
-               data-bs-toggle="collapse" 
-               data-bs-target="#collapsePropietario" 
-               aria-expanded="false" 
-               aria-controls="collapsePropietario">
-          <div class="collapse" id="collapsePropietario">
-            <h5 id="tituloDivPropietario"></h5>
-             <ul id="ulPropietario">
-             </ul>
-           </div>        
+        @Html.Partial("_tablaContrato.cshtml")     
       </div>
 
       
@@ -119,61 +113,116 @@
 
 
 <script>
-    
-     const inputPropietario=document.getElementById('inputPropietario')
-    document.getElementById('inputPropietario').addEventListener('input', function () {
+    const registro=document.getElementById("registro");
+    const registroClon2 = registro.cloneNode(true);
+    const btn1=document.getElementById("btnNext1");
+
+
+
+
+function dibujarTabla(page=1){
         
-        var valorIngresadoPropietario = this.value;
+   
         
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    var listaPropietarios=JSON.parse(xhr.responseText);
-                    var ulPropietario = document.getElementById("ulPropietario");
-                    ulPropietario.innerHTML = ""; 
-                    document.getElementById("tituloDivPropietario").innerHTML=listaPropietarios.length!=0?"Seleccione un propietario":"El valor ingresado no coincide con ningún propietario.";
+                    var objeto=JSON.parse(xhr.responseText);
+                    console.log(objeto);
+                    const listaInmuebles=objeto.listaInmuebles;
+                    // recorro la lista creando cada tr y appendeandolo en el body
+                   
+                    
+                    const bodyTabla=document.getElementById("bodyTabla");
+                    bodyTabla.innerHTML="";
+                    listaInmuebles.forEach(inm=> {
 
-                    listaPropietarios.forEach((opc)=> {
-                           var li = document.createElement('li');
-                           li.innerHTML=opc.nombre;
-                           li.id="propietario-"+opc.id;
-                           ulPropietario.appendChild(li);
-                           li.addEventListener("click",(e)=>{
-                                  document.getElementById("inmuebleId").value=e.target.id;
-                                  inputPropietario.value=e.target.textContent;
-                                  inputPropietario.setAttribute("aria-expanded","false"); 
-                                  //creo lista de inmuebles
-                                  ulPropietario.innerHTML = ""; 
-                                  document.getElementById("tituloDivPropietario").innerHTML=listaPropietarios.length!=0?"Seleccione un inmueble":"";
-
-                                  opc.listaInmuebles.forEach((inmueble)=>{
-                                     var li = document.createElement('li');
-                                     li.id="inmueble-"+inmueble.id;
-                                     li.innerHTML=`${inmueble.direccion}, ${inmueble.inmuebleTipoId.tipo}`;
-                                     ulPropietario.appendChild(li);
-                                     li.addEventListener("click",(e)=>{
-                                      document.getElementById("inmuebleId").value=e.target.id.split("-")[1];
-                                      inputPropietario.value=e.target.textContent;
-                                      inputPropietario.setAttribute("aria-expanded","false"); 
-                                       inputPropietario.click();
-
-                                     })
-
-                                  })
+                                  const registroClon=registroClon2.cloneNode(true)
+                                  registroClon.id+=inm.id;
+                                  registroClon.querySelector('#tdId').textContent = inm.id;
+                                 
+                                  const btnPropietario = registroClon.querySelector('#btnPropietario');
+                                  btnPropietario.setAttribute('data-bs-target', `#infoPersona${inm.id}`);
+                                  btnPropietario.setAttribute('aria-controls', `infoPersona${inm.id}`);
+                                  btnPropietario.textContent=`${inm.propietarioId.nombre} ${inm.propietarioId.apellido}`
+                                 
+                                  registroClon.querySelector('#infoPersona').id+=inm.id;
+                                  registroClon.querySelector('#pDocumento').innerHTML=`Documento: ${inm.propietarioId.dni}`;
+                                  registroClon.querySelector('#pEmail').innerHTML=`Documento: ${inm.propietarioId.email}`;
                                   
-                           })
-                        });
+                                  registroClon.querySelector('#cantidadAmbientes').textContent+=inm.cantidadAmbientes;
+                                  registroClon.querySelector('#inmuebleTipo').textContent+=inm.inmuebleTipoId.tipo;
+                                  registroClon.querySelector('#direccion').textContent+=inm.direccion;
+                                  registroClon.querySelector('#precioBase').textContent+=inm.precioBase;
+                                  registroClon.querySelector('#uso').textContent+=inm.uso;
+                                  bodyTabla.appendChild(registroClon);
+                      });
+                    // el nav
+                    
+                    
+                    const navUl=document.getElementById("navUl");
+                    navUl.innerHTML = '';
+                   const liPrevious = document.createElement('li');
+liPrevious.classList.add('page-item');
+const aPrevious = document.createElement('a');
+aPrevious.classList.add('page-link');
+aPrevious.setAttribute('aria-label', 'Previous');
+aPrevious.innerHTML = '<span aria-hidden="true">&laquo;</span>';
+liPrevious.appendChild(aPrevious);
+navUl.appendChild(liPrevious);
+                   // navUl.innerHTML="";
+                    for(let i=objeto.primerNumero;i<=objeto.primerNumero+4 && i<=objeto.cantidadPaginas;i++){
+                              
+                              const li=document.createElement("li");
+                              li.classList.add("page-item");
+                              if(objeto.page==i)
+                                li.classList.add("active");
+                              const a=document.createElement("a");
+                              a.textContent=i;
+                              a.classList.add("page-link");
+                              li.appendChild(a);
+                              navUl.appendChild(li);
+                              li.addEventListener('click',e=>{
+                                console.log("tengo Evebto")
+                                dibujarTabla(i)
+                                })
+                    }
+                   const liNext = document.createElement('li');
+liNext.classList.add('page-item');
+liNext.setAttribute('id', 'navNext');
+const aNext = document.createElement('a');
+aNext.classList.add('page-link');
+aNext.setAttribute('aria-label', 'Next');
+aNext.innerHTML = '<span aria-hidden="true">&raquo;</span>';
+liNext.appendChild(aNext);
+navUl.appendChild(liNext);
+
+
+
+
                 } else {
                     
                     console.log('Error al obtener las opciones del servidor');
                 }
             }
-        };
-       
-        xhr.open('GET', '/Propietario/GetOpciones?input=' + valorIngresadoPropietario, true);
+          }
+        xhr.open('GET', `/Contrato/GetListaInmueblePag?page=${page}`, true);
         xhr.send();
-    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    btn1.addEventListener('click', e=>{dibujarTabla(1)});
 </script>
 
 @section Scripts {
