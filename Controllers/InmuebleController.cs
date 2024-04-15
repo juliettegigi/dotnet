@@ -63,12 +63,14 @@ public IActionResult VerInmueble(Propietario propietario)
                 
                 return View(inmueble);
             }
+
+
                  public IActionResult Detalle(int id)
             {  
                 RepositorioInmueble ri = new RepositorioInmueble();
                 var inmueble = ri.GetInmueble(id);
                 
-               return Json  (inmueble);
+               return View(inmueble);
             }
     	public IActionResult Editar(int id)
             {  

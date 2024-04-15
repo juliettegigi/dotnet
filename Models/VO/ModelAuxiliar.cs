@@ -8,6 +8,7 @@ namespace InmobiliariaGutierrez.Models.VO
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Dni { get; set; }
+        public DateTime FinContrato { get; set; }
         public IList<Pago> Pagos { get; set; }
         
         // Campos para los contratos

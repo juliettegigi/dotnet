@@ -1,56 +1,61 @@
 @model InmobiliariaGutierrez.Models.VO.Inmueble
-@{
-    ViewData["Title"] = "Detalle del Inmueble";
-}
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Inmueble</title>
 </head>
 <body>
-    <h4>Detalle del Inmueble</h4>
-    <hr />
-
-    <div class="row">
-        <h2>Propietario</h2>
-        <div class="col-md-4">
-            <form action="" method="post">
-                  <div class="form-group">
-                    <label for="Propietario">Nombre y apellido del propietario:</label>
-                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.Nombre  @Model.PropietarioId.Apellido" readonly />
-                </div>  
-                  <div class="form-group">
-                    <label for="Propietario">Documento:</label>
-                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.DNI" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="Propietario">Telefono:</label>
-                    <input type="text" id="Propietario" name="Propietario" class="form-control" value="@Model.PropietarioId.Telefono" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="Direccion">Dirección:</label>
-                    <input type="text" id="Direccion" name="Direccion" class="form-control" value="@Model.PropietarioId.Domicilio" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="Direccion">Email:</label>
-                    <input type="text" id="Direccion" name="Direccion" class="form-control" value="@Model.PropietarioId.Email" readonly />
-                </div>
-
-                 <h2>Inmuebles</h2>
-                <div class="form-group">
-                    <label for="CantidadAmbientes">Cantidad de Ambientes:</label>
-                    <input type="text" id="CantidadAmbientes" name="CantidadAmbientes" class="form-control" value="@Model.CantidadAmbientes" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="Uso">Uso:</label>
-                    <input type="text" id="Uso" name="Uso" class="form-control" value="@Model.Uso" readonly />
-                </div>
-                <div class="form-group">
-                    <label for="PrecioBase">Precio Base:</label>
-                    <input type="text" id="PrecioBase" name="PrecioBase" class="form-control" value="@Model.PrecioBase" readonly />
-                </div>
-              
-             
-            </form>
-        </div>
-    </div>
+    <h2>Datos del Inmueble</h2>
+    <form>
+        <h3>Propietario</h3>
+        <label for="nombre">Nombre del Propietario:</label><br>
+        <input type="text" id="nombre" value="@Model.PropietarioId.Nombre" readonly><br>
+        
+        <label for="apellido">Apellido del Propietario:</label><br>
+        <input type="text" id="apellido" value="@Model.PropietarioId.Apellido" readonly><br>
+        
+        <label for="dni">DNI del Propietario:</label><br>
+        <input type="text" id="dni" value="@Model.PropietarioId.DNI" readonly><br>
+        
+        <label for="telefono">Teléfono del Propietario:</label><br>
+        <input type="text" id="telefono" value="@Model.PropietarioId.Telefono" readonly><br>
+        
+        <label for="email">Email del Propietario:</label><br>
+        <input type="text" id="email" value="@Model.PropietarioId.Email" readonly><br>
+        
+        <label for="domicilio">Domicilio del Propietario:</label><br>
+        <input type="text" id="domicilio" value="@Model.PropietarioId.Domicilio" readonly><br>
+        
+        <h3>Inmueble</h3>
+        <label for="direccion">Dirección:</label><br>
+        <input type="text" id="direccion" value="@Model.Direccion" readonly><br>
+        
+        <label for="tipo">Tipo de Inmueble:</label><br>
+        <input type="text" id="tipo" value="@Model.InmuebleTipoId" readonly><br>
+        
+        <label for="cantidadAmbientes">Cantidad de Ambientes:</label><br>
+        <input type="text" id="cantidadAmbientes" value="@Model.CantidadAmbientes" readonly><br>
+        
+        <label for="suspendido">Suspendido:</label><br>
+        <input type="text" id="suspendido" value="@Model.Suspendido" readonly><br>
+        
+        <label for="disponible">Disponible:</label><br>
+        <input type="text" id="disponible" value="@Model.Disponible" readonly><br>
+        
+        <label for="precioBase">Precio Base:</label><br>
+        <input type="text" id="precioBase" value="@Model.PrecioBase" readonly><br>
+        
+        <label for="uso">Uso:</label><br>
+        <input type="text" id="uso" value="@Model.Uso" readonly><br>
+        
+        <label for="cLatitud">Latitud:</label><br>
+        <input type="text" id="cLatitud" value="@Model.Coordenadas.CLatitud" readonly><br>
+        
+        <label for="cLongitud">Longitud:</label><br>
+        <input type="text" id="cLongitud" value="@Model.Coordenadas.CLongitud" readonly><br>
+    </form>
 </body>
 </html>

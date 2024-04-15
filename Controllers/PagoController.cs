@@ -92,20 +92,34 @@ VALUES (@ContratoId, @Importe, GETDATE());
     {
         return View();
     }
+
+
+
     public IActionResult Prepago(int Id, string nombre, string apellido, string dni)
     {    
  RepositorioPago rp = new RepositorioPago();
     IList<Pago> pagos = rp.GetPago(Id);
+      RepositorioContrato rc=new RepositorioContrato();
+        Contrato con=new Contrato();
+        con=rc.GetContrato(Id);
 
     ModelAuxiliar modelo = new ModelAuxiliar();
+    modelo.FinContrato=con.FechaFin;
     modelo.Nombre = nombre;
     modelo.Apellido = apellido;
     modelo.Dni = dni;
      modelo.Pagos =new List<Pago>(); 
      modelo.Pagos=pagos;
-
+       DateTime nuevaFecha = DateTime.Now;
     
    //return Json(pagos);
+   if (nuevaFecha>con.FechaFin)
+        {
+             TempData["dato"]="Tiene que renovar Contrato O tiene que desalojarlo";
+             
+       
+   
+       }
     return View("Pago", modelo);
     }
 
