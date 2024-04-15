@@ -26,7 +26,7 @@ public class PagoController : Controller
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
     } 
-      public IActionResult Pagar(int ContratoId,int NumeroPago, DateTime fecha )
+      public IActionResult Pagar( string nombre, string apellido,int ContratoId,int NumeroPago, DateTime fecha )
     {   
          DateTime nuevaFecha = new DateTime(fecha.Year, fecha.Day + 1 , fecha.Month );
         
@@ -42,9 +42,11 @@ public class PagoController : Controller
          pago.Importe=0;
          decimal numeroDecimal;
         
+        
          pago.FechaPago= DateTime.Now;
          Console.WriteLine(nuevaFecha);
            Console.WriteLine( con.FechaFin);
+           
     
          
 
@@ -120,7 +122,7 @@ VALUES (@ContratoId, @Importe, GETDATE());
        
    
        }
-    return View("Pago", modelo);
+    return View("Pagar", modelo);
     }
 
      public IActionResult MiAction()

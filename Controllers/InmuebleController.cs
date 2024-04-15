@@ -36,6 +36,7 @@ public class InmuebleController : Controller
             try 
             {     RepositorioInmueble ri = new RepositorioInmueble();
                   var inmuebles = ri.EliminaInmueblePropietario(id);
+                   TempData["ErrorMessage"] = "Se elimino correctamente el inmueble";
                   return RedirectToAction("Index");
             }
             catch (System.Exception)
@@ -179,7 +180,9 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
 
          }
          else{
-            return View("~/Views/Home/Index.cshtml");
+
+            return RedirectToAction("Index");
+
 
          }
       

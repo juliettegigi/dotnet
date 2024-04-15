@@ -33,6 +33,7 @@
                     <th>Fin De Contrato</th>
                     <th>Importe</th>
                     <th></th>
+                      <th></th>
 
                 </tr>
             </thead>
@@ -50,16 +51,22 @@
                            <td class="d-flex">
                                 @if (pago.FechaPago == DateTime.MinValue)
                                 {
-                                    <form id="formPago" asp-action="Pagar" asp-route-ContratoId="@pago.ContratoId" asp-route-NumeroPago="@pago.NumeroPago" asp-route-fecha="@pago.Fecha" asp-route-importe="@pago.Importe" method="post">
+                                    <form id="formPago" asp-action="Pagar" asp-route-ContratoId="@pago.ContratoId" asp-route-nombre="@Model.Nombre" asp-route-apellido="@Model.Apellido" asp-route-dni="@Model.Dni" asp-route-NumeroPago="@pago.NumeroPago" asp-route-fecha="@pago.Fecha" asp-route-importe="@pago.Importe" method="post">
                                         <button id="btnPagar" type="submit" onclick="return confirm('¿Estás seguro que deseas realizar el pago?');" class="btn btn-success"><i class="bi bi-cash"></i> Pagar</button>
                                     </form>
                                 }
                                 else {
                                                                 
                                     <i class="bi bi-check-circle text-success"></i>
+                               
                                 
 
                                 }
+                            </td>
+                            <td>
+                                  <form id="formPago" asp-action="Pagar" asp-route-ContratoId="@pago.ContratoId" asp-route-nombre="@Model.Nombre" asp-route-apellido="@Model.Apellido" asp-route-dni="@Model.Dni" asp-route-NumeroPago="@pago.NumeroPago" asp-route-fecha="@pago.Fecha" asp-route-importe="@pago.Importe" method="post">
+                                        <button id="btnPagar" type="submit" onclick="return confirm('¿Estás seguro que deseas realizar el pago?');" class="btn btn-success"><i class="bi bi-cash"></i> Pagar</button>
+                                    </form>
                             </td>
                         </tr>
                     }
