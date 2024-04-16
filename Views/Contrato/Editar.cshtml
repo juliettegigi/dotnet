@@ -1,5 +1,4 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
-
 <h4>Nuevo contrato</h4>
 
 <hr />
@@ -12,9 +11,9 @@
     <form asp-action="Guardar" method="post">  
       
       
-      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 visible">
+      <div class="formularioContrato z-5 position-absolute  top-0 start-0 h-50 w-50 visible">
         <div class="form-group">
-          <input asp-for="Id" type="hidden" value=@(ViewBag.id!=null?ViewBag.id:0)>
+          <input asp-for="Id" type="hidden" value=@(Model!=null?Model.Id:0)>
           <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
           <label asp-for="InquilinoId" class="control-label">Inquilino</label>
           <input asp-for="InquilinoId" class="form-control"
@@ -43,21 +42,45 @@
           </button>
         </div>
       </div>
+      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible">
+                <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
+                <div class="form-group">
+                  @Html.Partial("_tablaContrato.cshtml")
+                </div>
+                
+                <div>
+                  <button type="button" class="btn btn-secondary disabled" id="btnNext2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
+                  </button>
+                </div>
+      </div>  
+      
       
       <div class="formularioContrato z-3 position-absolute  top-0 start-0 h-50 w-50 invisible">
-        <div class="form-group">
-           <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
-          @Html.Partial("_tablaContrato.cshtml")
-        </div>
-        <div>
-          <button type="button" class="btn btn-secondary disabled" id="btnNext2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-            </svg>
-          </button>
-        </div>
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header py-3">
+                      <h4 class="my-0 fw-normal">Inmueble</h4>
+                    </div>
+                    <div class="card-body">
+                              <h1 class="card-title pricing-card-title">@(Model!=null?Model.InmuebleId.PropietarioId.Nombre:"") <small class="text-body-secondary fw-light">@(Model!=null?Model.InmuebleId.PropietarioId.Apellido:"")</small></h1>
+                              <ul class="list-unstyled mt-3 mb-4">
+                                <li>Dirección: @(Model!=null?Model.InmuebleId.Direccion:"")</li>
+                                <li>Tipo: @(Model!=null?Model.InmuebleId.InmuebleTipoId.Tipo:"")</li>
+                                <li>Uso: @(Model!=null?Model.InmuebleId.Uso:"")</li>
+                                <li>Cantidad de ambientes: @(Model!=null?Model.InmuebleId.CantidadAmbientes:"")</li>
+                              </ul>
+                              <button id="btnSeleccionarOtroInmueble" type="button" class="w-60 btn btn-lg btn-primary">Seleccionar otro inmueble</button>
+                              <button type="button" class="w-25 btn btn-lg btn-primary" id="btnNext22">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                                </svg>
+                              </button>
+                    </div>
+                </div>
       </div>
-
+      
       <div class="formularioContrato z-2 position-absolute  top-0 start-0 h-50 w-50 invisible">
         
         <div class="form-group">
@@ -97,11 +120,63 @@
 <script>
     
  const registro=document.getElementById("registro");
-    const registroClon2 = registro.cloneNode(true);
+   
     const btn1=document.getElementById("btnNext1");
     const btn2=document.getElementById("btnNext2");
+    const btn22=document.getElementById("btnNext22");
+    const btn3=document.getElementById("btnSeleccionarOtroInmueble");
+    const inputInnquilino=document.getElementById('innquilinoDataList')
 
-     const inputInnquilino=document.getElementById('innquilinoDataList')
+   function mostrarTabla(){
+        const visible = document.querySelector(".z-5");
+        const siguiente=document.querySelector(".z-4");
+        siguiente.classList.remove("invisible");
+        siguiente.classList.remove('z-5')
+        siguiente.classList.add('z-5');
+        visible.classList.add('z-4');
+        visible.classList.remove('z-5');        
+        visible.classList.add("invisible");
+        dibujarTabla(1);
+        
+   }
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+  if(innquilinoDataList.value){ // editar
+   btn1.classList.remove('disabled');
+
+    btn1.addEventListener('click', e=>{
+        const visible = document.querySelector(".z-5");
+        const siguiente=document.querySelector(".z-3");
+        siguiente.classList.remove("invisible");
+        siguiente.classList.remove('z-3')
+        siguiente.classList.add('z-5');
+        visible.classList.add('z-3');
+        visible.classList.remove('z-5');        
+        visible.classList.add("invisible");
+           
+   })
+   }
+
+   else{
+    btn1.addEventListener('click', mostrarTabla);
+   }
+});
+
+
+
+
+btn3.addEventListener('click',mostrarTabla)
+
+
+
+
+
+//*****************************************************************************************
+
     document.getElementById('innquilinoDataList').addEventListener('input', function () {
         
         var valorIngresado = this.value;
@@ -146,7 +221,7 @@
 
 
 function dibujarTabla(page=1){
-        
+         const registroClon2 = registro.cloneNode(true);
    
         
         var xhr = new XMLHttpRequest();
@@ -260,37 +335,23 @@ function dibujarTabla(page=1){
 
 
 
-
-
-
-
-
-
-
-    btn1.addEventListener('click', e=>{
-        const visible = document.querySelector(".z-4");
-        const siguiente=document.querySelector(".z-3");
-        siguiente.classList.remove("invisible");
-        siguiente.classList.remove('z-3')
-        siguiente.classList.add('z-4');
-        visible.classList.add('z-3');
-        visible.classList.remove('z-4');        
-        visible.classList.add("invisible");
-        dibujarTabla(1);
-        });
-
-
-    btn2.addEventListener('click', e=>{
-         const visible = document.querySelector(".z-4");
+function pagSiguiente(){
+  
+         const visible = document.querySelector(".z-5");
          const siguiente=document.querySelector(".z-2");
         siguiente.classList.remove("invisible");
         siguiente.classList.add("visible");
         siguiente.classList.remove('z-2')
-        siguiente.classList.add('z-4');
+        siguiente.classList.add('z-5');
         visible.classList.add('z-2');
-        visible.classList.remove('z-4');
+        visible.classList.remove('z-5');
         visible.classList.add("invisible");
-        });    
+        
+}
+
+
+    btn2.addEventListener('click', pagSiguiente);
+    btn22.addEventListener('click',pagSiguiente );       
 </script>
 
 @section Scripts {

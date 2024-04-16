@@ -48,7 +48,6 @@ public class ContratoController : Controller
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
-            ViewBag.id=id;
          Contrato c=rc.GetContrato(id);
          return View(c);
         }
