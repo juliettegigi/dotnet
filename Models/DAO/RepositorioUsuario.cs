@@ -195,6 +195,39 @@ public Usuario ObtenerPorId(int id)
 			}
 			return e;
 		}
+
+
+		public void ActualizarUsuario(Usuario usuario)
+{
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        string sql = @"UPDATE Usuarios 
+                       SET Nombre = @nombre, 
+                           Apellido = @apellido, 
+                           Avatar = @avatar, 
+                           Email = @email,
+                           Pass = @pass,
+                           Rol = @rol
+                       WHERE Id = @id";
+                       
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.CommandType = CommandType.Text;
+            command.Parameters.AddWithValue("@nombre", usuario.Nombre);
+            command.Parameters.AddWithValue("@apellido", usuario.Apellido);
+            command.Parameters.AddWithValue("@avatar", (object)usuario.Avatar ?? DBNull.Value);
+            command.Parameters.AddWithValue("@email", usuario.Email);
+            command.Parameters.AddWithValue("@pass", (object)usuario.Pass ?? DBNull.Value);
+            command.Parameters.AddWithValue("@rol", usuario.Rol);
+            command.Parameters.AddWithValue("@id", usuario.Id);
+
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+    }
+}
+
 		
 	}
 

@@ -50,6 +50,7 @@ public class UsuarioController : Controller
 		{   
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario usuario = ru.ObtenerPorId(id);
+			Console.WriteLine(usuario.Rol);
 			ViewBag.Roles = Usuario.ObtenerRoles();
 			return View(usuario);
 			} 
@@ -192,4 +193,57 @@ public async Task<ActionResult> Logout()
 			return RedirectToAction("Index", "Home");
 		}
 
+
+
+
+
+
+		[HttpPost]
+public ActionResult Update(Usuario u)
+{
+    try
+    {
+        if (u.Pass != null)
+        {
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                password: u.Pass,
+                                salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                                prf: KeyDerivationPrf.HMACSHA1,
+                                iterationCount: 1000,
+                                numBytesRequested: 256 / 8));
+            u.Pass = hashed;
+        }
+
+        if (u.AvatarFile != null && u.Id > 0)
+        {
+            string wwwPath = environment.WebRootPath;
+            string path = Path.Combine(wwwPath, "Uploads");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            string fileName = "avatar_" + u.Id + Path.GetExtension(u.AvatarFile.FileName);
+            string pathCompleto = Path.Combine(path, fileName);
+            u.Avatar = Path.Combine("/Uploads", fileName);
+            using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+            {
+                u.AvatarFile.CopyTo(stream);
+            }
+        }
+
+        repositorio.ActualizarUsuario(u);
+
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        ViewBag.Roles = Usuario.ObtenerRoles();
+        return View("Edit", u); 
+    }
 }
+
+
+}
+
+//**********************************************************************************************
+//**********************************************************************************************
