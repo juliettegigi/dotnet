@@ -26,7 +26,12 @@ public class UsuarioController : Controller
             }
 	
       public IActionResult Index(){
-		return View();
+		IList<Usuario> usuarios=new List<Usuario>();
+		RepositorioUsuario ru=new RepositorioUsuario();
+		usuarios=ru.ObtenerTodos();
+		
+		
+		return View(usuarios);
 	}
 
 
@@ -36,6 +41,29 @@ public class UsuarioController : Controller
 			ViewBag.Roles = Usuario.ObtenerRoles();
 			return View();
 		} 
+
+
+
+
+	//***************************************************************************************************************************************************
+		public ActionResult Editar(int id)
+		{   
+			RepositorioUsuario ru = new RepositorioUsuario();
+			Usuario usuario = ru.ObtenerPorId(id);
+			ViewBag.Roles = Usuario.ObtenerRoles();
+			return View(usuario);
+			} 
+
+
+
+
+//*************************************************************************************************************
+//********************************************************************************************************************************************
+	//***************************************************************************************************************************************************
+		public ActionResult Baja(int id)
+		{ repositorio.Baja(id);
+			 return RedirectToAction("Index");
+			} 
 
 
 
