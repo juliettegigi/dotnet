@@ -126,6 +126,7 @@ public Inquilino crearInquilino(MySqlDataReader reader){
                         CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
                         Uso = uso,
                         Coordenadas = coordenada,
+						Disponible = reader.GetBoolean("disponible"),
                     };			
 }
 

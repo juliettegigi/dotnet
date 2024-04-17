@@ -157,7 +157,7 @@
         <div class="mb-3">
             <p>¿Está listo para alquilar?</p>
            <select class="form-select form-select-sm" name="Alquilar" aria-label=".form-select-sm example">
-                @if (Model.Disponible)
+                @if (Model.Disponible==true)
                 {
                     <option value="1" selected>Si</option>
                     <option value="0">No</option>
