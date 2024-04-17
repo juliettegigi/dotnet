@@ -249,7 +249,7 @@ public ActionResult Update(Usuario u)
 	
 }
 public ActionResult Updatese(Usuario u)
-{  
+{  Console.WriteLine(u.EliminarFoto);
     try
     {
         // Verificar si se proporciona una nueva contraseña y hashearla
@@ -265,7 +265,32 @@ public ActionResult Updatese(Usuario u)
         }
 
         // Actualizar la información del usuario en la base de datos
-        
+       if (u.EliminarFoto)
+        {   
+            // Obtener la ruta del directorio donde se almacenan las fotos
+            string wwwPath = environment.WebRootPath;
+            string path = Path.Combine(wwwPath, "Uploads");
+			
+
+            // Obtener la ruta completa del archivo de la foto
+            string fileName =u.Avatar;
+			//Console.WriteLine("que cagada");
+            //string pathCompleto = Path.Combine(path, fileName);
+			Console.WriteLine("que gato");
+		
+
+            // Verificar si el archivo existe y eliminarlo
+            if (System.IO.File.Exists(fileName))
+            {
+                System.IO.File.Delete(fileName);
+            }
+
+            // También puedes eliminar la referencia de la foto en el modelo del usuario si es necesario
+            u.Avatar = null; 
+			  repositorio.ActualizarUsuario(u);
+
+        return RedirectToAction(nameof(Index));
+        }
 
         // Manejar la carga de una nueva foto (avatar) si se proporciona
         if (u.AvatarFile != null && u.AvatarFile.Length > 0)
@@ -290,12 +315,11 @@ public ActionResult Updatese(Usuario u)
         }
         else if (string.IsNullOrEmpty(u.Avatar))
         {Console.WriteLine("Entrando aca");
-            // Si no se proporciona una nueva foto y el campo Avatar está vacío,
-            // mantener la foto existente (no modificar Avatar en la base de datos)
+          
             u.Avatar = repositorio.ObtenerPorId(u.Id).Avatar;
         }
 
-        // Actualizar la información del usuario (incluida la foto) en la base de datos
+
         repositorio.ActualizarUsuario(u);
 
         return RedirectToAction(nameof(Index));

@@ -15,6 +15,7 @@ namespace InmobiliariaGutierrez.Models.VO;
 		public string Avatar { get; set; }
 		public IFormFile AvatarFile { get; set; }
 		public int Rol { get; set; }		
+		public Boolean EliminarFoto{ get; set; }
         public string RolNombre => Rol > 0 ? ((enRoles)Rol).ToString() : "";
 
 		public static IDictionary<int, string> ObtenerRoles()

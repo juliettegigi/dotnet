@@ -205,12 +205,8 @@ public void ActualizarUsuario(Usuario usuario)
                            Apellido = @apellido, 
                            Avatar = @avatar, 
                            Email = @email,";
-
-        // Agregar la actualización del avatar solo si no es nulo
-        if (usuario.Avatar != null)
-        {
-            sql += " Avatar = @avatar,";
-        }
+        sql += " Avatar = @avatar,";
+        
 
         // Agregar la actualización de la contraseña solo si no es nula
         if (usuario.Pass != null)
