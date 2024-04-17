@@ -5,7 +5,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Editar-max" enctype="multipart/form-data" asp-route-id="@Model.Id">
+        <form asp-action="Updatese" enctype="multipart/form-data" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>
@@ -24,13 +24,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="Pass" class="control-label"></label>
-                <input asp-for="Pass" class="form-control" value="" />
+                <input asp-for="Pass" class="form-control" value="" placeholder="nueva contraseña o queda la antigua" />
                 <span asp-validation-for="Pass" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AvatarFile" class="control-label"></label>
-                <input type="file" name="AvatarFile" />
+                <label asp-for="AvatarFile" class="control-label" ></label>
+                @if (!string.IsNullOrEmpty(Model.Avatar))
+                {
+                    <img src="@Model.Avatar" class="avatar img-thumbnail" alt="Avatar">
+                }
+                else
+                {
+                    <span>No tiene foto de perfil</span>
+                }
+                <input type="file" name="AvatarFile" placeholder="Ingrese nueva contraseña"  />
             </div>
+
 			<div class="form-group">
 				<label class="control-label">Rol</label>
 				<select class="form-control" name="Rol">

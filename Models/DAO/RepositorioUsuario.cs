@@ -196,8 +196,7 @@ public Usuario ObtenerPorId(int id)
 			return e;
 		}
 
-
-		public void ActualizarUsuario(Usuario usuario)
+public void ActualizarUsuario(Usuario usuario)
 {
     using (var connection = new MySqlConnection(ConnectionString))
     {
@@ -205,11 +204,22 @@ public Usuario ObtenerPorId(int id)
                        SET Nombre = @nombre, 
                            Apellido = @apellido, 
                            Avatar = @avatar, 
-                           Email = @email,
-                           Pass = @pass,
-                           Rol = @rol
-                       WHERE Id = @id";
-                       
+                           Email = @email,";
+
+        // Agregar la actualización del avatar solo si no es nulo
+        if (usuario.Avatar != null)
+        {
+            sql += " Avatar = @avatar,";
+        }
+
+        // Agregar la actualización de la contraseña solo si no es nula
+        if (usuario.Pass != null)
+        {
+            sql += " Pass = @pass,";
+        }
+
+        sql += " Rol = @rol WHERE Id = @id";
+
         using (var command = new MySqlCommand(sql, connection))
         {
             command.CommandType = CommandType.Text;
@@ -217,7 +227,13 @@ public Usuario ObtenerPorId(int id)
             command.Parameters.AddWithValue("@apellido", usuario.Apellido);
             command.Parameters.AddWithValue("@avatar", (object)usuario.Avatar ?? DBNull.Value);
             command.Parameters.AddWithValue("@email", usuario.Email);
-            command.Parameters.AddWithValue("@pass", (object)usuario.Pass ?? DBNull.Value);
+
+            // Agregar el parámetro de contraseña solo si no es nula
+            if (usuario.Pass != null)
+            {
+                command.Parameters.AddWithValue("@pass", usuario.Pass);
+            }
+
             command.Parameters.AddWithValue("@rol", usuario.Rol);
             command.Parameters.AddWithValue("@id", usuario.Id);
 

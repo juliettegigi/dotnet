@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;//para indicar q uso las cooki
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using InmobiliariaGutierrez.Models.DAO;
 using System;
+using Microsoft.Extensions.Logging.Console;
 
 namespace InmobiliariaGutierrez.Controllers;
 
@@ -198,9 +199,11 @@ public async Task<ActionResult> Logout()
 
 
 
-		[HttpPost]
+[HttpPost]
 public ActionResult Update(Usuario u)
-{
+{  
+
+
     try
     {
         if (u.Pass != null)
@@ -213,6 +216,8 @@ public ActionResult Update(Usuario u)
                                 numBytesRequested: 256 / 8));
             u.Pass = hashed;
         }
+
+		 repositorio.ActualizarUsuario(u);
 
         if (u.AvatarFile != null && u.Id > 0)
         {
@@ -231,7 +236,7 @@ public ActionResult Update(Usuario u)
             }
         }
 
-        repositorio.ActualizarUsuario(u);
+       
 
         return RedirectToAction(nameof(Index));
     }
@@ -240,6 +245,66 @@ public ActionResult Update(Usuario u)
         ViewBag.Roles = Usuario.ObtenerRoles();
         return View("Edit", u); 
     }
+
+	
+}
+public ActionResult Updatese(Usuario u)
+{  
+    try
+    {
+        // Verificar si se proporciona una nueva contraseña y hashearla
+        if (!string.IsNullOrEmpty(u.Pass))
+        {
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                                password: u.Pass,
+                                salt: System.Text.Encoding.ASCII.GetBytes(configuration["Salt"]),
+                                prf: KeyDerivationPrf.HMACSHA1,
+                                iterationCount: 1000,
+                                numBytesRequested: 256 / 8));
+            u.Pass = hashed;
+        }
+
+        // Actualizar la información del usuario en la base de datos
+        
+
+        // Manejar la carga de una nueva foto (avatar) si se proporciona
+        if (u.AvatarFile != null && u.AvatarFile.Length > 0)
+        {
+            string wwwPath = environment.WebRootPath;
+            string path = Path.Combine(wwwPath, "Uploads");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            string fileName = "avatar_" + u.Id + Path.GetExtension(u.AvatarFile.FileName);
+            string pathCompleto = Path.Combine(path, fileName);
+
+            // Guardar la nueva ruta del avatar en el modelo del usuario
+            u.Avatar = Path.Combine("/Uploads", fileName);
+
+            // Guardar el archivo en el servidor
+            using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+            {
+                u.AvatarFile.CopyTo(stream);
+            }
+        }
+        else if (string.IsNullOrEmpty(u.Avatar))
+        {Console.WriteLine("Entrando aca");
+            // Si no se proporciona una nueva foto y el campo Avatar está vacío,
+            // mantener la foto existente (no modificar Avatar en la base de datos)
+            u.Avatar = repositorio.ObtenerPorId(u.Id).Avatar;
+        }
+
+        // Actualizar la información del usuario (incluida la foto) en la base de datos
+        repositorio.ActualizarUsuario(u);
+
+        return RedirectToAction(nameof(Index));
+    }
+    catch (Exception ex)
+    {
+        ViewBag.Roles = Usuario.ObtenerRoles();
+        return View("Edit", u); 
+    }   
 }
 
 
