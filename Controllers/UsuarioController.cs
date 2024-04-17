@@ -249,7 +249,7 @@ public ActionResult Update(Usuario u)
 	
 }
 public ActionResult Updatese(Usuario u)
-{  Console.WriteLine(u.EliminarFoto);
+{  Console.WriteLine(u.Avatar);
     try
     {
         // Verificar si se proporciona una nueva contraseña y hashearla
@@ -265,32 +265,40 @@ public ActionResult Updatese(Usuario u)
         }
 
         // Actualizar la información del usuario en la base de datos
-       if (u.EliminarFoto)
-        {   
-            // Obtener la ruta del directorio donde se almacenan las fotos
-            string wwwPath = environment.WebRootPath;
-            string path = Path.Combine(wwwPath, "Uploads");
-			
+if (u.EliminarFoto)
+{   
+    // Obtener la ruta completa del archivo de la foto
+    u.Avatar = repositorio.ObtenerPorId(u.Id).Avatar;
+    string wwwPath = environment.WebRootPath;
+    string path = Path.Combine(wwwPath, "Uploads");
 
-            // Obtener la ruta completa del archivo de la foto
-            string fileName =u.Avatar;
-			//Console.WriteLine("que cagada");
-            //string pathCompleto = Path.Combine(path, fileName);
-			Console.WriteLine("que gato");
-		
+    // Eliminar la parte "/Uploads" de la ruta
+    string fileName = u.Avatar.Replace("/Uploads", "");
+	 Console.WriteLine("-----------");
+   Console.WriteLine(path);
+    Console.WriteLine("-------------");
 
-            // Verificar si el archivo existe y eliminarlo
-            if (System.IO.File.Exists(fileName))
-            {
-                System.IO.File.Delete(fileName);
-            }
+    // Reemplazar las barras inclinadas inversas por barras inclinadas
+    fileName = fileName.Replace("/", "\\");
 
-            // También puedes eliminar la referencia de la foto en el modelo del usuario si es necesario
-            u.Avatar = null; 
-			  repositorio.ActualizarUsuario(u);
+    // Obtener la ruta completa del archivo
+    string fullPath =path+fileName;
+	 Console.WriteLine("-----------");
+   Console.WriteLine(fullPath);
+    Console.WriteLine("-------------");
+    // Verificar si el archivo existe y eliminarlo
+    if (System.IO.File.Exists(fullPath))
+    {
+        System.IO.File.Delete(fullPath);
+    }
 
-        return RedirectToAction(nameof(Index));
-        }
+    // También puedes eliminar la referencia de la foto en el modelo del usuario si es necesario
+    u.Avatar = null; 
+    repositorio.ActualizarUsuario(u);
+
+    return RedirectToAction(nameof(Index));
+}
+
 
         // Manejar la carga de una nueva foto (avatar) si se proporciona
         if (u.AvatarFile != null && u.AvatarFile.Length > 0)
