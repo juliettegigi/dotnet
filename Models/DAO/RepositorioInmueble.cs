@@ -406,6 +406,9 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
             {where};";
+
+            Console.WriteLine("en repoooooooooooooooooooooooooooooooooooooooooooooooooo");
+            Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{   if(filtros!=null){
                         if(filtros.CantidadAmbientes != 0)command.Parameters.AddWithValue("c", filtros.CantidadAmbientes);
@@ -524,18 +527,20 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
 
 public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewInquilinoFiltrarInmueble? filtros)
 	{
-        
+        Console.WriteLine("**************************************************Filtrosssssssssssssssss");
+        Console.WriteLine(filtros);
         List<string> listaDeFiltros = new List<string>();
-        string where="";
+        string where="estado=true";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
         if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
         if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
         if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
         if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
         if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
+        if(!string.IsNullOrEmpty(filtros.ApartirDe))listaDeFiltros.Add("(contratos.fechainicio<@aPartirDe or contratos.fechafin>@aPartirDe)");
 
         if(listaDeFiltros.Count!=0){
-            where="where ";
+            where="where estado=true AND ";
             int i=0;
             for(i=0;i<listaDeFiltros.Count-1;i++)
                 {
@@ -554,6 +559,8 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
+            INNER JOIN cotratos ON inmuebles.id = contratos.inmuebleid
+            INNER JOIN contratos ON inmuebles.id=contratos.inmuebleid
             {where}
             order by id
             limit @limite offset @offset;
@@ -568,6 +575,9 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
                 if(filtros.PrecioMax != 0)command.Parameters.AddWithValue("pmax", filtros.PrecioMax );
                 if(filtros.PrecioMin != 0)command.Parameters.AddWithValue("pmin", filtros.PrecioMin );
                 if(filtros.Tipo!="")command.Parameters.AddWithValue("t", filtros.Tipo );
+                if(filtros.ApartiDe!="")command.Parameters.AddWithValue("aPartirDe", filtros.ApartiDe );
+                if(filtros.Hasta!="")command.Parameters.AddWithValue("hasta", filtros.Hasta );
+
 				connection.Open();
 				using(var reader = command.ExecuteReader())
 				{

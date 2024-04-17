@@ -47,6 +47,8 @@ public class ContratoController : Controller
 
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
+        RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
+        ViewBag.ListaTipos=rit.GetInmuebleTipos();
         if(id!=0){
          Contrato c=rc.GetContrato(id);
          return View(c);
@@ -115,12 +117,15 @@ public class ContratoController : Controller
 	}
 
 
-    public IActionResult GetListaInmueblePag(int page,int limit=5)
+    public IActionResult GetListaInmueblePag(int page,int limit=5,ViewInquilinoFiltrarInmueble filtro=null)
     {   
+
+        Console.WriteLine("----------------------------------------------------------fffffffffffffffffControleer");
+        Console.WriteLine(filtro);
         int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();
-        IList<Inmueble>lista =ri.GetInmueblesPaginado(limit,offset);
-		int totalReg=ri.getCantidadRegistrosFiltrado(null);
+        IList<Inmueble>lista =ri.GetInmueblesPaginadoFiltrado(limit,offset,filtro);
+		int totalReg=ri.getCantidadRegistrosFiltrado(filtro);
 		int cantidadPaginas=totalReg/limit;
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
 		

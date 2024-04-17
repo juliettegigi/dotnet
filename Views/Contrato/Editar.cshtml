@@ -46,6 +46,10 @@
                 <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
                 <div class="form-group">
                   @Html.Partial("_tablaContrato.cshtml")
+                  <div>
+                     <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Filtrar</button>
+
+                   </div>
                 </div>
                 
                 <div>
@@ -117,6 +121,76 @@
 
 
 
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header border-secondary">
+    <h5 class="offcanvas-title border-secondary" id="offcanvasRightLabel">Filtros</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div>  
+      <span class="placeholder col-12 placeholder-xs"></span>
+  </div>
+  <div class="offcanvas-body ">
+    <form  method="get" name="formFiltrar"  >
+         <div>
+            <h4>Uso</h4>
+            <div>
+              <input type="hidden" name="page" value="1"/>
+              <input type="hidden" name="filtrar" value="1"/>
+               <input type="checkbox" id="cbComercial" name="cbComercial">
+               <label for="cbComercial">Comercial</label>
+               <input type="checkbox" id="cbResidencial" name="cbResidencial" )>
+               <label for="cbResidencial">Residencial</label>
+           </div>
+         </div>
+         <div>
+            <h4>Tipo</h4>
+            <div>
+               
+               <input class="form-control"  name="tipo" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
+               <datalist id="datalistOptions">
+                  @foreach (var item in ViewBag.ListaTipos){
+                      <option value="@item.Tipo">@item.Tipo</option>
+                  }
+               </datalist>
+           </div>
+         </div>
+         <div>
+            <h4>Cantidad de ambientes</h4>
+            <div>
+               <input type="number" min="0" name="cantidadAmbientes" step="1" >
+           </div>
+         </div>
+         <div>
+            <h4>Precio</h4>
+            <div>
+               <label for="precioMin">Precio Mínimo:</label>
+               <input type="number" id="precioMin" name="precioMin" min="0" step="0.01"> 
+               
+               <label for="precioMax">Precio Máximo:</label>
+               <input type="number" id="precioMax" name="precioMax" min="0" step="0.01" >
+           </div>
+         </div>
+         <div>
+            <h4>Fecha</h4>
+            <div>
+               <label  class="control-label"> A partir de: </label>
+               <input type="date" class="form-control" name="desde" id="desde" />
+            </div>
+            <div>    
+               <label for="hasta">Hasta:</label>
+               <input type="date"  name="hasta" id="hasta" class="form-control"   /> 
+           </div>
+         </div>
+         <div class="form-group">
+            <button type="button"  class="btn btn-primary" id="btnFiltrar">Aplicar</button>
+          </div>
+         
+    </form>
+  </div>
+</div>
+
+
+
 <script>
     
  const registro=document.getElementById("registro");
@@ -136,7 +210,7 @@
         visible.classList.add('z-4');
         visible.classList.remove('z-5');        
         visible.classList.add("invisible");
-        dibujarTabla(1);
+        dibujarTabla(1,`/Contrato/GetListaInmueblePag`);
         
    }
 
@@ -220,7 +294,9 @@ btn3.addEventListener('click',mostrarTabla)
 //***********************************************************************************************************************
 
 
-function dibujarTabla(page=1){
+function dibujarTabla(page=1,ruta,queryString='&'){
+        ruta=ruta.split("?")[0];
+        let p=1;
          const registroClon2 = registro.cloneNode(true);
    
         
@@ -229,7 +305,6 @@ function dibujarTabla(page=1){
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     var objeto=JSON.parse(xhr.responseText);
-                    console.log(objeto);
                     const listaInmuebles=objeto.listaInmuebles;
                     // recorro la lista creando cada tr y appendeandolo en el body
                    
@@ -255,7 +330,7 @@ function dibujarTabla(page=1){
                                   registroClon.querySelector('#inmuebleTipo').textContent+=inm.inmuebleTipoId.tipo;
                                   registroClon.querySelector('#direccion').textContent+=inm.direccion;
                                   registroClon.querySelector('#precioBase').textContent+=inm.precioBase;
-                                  registroClon.querySelector('#uso').textContent+=inm.uso;
+                                  registroClon.querySelector('#uso').textContent+=inm.uso==1?'Residelcial':'Comercial';
                                   //evennto para cada fila
                                   registroClon.addEventListener('click',(e)=>{
                                          const id=document.getElementById("inmuebleId");
@@ -284,7 +359,9 @@ function dibujarTabla(page=1){
                    aPrevious.innerHTML = '<span aria-hidden="true">&laquo;</span>';
                    liPrevious.appendChild(aPrevious);
                    liPrevious.addEventListener('click',e=>{
-                                dibujarTabla(objeto.page==1?objeto.cantidadPaginas:objeto.page-1)
+                                 const p=objeto.page==1?objeto.cantidadPaginas:objeto.page-1;
+                        
+                                dibujarTabla(p,ruta)
                                 })
                    navUl.appendChild(liPrevious);
 
@@ -301,8 +378,7 @@ function dibujarTabla(page=1){
                               li.appendChild(a);
                               navUl.appendChild(li);
                               li.addEventListener('click',e=>{
-                                console.log("tengo Evebto")
-                                dibujarTabla(i)
+                                dibujarTabla(i,ruta)
                                 })
                     }
                    const liNext = document.createElement('li');
@@ -314,7 +390,8 @@ function dibujarTabla(page=1){
                   aNext.innerHTML = '<span aria-hidden="true">&raquo;</span>';
                   liNext.appendChild(aNext);                  
                   liNext.addEventListener('click',e=>{
-                                dibujarTabla(objeto.page==objeto.cantidadPaginas ? 1 : objeto.page+1)
+                     const p=objeto.page==objeto.cantidadPaginas ? 1 : objeto.page+1;
+                                dibujarTabla(p,ruta)
                                 })
                   navUl.appendChild(liNext);
 
@@ -327,7 +404,9 @@ function dibujarTabla(page=1){
                 }
             }
           }
-        xhr.open('GET', `/Contrato/GetListaInmueblePag?page=${page}`, true);
+          ruta+=`?page=${page}${queryString=='&'?"":'&'+queryString}`;
+
+        xhr.open('GET', ruta, true);
         xhr.send();
 }
 
@@ -351,7 +430,39 @@ function pagSiguiente(){
 
 
     btn2.addEventListener('click', pagSiguiente);
-    btn22.addEventListener('click',pagSiguiente );       
+    btn22.addEventListener('click',pagSiguiente );    
+
+
+
+
+    function filtrar(){
+        event.preventDefault();
+         const obj={};
+         obj.cbComercial=formFiltrar[cbComercial];
+         obj.CbResidencial=formFiltrar[CbResidencial];
+         obj.Tipo=formFiltrar[tipo];
+         obj.CantidadAmbientes=formFiltrar[cantidadAmbientes];
+         obj.PrecioMin=formFiltrar[PrecioMin];
+         obj.PrecioMax=formFiltrar[PrecioMax];
+         const queryString = Object.keys(obj).map(key => key + '=' + encodeURIComponent(obj[key])).join('&');
+         dibujarTabla(1,`/Contrato/GetListaInmueblePag?${queryString}`);
+    }   
+
+
+    document.getElementById("btnFiltrar").addEventListener('click',function(){
+        event.preventDefault();
+         const obj={};
+         obj.cbComercial=formFiltrar['cbComercial'].checked;
+         obj.CbResidencial=formFiltrar['cbResidencial'].checked;
+         obj.Tipo=formFiltrar['tipo'].value;
+         obj.CantidadAmbientes=formFiltrar['cantidadAmbientes'].value;
+         obj.PrecioMin=formFiltrar['precioMin'].value;
+         obj.PrecioMax=formFiltrar['precioMax'].value;
+         obj.ApartirDe=formFiltrar['desde'].value;
+         obj.Hasta=formFiltrar['hasta'].value;
+         const queryString = Object.keys(obj).map(key => key + '=' + encodeURIComponent(obj[key])).join('&');
+         dibujarTabla(1,`/Contrato/GetListaInmueblePag?`,queryString);
+    }   );
 </script>
 
 @section Scripts {

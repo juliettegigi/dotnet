@@ -5,6 +5,7 @@ y el inquilino. Se debe volver a verificar que el inmueble no esté
 ocupado en esas fechas por otro contrato*/
 
 using System.ComponentModel.DataAnnotations.Schema;
+using InmobiliariaGutierrez.Models.Validacioness;
 
 namespace InmobiliariaGutierrez.Models.VO;
 
@@ -15,9 +16,11 @@ public class Contrato
     public Inmueble InmuebleId { get; set; }
     [ForeignKey(nameof(InquilinoId))]
     public Inquilino InquilinoId { get; set; }
+
     
 	public DateTime FechaInicio { get; set; }
-	public DateTime FechaFin { get; set; }
+	[FechaNoMenorQueLaActual()]
+    public DateTime FechaFin { get; set; }
 	public DateTime FechaFinAnticipada { get; set; }
 	public decimal PrecioXmes { get; set; }
     public bool Estado{ get; set; }
