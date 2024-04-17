@@ -23,3 +23,21 @@ body {
 
 .formularioContrato{
 }
+
+#imgPerfil{
+  height:40px;width:40px;
+  border-radius: 100%;
+}
+
+#flechaImgPerfil{
+  position:absolute;
+  right: -3px;
+  bottom: -8px;
+  color: #343a40;
+  background-color: #e9ecef; /* Color de fondo gris */
+  border-radius: 100%; /* Aplica un radio de borde para hacer un círculo */
+}
+
+.dropdown-toggle.dropdown-toggle-icon-none::after {
+  display: none !important;
+}

@@ -16,7 +16,11 @@
      
 </head>
 <body>
-    <header>
+
+
+    
+		<header>
+            @if (User.Identity.IsAuthenticated){
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">InmobiliariaGutierrez</a>
@@ -25,7 +29,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 d-flex">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -44,13 +48,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Contrato" asp-action="Index" asp-route-page="1" >Contratos</a> @* me dirige al controller Inquilino y al Index. Este busca en la DB la lista de inquilinos y devuerve la view Index de inquilino con la lista *@
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"  >Usuario</a> @* me dirige al controller Inquilino y al Index. Este busca en la DB la lista de inquilinos y devuerve la view Index de inquilino con la lista *@
-                        </li>
+                        @if(User.IsInRole("Administrador")){
+                               <li class="nav-item">
+                                  <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index"  >Usuario</a> @* me dirige al controller Inquilino y al Index. Este busca en la DB la lista de inquilinos y devuerve la view Index de inquilino con la lista *@
+                               </li>
+                        }
+                        <div class="ms-auto dropdown">
+                            <li class="ms-auto dropdown " id="perfil">
+                                <a class="dropdown-toggle dropdown-toggle-icon-none" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                                    <image id="imgPerfil" x="0" y="0" height="100%" preserveAspectRatio="xMidYMid slice" width="100%" src="@User.FindFirst("img")?.Value">
+                                        <i id="flechaImgPerfil" class="bi bi-arrow-down-circle secondary"></i>
+                                    </image>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-lg-end">
+                                  <li><a class="dropdown-item" href="#">Action</a></li>
+                                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                                  <li><a asp-controller="Usuario" asp-action="Logout" class="dropdown-item" >🚪 Salir</a></li>
+                                </ul>
+                            </li>
+                        </div>
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav>}
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -69,6 +89,8 @@
             &copy; 2024 - InmobiliariaGutierrez - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+				
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

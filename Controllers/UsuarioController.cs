@@ -159,8 +159,11 @@ public async Task<IActionResult> Login(ViewLogin login)
 						new Claim(ClaimTypes.Name, u.Email),
 						new Claim("FullName", u.Nombre + " " + u.Apellido),
 						new Claim(ClaimTypes.Role, u.RolNombre),
-						new Claim("id", $"{u.Id}")
+						new Claim("id", $"{u.Id}"),
+						new Claim("img", $"{u.Avatar}"),
+
 					};
+					Console.WriteLine(u.Avatar);
 
                     // al objeto le paso la lista, los datos del user, y lo 2do me crea la identidad conn cookies  
 					var claimsIdentity = new ClaimsIdentity(
