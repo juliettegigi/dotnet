@@ -30,6 +30,7 @@ public Inmueble? GetInmueble(int id)
                    inmuebles.cLatitud,
                    inmuebles.cLongitud,
                    inmuebles.suspendido,
+                    inmuebles.disponible,
                    propietarios.id AS idPropietario,
                    propietarios.dni,
                    propietarios.nombre,
@@ -90,6 +91,7 @@ public Inmueble? GetInmueble(int id)
                         CantidadAmbientes = reader.GetInt32("cantidadAmbientes"),
                         Uso = uso,
                         Coordenadas = coordenada,
+                        Disponible = reader.GetBoolean("disponible"),
                         PrecioBase=reader.GetDecimal("precioBase"),
                     };
                 }
@@ -186,7 +188,8 @@ public IList<Inmueble> GetAllInmuebles()
 							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
                             PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
 							Uso = crearUso(reader),
-                            Coordenadas=coordenada
+                            Coordenadas=coordenada,
+                            Disponible = reader.GetBoolean(nameof(Inmueble.Disponible)),
 							
 							
 						});
@@ -266,7 +269,8 @@ public int AltaInmueble(Inmueble inmueble)
                             {nameof(Inmueble.PrecioBase)},
                             {nameof(Inmueble.Coordenadas.CLatitud)},
                             {nameof(Inmueble.Coordenadas.CLongitud)},
-                            {nameof(Inmueble.Suspendido)}
+                            {nameof(Inmueble.Suspendido)},
+                            {nameof(Inmueble.Disponible)}
                    )
                    VALUES (
                             @{nameof(Inmueble.PropietarioId)}, 
@@ -277,7 +281,8 @@ public int AltaInmueble(Inmueble inmueble)
                             @{nameof(Inmueble.PrecioBase)}, 
                             @{nameof(Inmueble.Coordenadas.CLatitud)}, 
                             @{nameof(Inmueble.Coordenadas.CLongitud)}, 
-                            @{nameof(Inmueble.Suspendido)}
+                            @{nameof(Inmueble.Suspendido)},
+                             @{nameof(Inmueble.Disponible)}
                    );
                    SELECT LAST_INSERT_ID();";
         
@@ -292,6 +297,7 @@ public int AltaInmueble(Inmueble inmueble)
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Suspendido)}", inmueble.Suspendido);
+            command.Parameters.AddWithValue($"@{nameof(Inmueble.Disponible)}", inmueble.Disponible);
 
             connection.Open();
             id = Convert.ToInt32(command.ExecuteScalar());
@@ -315,7 +321,8 @@ public int AltaInmueble(Inmueble inmueble)
                     {nameof(Inmueble.Uso)} = @{nameof(Inmueble.Uso)},
                     {nameof(Inmueble.PrecioBase)} = @{nameof(Inmueble.PrecioBase)},
                     {nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
-                    {nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)}
+                    {nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)},
+                    {nameof(Inmueble.Disponible)} = @{nameof(Inmueble.Disponible)}
                     WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
                 using(var command = new MySqlCommand(sql, connection))
                 {
@@ -328,6 +335,7 @@ public int AltaInmueble(Inmueble inmueble)
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Disponible)}", inmueble.Disponible);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Id)}", inmueble.Id);
                     connection.Open();
                     command.ExecuteNonQuery();
