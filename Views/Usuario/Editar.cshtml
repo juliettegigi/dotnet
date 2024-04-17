@@ -1,0 +1,75 @@
+@model InmobiliariaGutierrez.Models.VO.Usuario
+<h1>Editar</h1>
+
+<h4>Usuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Updatese" enctype="multipart/form-data" asp-route-id="@Model.Id">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" value="@Model.Nombre" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" value="@Model.Apellido" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" value="@Model.Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pass" class="control-label"></label>
+                <input asp-for="Pass" class="form-control" value="" placeholder="nueva contraseña o queda la antigua" />
+                <span asp-validation-for="Pass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvatarFile" class="control-label" ></label>
+                @if (!string.IsNullOrEmpty(Model.Avatar))
+                {    
+                    <img src="@Model.Avatar" asp-for="Avatar" class="avatar img-thumbnail" alt="Avatar"  id="avatarImg">
+                }
+                else
+                {
+                    <span>No tiene foto de perfil</span>
+                }
+                <input type="file" name="AvatarFile"  />
+                   <input type="button" id="eliminarBtn" value="Eliminar Foto" onclick="eliminarFoto()" />
+                   <input type="hidden" id="eliminarFotoInput" name="EliminarFoto" />
+            </div>
+
+			<div class="form-group">
+				<label class="control-label">Rol</label>
+				<select class="form-control" name="Rol">
+					@foreach (var kvp in ViewBag.Roles)
+					{
+						         @if (kvp.Key == Model.Rol)
+									{
+										<option value="@kvp.Key" selected>@kvp.Value</option>
+									}
+									else
+									{
+										<option value="@kvp.Key">@kvp.Value</option>
+									}
+					}
+				</select>
+			</div>
+            <div class="form-group">
+                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div><script>
+    function eliminarFoto() {
+     
+        document.getElementById('eliminarFotoInput').value = 'true';
+
+
+        document.getElementById('avatarImg').style.display = 'none';
+    }
+</script>
+

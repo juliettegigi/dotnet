@@ -1,1 +1,61 @@
-<h1>index</h1>
+@model List<InmobiliariaGutierrez.Models.VO.Usuario>
+
+@{
+    ViewData["Title"] = "Lista de Usuarios";
+}
+
+    <h1 class="d-flex">Lista de Usuario</h1>
+    <a asp-action="Create" >
+        <button type="submit"  class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
+             <i class="bi bi-plus"></i>
+        </button>
+    </a>
+    
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Avatar</th>
+            <th>Acciones</th> <!-- Nueva columna para acciones -->
+        
+         
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+            <tr>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.Apellido</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.RolNombre</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(usuario.Avatar))
+                    {
+                        <img src="@usuario.Avatar" alt="Avatar de @usuario.Nombre @usuario.Apellido" style="width: 50px; height: 50px;" />
+                    }
+                    else
+                    {
+                        <span>No tiene avatar</span>
+                    }
+                </td>
+                <td class="d-flex">
+                    <form asp-action="Editar" asp-route-id="@usuario.Id" method="post" class="me-2">
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Editar usuario">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </form>
+                    <form asp-action="Baja" asp-route-id="@usuario.Id" method="post">
+                        <button type="submit" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Borrar usuario">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
