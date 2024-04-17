@@ -407,8 +407,6 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
             {where};";
 
-            Console.WriteLine("en repoooooooooooooooooooooooooooooooooooooooooooooooooo");
-            Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{   if(filtros!=null){
                         if(filtros.CantidadAmbientes != 0)command.Parameters.AddWithValue("c", filtros.CantidadAmbientes);
@@ -527,8 +525,7 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
 
 public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewInquilinoFiltrarInmueble? filtros)
 	{
-        Console.WriteLine("**************************************************Filtrosssssssssssssssss");
-        Console.WriteLine(filtros);
+        
         List<string> listaDeFiltros = new List<string>();
         string where="where contratos.estado=true";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
@@ -567,10 +564,6 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
             limit @limite offset @offset;
             "; 
 
-Console.WriteLine("**************************************************Filtrosssssssssssssssss");
-Console.WriteLine(sql);
-
-        Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);
 			    command.Parameters.AddWithValue("offset", offset);

@@ -42,7 +42,7 @@
           </button>
         </div>
       </div>
-      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible">
+      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible ">
                 <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
                 <div class="form-group">
                   @Html.Partial("_tablaContrato.cshtml")
@@ -68,19 +68,28 @@
                       <h4 class="my-0 fw-normal">Inmueble</h4>
                     </div>
                     <div class="card-body">
-                              <h1 class="card-title pricing-card-title">@(Model!=null?Model.InmuebleId.PropietarioId.Nombre:"") <small class="text-body-secondary fw-light">@(Model!=null?Model.InmuebleId.PropietarioId.Apellido:"")</small></h1>
+                              <h1 class="card-title pricing-card-title" id="nombreCard">@(Model!=null?Model.InmuebleId.PropietarioId.Nombre:"") <small  class="text-body-secondary fw-light" id="apellidoCard">@(Model!=null?Model.InmuebleId.PropietarioId.Apellido:"")</small></h1>
                               <ul class="list-unstyled mt-3 mb-4">
-                                <li>Dirección: @(Model!=null?Model.InmuebleId.Direccion:"")</li>
-                                <li>Tipo: @(Model!=null?Model.InmuebleId.InmuebleTipoId.Tipo:"")</li>
-                                <li>Uso: @(Model!=null?Model.InmuebleId.Uso:"")</li>
-                                <li>Cantidad de ambientes: @(Model!=null?Model.InmuebleId.CantidadAmbientes:"")</li>
+                                <li id="direccionCard">Dirección: @(Model!=null?Model.InmuebleId.Direccion:"")</li>
+                                <li id="tipoCard">Tipo: @(Model!=null?Model.InmuebleId.InmuebleTipoId.Tipo:"")</li>
+                                <li id="usoCard">Uso: @(Model!=null?Model.InmuebleId.Uso:"")</li>
+                                <li id="cantidadCard">Cantidad de ambientes: @(Model!=null?Model.InmuebleId.CantidadAmbientes:"")</li>
                               </ul>
                               <button id="btnSeleccionarOtroInmueble" type="button" class="w-60 btn btn-lg btn-primary">Seleccionar otro inmueble</button>
-                              <button type="button" class="w-25 btn btn-lg btn-primary" id="btnNext22">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-                                </svg>
-                              </button>
+                              <div class="row mt-5">
+                                 <div class="form-group col">
+                                    <button type="button" class="btn btn-primary" id="btnVolver1" >
+                                       <i class="bi bi-arrow-left"></i>
+                                    </button>
+                                 </div>
+                                <div class="form-group col">
+                                  <button type="button"  id="btnNext22" class="btn btn-primary float-end">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                                    </svg>
+                                  </button>
+                                </div>
+                              </div>
                     </div>
                 </div>
       </div>
@@ -102,10 +111,17 @@
                 <input asp-for="PrecioXmes" class="form-control"  />
                 <span asp-validation-for="PrecioXmes" class="text-danger"></span>
         </div>
-        
-        <div class="form-group">
-          <input type="submit" value="Guardar" class="btn btn-primary" />
+        <div class="row mt-5">
+            <div class="form-group col">
+                 <button type="button" class="btn btn-primary" id="btnVolver2">
+                      <i class="bi bi-arrow-left"></i>
+                 </button>
+            </div>
+            <div class="form-group col">
+              <input type="submit" value="Guardar" class="btn btn-primary float-end" />
+            </div>
         </div>
+        
       </div>
     </form>
 
@@ -199,17 +215,11 @@
     const btn2=document.getElementById("btnNext2");
     const btn22=document.getElementById("btnNext22");
     const btn3=document.getElementById("btnSeleccionarOtroInmueble");
-    const inputInnquilino=document.getElementById('innquilinoDataList')
-
+    const btnVolver2=document.getElementById('btnVolver2');
+    const btnVolver1=document.getElementById('btnVolver1');
+    const inputInnquilino=document.getElementById('innquilinoDataList');
+    const editar=inputInnquilino.value?true:false;;
    function mostrarTabla(){
-        const visible = document.querySelector(".z-5");
-        const siguiente=document.querySelector(".z-4");
-        siguiente.classList.remove("invisible");
-        siguiente.classList.remove('z-5')
-        siguiente.classList.add('z-5');
-        visible.classList.add('z-4');
-        visible.classList.remove('z-5');        
-        visible.classList.add("invisible");
         dibujarTabla(1,`/Contrato/GetListaInmueblePag`);
         
    }
@@ -219,31 +229,28 @@
 
 
     document.addEventListener("DOMContentLoaded", function() {
-  if(innquilinoDataList.value){ // editar
-   btn1.classList.remove('disabled');
+          if(editar){ // editar
+              btn1.classList.remove('disabled');
+              btn1.addEventListener('click', e=>{pagSiguiente('z-3')})
+          }
 
-    btn1.addEventListener('click', e=>{
-        const visible = document.querySelector(".z-5");
-        const siguiente=document.querySelector(".z-3");
-        siguiente.classList.remove("invisible");
-        siguiente.classList.remove('z-3')
-        siguiente.classList.add('z-5');
-        visible.classList.add('z-3');
-        visible.classList.remove('z-5');        
-        visible.classList.add("invisible");
-           
-   })
-   }
-
-   else{
-    btn1.addEventListener('click', mostrarTabla);
-   }
-});
+          else{
+           btn1.addEventListener('click',()=>{  
+            pagSiguiente('z-3');
+            if(!editar)                                   
+                pagSiguiente('z-4');
+            mostrarTabla()
+            });
+          }
+    });
 
 
 
 
-btn3.addEventListener('click',mostrarTabla)
+btn3.addEventListener('click',()=>{
+  pagSiguiente('z-4')
+  mostrarTabla();
+  })
 
 
 
@@ -252,7 +259,7 @@ btn3.addEventListener('click',mostrarTabla)
 //*****************************************************************************************
 
     document.getElementById('innquilinoDataList').addEventListener('input', function () {
-        
+        console.log="qqqqqqqq"
         var valorIngresado = this.value;
         
         var xhr = new XMLHttpRequest();
@@ -343,9 +350,16 @@ function dibujarTabla(page=1,ruta,queryString='&'){
                                          (e.currentTarget).classList.toggle('table-active');
                                          btn2.classList.remove('disabled');
                                          // cambiar el div
-                                  });
+                                         document.getElementById("direccionCard").textContent=`Dirección: ${inm.direccion}`;
+                                         document.getElementById("tipoCard").textContent=`Tipo: ${inm.inmuebleTipoId.tipo}`;
+                                         document.getElementById("usoCard").textContent=`Uso: ${inm.uso==1?'Residelcial':'Comercial'}`;
+                                         document.getElementById("cantidadCard").textContent=`Cantidad de ambientes: ${inm.cantidadAmbientes}`; 
+                                         document.getElementById("nombreCard").textContent=` ${inm.propietarioId.nombre}`; 
+                                         //document.getElementById("apellidoCard").textContent=` ${inm.propietarioId.apellido}`; 
+                                         pagSiguiente('z-4');                            
+                                         });
                                   bodyTabla.appendChild(registroClon);
-                      });
+                                 });
                     // el nav
                     
                     
@@ -414,39 +428,30 @@ function dibujarTabla(page=1,ruta,queryString='&'){
 
 
 
-function pagSiguiente(){
+function pagSiguiente(z){
   
-         const visible = document.querySelector(".z-5");
-         const siguiente=document.querySelector(".z-2");
+        const visible = document.querySelector(".z-5");        
+        const siguiente=document.querySelector(`.${z}`);
         siguiente.classList.remove("invisible");
         siguiente.classList.add("visible");
-        siguiente.classList.remove('z-2')
-        siguiente.classList.add('z-5');
-        visible.classList.add('z-2');
-        visible.classList.remove('z-5');
-        visible.classList.add("invisible");
+        siguiente.classList.remove(z)
+        siguiente.classList.add("z-5");
+        visible.classList.add(z);
         
+        
+        visible.classList.add("invisible");
+         visible.classList.remove("visible"); 
+         visible.classList.remove("z-5");
 }
 
 
-    btn2.addEventListener('click', pagSiguiente);
-    btn22.addEventListener('click',pagSiguiente );    
+    btn2.addEventListener('click', ()=>{pagSiguiente("z-2")});
+    btn22.addEventListener('click',()=>{pagSiguiente("z-2")} );    
+    btnVolver2.addEventListener('click',()=>{pagSiguiente("z-2")})
+    btnVolver1.addEventListener('click',()=>{pagSiguiente("z-3")})
 
 
 
-
-    function filtrar(){
-        event.preventDefault();
-         const obj={};
-         obj.cbComercial=formFiltrar[cbComercial];
-         obj.CbResidencial=formFiltrar[CbResidencial];
-         obj.Tipo=formFiltrar[tipo];
-         obj.CantidadAmbientes=formFiltrar[cantidadAmbientes];
-         obj.PrecioMin=formFiltrar[PrecioMin];
-         obj.PrecioMax=formFiltrar[PrecioMax];
-         const queryString = Object.keys(obj).map(key => key + '=' + encodeURIComponent(obj[key])).join('&');
-         dibujarTabla(1,`/Contrato/GetListaInmueblePag?${queryString}`);
-    }   
 
 
     document.getElementById("btnFiltrar").addEventListener('click',function(){
@@ -463,6 +468,7 @@ function pagSiguiente(){
          const queryString = Object.keys(obj).map(key => key + '=' + encodeURIComponent(obj[key])).join('&');
          dibujarTabla(1,`/Contrato/GetListaInmueblePag?`,queryString);
     }   );
+
 </script>
 
 @section Scripts {
