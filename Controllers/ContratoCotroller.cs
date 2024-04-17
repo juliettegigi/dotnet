@@ -26,7 +26,7 @@ public class ContratoController : Controller
 		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
 		
 		var objetoView=new IndexView{ListaContratos=lista};
-		objetoView.PrimerNumero=page%5==0?page-4:((page/5)*5+1);
+		objetoView.PrimerNumero=page%limit==0?page-(limit-1):((page/limit)*limit+1);
 		objetoView.Page=page;
 		objetoView.CantidadPaginas=cantidadPaginas;
 		
@@ -44,7 +44,7 @@ public class ContratoController : Controller
 [HttpGet]
     public IActionResult Editar(int id=0)
 	{   
-
+       
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
@@ -94,9 +94,10 @@ public class ContratoController : Controller
 
 [HttpPost]
 	public IActionResult Guardar(Contrato contrato)
-	{ 
-        Console.WriteLine("************************************************");
+	{  
+        Console.WriteLine("*****************************************************contrato");
         Console.WriteLine(contrato);
+       
 		RepositorioContrato rc = new RepositorioContrato();
 		RepositorioPago rp = new RepositorioPago();
 		
@@ -120,8 +121,7 @@ public class ContratoController : Controller
     public IActionResult GetListaInmueblePag(int page,int limit=5,ViewInquilinoFiltrarInmueble filtro=null)
     {   
 
-        Console.WriteLine("----------------------------------------------------------fffffffffffffffffControleer");
-        Console.WriteLine(filtro);
+        
         int offset=(page-1)*limit;
 		var ri=new RepositorioInmueble();
         IList<Inmueble>lista =ri.GetInmueblesPaginadoFiltrado(limit,offset,filtro);

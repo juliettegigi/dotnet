@@ -158,8 +158,11 @@ public class RepositorioContrato:RepositorioBase
 				             {nameof(Contrato.FechaFin)} = @{nameof(Contrato.FechaFin)},
 				             {nameof(Contrato.FechaFinAnticipada)} = @{nameof(Contrato.FechaFinAnticipada)},
 				             {nameof(Contrato.PrecioXmes)} = @{nameof(Contrato.PrecioXmes)},
-				             {nameof(Contrato.Estado)} = @{nameof(Contrato.Estado)}
+				             {nameof(Contrato.Estado)} = 1
 				          WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
+
+		     Console.WriteLine("*****************************************************sql");
+        Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);
@@ -368,12 +371,14 @@ public IList<Contrato> GetContratosTerminan(int dias)
 									   on inmuebles.inmuebleTipoId=inmuebleTipos.id
 									) as inmueblesCompleto
 	                    ON contratos.inmuebleId=idInmueble
-						
+						where contratos.estado=true
 						order by id
+						
                         limit @limite offset @offset;
  
 
             "; 
+			
 
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);
@@ -412,7 +417,8 @@ public IList<Contrato> GetContratosTerminan(int dias)
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
 			var sql = @$"  SELECT COUNT(*) AS cantidadRegistros
-                           FROM contratos;";
+                           FROM contratos
+						   where contratos.estado=true;";
 			using(var command = new MySqlCommand(sql, connection))
 			{    
 				connection.Open();

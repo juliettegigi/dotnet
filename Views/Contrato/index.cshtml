@@ -22,7 +22,6 @@
                 <th>Inmueble</th>
                 <th>Fechas</th>
                 <th>Precio por mes</th>
-                <th>estado</th>
                 <th></th>
             </tr>
 		</thead>
@@ -54,13 +53,13 @@
                                          data-bs-toggle="collapse" 
                                          data-bs-target="#infoInmueble@(i)" 
                                          aria-expanded="false" 
-                                         aria-controls="infoInmueble@(i)" > @item.InmuebleId.Id
+                                         aria-controls="infoInmueble@(i)" > @item.InmuebleId.Direccion
                                  </button>
                             </p>
                             <div class="collapse" id="infoInmueble@(i)" >
                                 <div class="card card-body">
                                     <p>Propietario: @item.InmuebleId.PropietarioId.Nombre</p>
-                                    <p>Email: @item.InmuebleId.Uso</p>
+                                    <p>Email: @item.InmuebleId.PropietarioId.Email</p>
                                  </div> 
                             </div>
                             
@@ -84,7 +83,6 @@
                             
                       </td>
             		  <td>@item.PrecioXmes</td>
-            		  <td>@item.Estado</td>
                       <td class="d-flex">
 							 <a asp-action="Editar" asp-route-id="@item.Id">
    						         <button type="submit"><i class="bi bi-pencil-square"></i></button>
