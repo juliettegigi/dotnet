@@ -1,9 +1,4 @@
-using System.Configuration;
-using System.Data;
-using InmobiliariaGutierrez.Models.VO;
-using MySql.Data.MySqlClient;
-
-namespace InmobiliariaGutierrez.Models.DAO;
+/*
 
 public class RepositorioInmueble:RepositorioBase
 {
@@ -29,8 +24,7 @@ public Inmueble? GetInmueble(int id)
                    inmuebles.precioBase,
                    inmuebles.cLatitud,
                    inmuebles.cLongitud,
-                   inmuebles.suspendido,
-                    inmuebles.disponible,
+                   inmuebles.disponible,
                    propietarios.id AS idPropietario,
                    propietarios.dni,
                    propietarios.nombre,
@@ -188,8 +182,10 @@ public IList<Inmueble> GetAllInmuebles()
 							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
                             PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
 							Uso = crearUso(reader),
-                            Coordenadas=coordenada,
                             Disponible = reader.GetBoolean(nameof(Inmueble.Disponible)),
+                            Coordenadas=coordenada,
+                            
+
 							
 							
 						});
@@ -269,7 +265,6 @@ public int AltaInmueble(Inmueble inmueble)
                             {nameof(Inmueble.PrecioBase)},
                             {nameof(Inmueble.Coordenadas.CLatitud)},
                             {nameof(Inmueble.Coordenadas.CLongitud)},
-                            {nameof(Inmueble.Suspendido)},
                             {nameof(Inmueble.Disponible)}
                    )
                    VALUES (
@@ -281,8 +276,7 @@ public int AltaInmueble(Inmueble inmueble)
                             @{nameof(Inmueble.PrecioBase)}, 
                             @{nameof(Inmueble.Coordenadas.CLatitud)}, 
                             @{nameof(Inmueble.Coordenadas.CLongitud)}, 
-                            @{nameof(Inmueble.Suspendido)},
-                             @{nameof(Inmueble.Disponible)}
+                            @{nameof(Inmueble.Disponible)}
                    );
                    SELECT LAST_INSERT_ID();";
         
@@ -292,11 +286,11 @@ public int AltaInmueble(Inmueble inmueble)
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-            command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
+            string valorEnum=inmueble.Uso==TipoUso.Comercial? "Comercial" : "Residencial";
+            command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", valorEnum);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
-            command.Parameters.AddWithValue($"@{nameof(Inmueble.Suspendido)}", inmueble.Suspendido);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Disponible)}", inmueble.Disponible);
 
             connection.Open();
@@ -322,7 +316,7 @@ public int AltaInmueble(Inmueble inmueble)
                     {nameof(Inmueble.PrecioBase)} = @{nameof(Inmueble.PrecioBase)},
                     {nameof(Inmueble.Coordenadas.CLatitud)} = @{nameof(Inmueble.Coordenadas.CLatitud)},
                     {nameof(Inmueble.Coordenadas.CLongitud)} = @{nameof(Inmueble.Coordenadas.CLongitud)},
-                    {nameof(Inmueble.Disponible)} = @{nameof(Inmueble.Disponible)}
+                     {nameof(Inmueble.Disponible)} = @{nameof(Inmueble.Disponible)}
                     WHERE {nameof(Inmueble.Id)} = @{nameof(Inmueble.Id)};";
                 using(var command = new MySqlCommand(sql, connection))
                 {
@@ -330,7 +324,8 @@ public int AltaInmueble(Inmueble inmueble)
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}",(Enum)inmueble.Uso);
+                    string valorEnum=inmueble.Uso==TipoUso.Comercial? "Comercial" : "Residencial";
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", valorEnum);
 
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
@@ -414,7 +409,6 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
             {where};";
-
 			using(var command = new MySqlCommand(sql, connection))
 			{   if(filtros!=null){
                         if(filtros.CantidadAmbientes != 0)command.Parameters.AddWithValue("c", filtros.CantidadAmbientes);
@@ -535,19 +529,16 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 	{
         
         List<string> listaDeFiltros = new List<string>();
-        string where="where contratos.estado=true";
+        string where="";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
         if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
         if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
         if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
         if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
         if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
-        listaDeFiltros.Add(@$"(contratos.fechainicio<@aPartirDe or contratos.fechafin>@aPartirDe) and
-                              (contratos.fechainicio<@hasta or contratos.fechafin>@hasta) 
-                               ");
 
         if(listaDeFiltros.Count!=0){
-            where="where contratos.estado=true AND ";
+            where="where ";
             int i=0;
             for(i=0;i<listaDeFiltros.Count-1;i++)
                 {
@@ -566,7 +557,6 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
-            INNER JOIN contratos ON inmuebles.id=contratos.inmuebleid
             {where}
             order by id
             limit @limite offset @offset;
@@ -581,9 +571,6 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
                 if(filtros.PrecioMax != 0)command.Parameters.AddWithValue("pmax", filtros.PrecioMax );
                 if(filtros.PrecioMin != 0)command.Parameters.AddWithValue("pmin", filtros.PrecioMin );
                 if(filtros.Tipo!="")command.Parameters.AddWithValue("t", filtros.Tipo );
-                command.Parameters.AddWithValue("aPartirDe", filtros.ApartirDe.ToString("yyyy-MM-dd") );
-                command.Parameters.AddWithValue("hasta", filtros.Hasta.ToString("yyyy-MM-dd"));
-
 				connection.Open();
 				using(var reader = command.ExecuteReader())
 				{
@@ -600,7 +587,8 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 							CantidadAmbientes = reader.GetInt32(nameof(Inmueble.CantidadAmbientes)),
                             PrecioBase=reader.GetDecimal(nameof(Inmueble.PrecioBase)),
 							Uso = crearUso(reader),
-                            Coordenadas=coordenada
+                            Coordenadas=coordenada,
+                            Disponible=reader.GetBoolean(nameof(Inmueble.Disponible)),
 							
 							
 						});
@@ -617,3 +605,4 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 }
 
 
+*/

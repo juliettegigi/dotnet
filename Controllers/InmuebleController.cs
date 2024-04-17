@@ -132,7 +132,7 @@ public IActionResult VerInmueble(Propietario propietario)
         { inmueble.Uso=InmobiliariaGutierrez.Models.VO.TipoUso.Residencial;
         
         }
-          
+       
       
          
         CultureInfo cultura = CultureInfo.InvariantCulture;
@@ -146,10 +146,10 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
     inmueble.Coordenadas = coordenadas;
 }
          if(alquilar=="1"){
-            inmueble.Suspendido=false;
+            inmueble.Disponible=true;
          }
          else{
-           inmueble.Suspendido=true;
+           inmueble.Disponible=false;
          }
 
         
@@ -159,6 +159,11 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
         
          if(IdInmueble>0){
             inmueble.Id=IdInmueble;
+             Console.WriteLine("++++++++++++++++++++++++++++++");
+          Console.WriteLine(inmueble.Uso.ToString());
+
+           Console.WriteLine("++++++++++++++++++++++++++++++");
+      
             repo.ModificaInmueble(inmueble);
          }
          else
