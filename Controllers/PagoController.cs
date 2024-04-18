@@ -23,6 +23,7 @@ public class PagoController : Controller
    public IActionResult Index()
     {   
 		RepositorioContrato rc=new RepositorioContrato();
+    DateTime da=DateTime.MinValue;
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
     } 

@@ -463,7 +463,7 @@ public IList<Contrato> GetContratosTodos()
                                    ON inmuebles.inmuebleTipoId=inmuebleTipos.id
                                 ) as inmueblesCompleto
                     ON contratos.inmuebleId=idInmueble
-						
+				    where contratos.estado=true	
                     ORDER BY id;
  
 

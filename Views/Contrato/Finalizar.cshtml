@@ -1,0 +1,106 @@
+@model InmobiliariaGutierrez.Models.VO.Contrato
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .hidden {
+            display: none;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<table id="" class="">
+    <thead>
+        <tr>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Precio por Mes</th>
+            <th>Estado</th>
+            <th>Inquilino</th>
+            <th>Documento Inquilino</th>
+            <th>Dirección del Inmueble</th>
+       
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.FechaInicio.ToShortDateString()</td>
+            <td>@Model.FechaFin.ToShortDateString()</td>
+            <td>@Model.PrecioXmes</td>
+            <td>@Model.Estado</td>
+            <td>@Model.InquilinoId.Nombre @Model.InquilinoId.Apellido</td>
+            <td>@Model.InquilinoId.DNI</td>
+            <td>@Model.InmuebleId.Direccion</td>
+
+        </tr>
+    </tbody>
+</table>
+<div>
+<label for="fechaSalida">Fecha de Salida:</label>
+<input type="datetime-local" id="fechaSalida" name="fechaSalida">
+<button type="submit" title="Pagar Cuota" onclick="calcular()">Calcular</button>
+</div>
+ <div id="calculo"></div>
+
+
+<button class="hidden" type="submit" title="Pagar Cuota">Pagar</button>
+<button  class="hidden"  type="submit" title="Pagar Cuota">Pactar fecha</button>
+<div>
+
+<button type="submit" title="Pagar Cuota">Volver</button>
+</div>
+<script>
+function calcular()
+ {
+    var botonesOcultos = document.querySelectorAll('.hidden');
+       botonesOcultos.forEach(boton => {
+        boton.classList.remove('hidden');
+    });
+    var fechaSeleccionada = document.getElementById('fechaSalida').value;
+    var contratoId = @Model.Id+"/"+fechaSeleccionada; 
+    var fechaSeleccionada=fechaSeleccionada+"hola";
+    
+ 
+   var data = [{
+    Id: contratoId,
+    Fecha: fechaSeleccionada
+}];
+    console.log(data);
+    fetch('/Contrato/Calcular', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('calculo').innerHTML = JSON.stringify(data);
+       
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+</script>
+
+</body>
+
+</html>

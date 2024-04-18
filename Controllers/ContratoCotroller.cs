@@ -36,9 +36,58 @@ public class ContratoController : Controller
 
     public IActionResult Eliminar(int id)
 	{   
-		RepositorioContrato rp = new RepositorioContrato();
-		rp.EliminarContrato(id);
+      
+        DateTime FechaFinparametro=DateTime.Now;;// tiene wue venir porparametro
+		RepositorioContrato rc= new RepositorioContrato();
+        RepositorioPago rp=new RepositorioPago();
+        
+        IList<Pago> pago ;
+         pago=rp.GetPago(id);
+        Contrato contrato=rc.GetContrato(id);
+         DateTime fechaActual = DateTime.Now;
+           /*
+         int mesestotaldeuda=0;
+            int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
+            int  mitad=(contrato.FechaFin.Year-contrato.FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
+            mitad=mitad/2 ;
+            int deudas=0;
+            int cantidadpagos=0;
+            decimal multa;
+           for(int i = 0; i<pago.Count; i++){
+            if(pago[i].FechaPago>DateTime.MinValue)
+            {
+                cantidadpagos++;
+
+            }else{
+                deudas++;
+            }
+       
+           }
+           mesestotaldeuda=diferenciaMeses-cantidadpagos;
+
+            if(deudas>0){
+
+            
+            if (diferenciaMeses>=mitad){
+                mesestotaldeuda=mesestotaldeuda+2;
+            }
+            else{
+                mesestotaldeuda++;
+            }
+            multa=mesestotaldeuda*pago[0].Importe;
+           }
+
+
+          Console.WriteLine(cantidadpagos);
+          Console.WriteLine(deudas);
+   
+
+        return Json(pago);
+        */
+        
+		rc.EliminarContrato(id);
 		return RedirectToAction(nameof(Index),new { page = 1});
+        
 	}
 
 [HttpGet]
@@ -138,4 +187,73 @@ public class ContratoController : Controller
         
     }
    
+   public IActionResult Finalizar(int Id){
+    RepositorioContrato rc=new RepositorioContrato();
+    
+    Contrato contrato=rc.GetContrato(Id);
+    return View(contrato);
+   }
+ public IActionResult Calcular([FromBody] List<Arreglo> arreglo)
+    {
+            RepositorioContrato rc=new RepositorioContrato();
+            RepositorioPago rp=new RepositorioPago();
+            IList<Pago> pagos;
+            Contrato contrato = new Contrato();
+            
+            string[] partesId = arreglo[0].Id.Split('/');
+            int Id = Convert.ToInt32(partesId[0]);
+            DateTime FechaFinparametro = DateTime.Parse(partesId[1]);
+            contrato=rc.GetContrato(Id);
+            pagos=rp.GetPago(Id);
+            
+          
+
+            
+         int mesestotaldeuda=0;
+         /*entre fechaanticipada y contrato*/   int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
+         
+             int  mitad=(contrato.FechaFin.Year-contrato.    FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
+            
+            /*mitadl total*/ mitad=mitad/2 ;
+
+       /*aca sacar calculo de multa*/     int fechamulta = (contrato.FechaFin.Year-FechaFinparametro.Year  ) * 12 + contrato.FechaFin.Month-FechaFinparametro.Month ;
+           
+            int deudas=0;
+            int cantidadpagos=0;
+            decimal multa=0;
+           for(int i = 0; i<pagos.Count; i++){
+            if(pagos[i].FechaPago>DateTime.MinValue)
+            {
+                cantidadpagos++;
+
+            }else{
+                deudas++;
+            }
+       
+           }
+           /*tengo el total de la fecha hacia la anticipads me falta la multa*/
+            mesestotaldeuda=diferenciaMeses-cantidadpagos;
+
+            if(mesestotaldeuda>0){
+
+            
+            if (fechamulta>=mitad){
+                mesestotaldeuda=mesestotaldeuda+2;
+            }
+            else{
+                mesestotaldeuda++;
+            }
+            multa=mesestotaldeuda*pagos[0].Importe;
+           }
+
+
+       var resultado = new
+    {
+        Mensaje = "Tiene un total de meses adeudado: " + mesestotaldeuda + ", y una multa de $" + multa,
+        OtroMensaje = "¡Hola!"
+    };
+
+   
+        return Json(multa);
+    }
 }
