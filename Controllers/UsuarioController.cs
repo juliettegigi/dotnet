@@ -109,7 +109,8 @@ public class UsuarioController : Controller
 					repositorio.Modificacion(u);
 				}
 				
-				return RedirectToAction(nameof(Index));
+				TempData["msg"]="✔ Ya estás registrado, ahora podés loggearte.";
+				return RedirectToAction("Index", "Home");
 			}
 			catch (Exception ex)
 			{

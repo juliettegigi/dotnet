@@ -4,7 +4,11 @@
 <hr/>
 
 
-
+@if(ViewBag.msg!=null){
+    <div class="alert alert-success" role="alert">
+          @ViewBag.msg
+    </div>
+}
 
 <div class="container"> 
         <div class="row">    
