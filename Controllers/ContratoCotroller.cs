@@ -211,7 +211,9 @@ public class ContratoController : Controller
             
          int mesestotaldeuda=0;
          /*entre fechaanticipada y contrato*/   int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
-         
+     Console.WriteLine( "diferenciaMeses");
+      Console.WriteLine( diferenciaMeses);
+      Console.WriteLine( "diferenciaMeses");
              int  mitad=(contrato.FechaFin.Year-contrato.    FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
             
             /*mitadl total*/ mitad=mitad/2 ;
@@ -231,29 +233,41 @@ public class ContratoController : Controller
             }
        
            }
+               Console.WriteLine( "cantidadpagos");
+      Console.WriteLine(cantidadpagos);
+      Console.WriteLine( "cantidadpagos");
            /*tengo el total de la fecha hacia la anticipads me falta la multa*/
             mesestotaldeuda=diferenciaMeses-cantidadpagos;
-
-            if(mesestotaldeuda>0){
+                Console.WriteLine( "mesestotaldeuda");
+      Console.WriteLine(mesestotaldeuda);
+      Console.WriteLine( "mesestotaldeuda");
+       Console.WriteLine( "fechamulta");
+      Console.WriteLine(fechamulta);
+      Console.WriteLine( "fechamulta");
+      int mesesadeudado=mesestotaldeuda;
+      int mesesmulta=0;
+           
 
             
-            if (fechamulta>=mitad){
+            if (fechamulta>mitad){
                 mesestotaldeuda=mesestotaldeuda+2;
+                mesesmulta=mesesmulta+2;
             }
             else{
                 mesestotaldeuda++;
+                mesesmulta=mesesmulta+1;
             }
             multa=mesestotaldeuda*pagos[0].Importe;
-           }
+           
 
 
        var resultado = new
     {
-        Mensaje = "Tiene un total de meses adeudado: " + mesestotaldeuda + ", y una multa de $" + multa,
-        OtroMensaje = "¡Hola!"
+        Mensaje = "Tiene un total de meses adeudado: " + mesesadeudado + ", y una multa de " + mesesmulta+" meses de alquiler", 
+        total = multa
     };
 
    
-        return Json(multa);
+        return Json(resultado);
     }
 }
