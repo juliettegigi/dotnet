@@ -19,6 +19,7 @@
             text-align: left;
             padding: 8px;
         }
+   
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
@@ -53,6 +54,8 @@
         </tr>
     </tbody>
 </table>
+ @if (!Model.tienefechapactada)
+{
 <div>
 <label for="fechaSalida">Fecha de Salida:</label>
 <input type="datetime-local" id="fechaSalida" name="fechaSalida">
@@ -60,9 +63,28 @@
 </div>
  <div id="calculo"></div>
 
+<form action="/Contrato/PagarCuota">
+    <button class="hidden" type="submit" title="Pagar Cuota" name="Id" value="@Model.Id">Pagar</button>
+</form>
 
-<button class="hidden" type="submit" title="Pagar Cuota">Pagar</button>
-<button  class="hidden"  type="submit" title="Pagar Cuota">Pactar fecha</button>
+<form action="/Contrato/Pactarfecha" method="post">
+    <button class="hidden" type="submit" title="Pagtar fecha" name="Id" value="@Model.Id">Pactar fecha</button>
+</form>
+}
+else
+{
+       <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Tiene fecha de salida</h4>
+        <p>Fecha Anticipada: @Model.FechaFinAnticipada</p>
+        <hr>
+        <p class="mb-0">Tiene que pagar el total de: @Model.preciototal</p>
+    </div>
+    <form action="/Contrato/PagarCuota">
+    <button class="hello" type="submit" title="Pagar Cuota" name="Id" value="@Model.Id">Pagar</button>
+</form>
+
+}
+
 <div>
 
 <button type="submit" title="Pagar Cuota">Volver</button>
@@ -93,7 +115,7 @@ function calcular()
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('calculo').innerHTML = JSON.stringify(data);
+        document.getElementById('calculo').innerHTML = JSON.stringify(data.mensaje);
        
     })
     .catch(error => console.error('Error:', error));

@@ -497,6 +497,40 @@ public IList<Contrato> GetContratosTodos()
     }
     return contratos;
 }
+	public int ModificaContratoparmi(Contrato contrato)
+	{
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+		var sql = @$"UPDATE Contratos
+             SET {nameof(Contrato.InquilinoId)} = @{nameof(Contrato.InquilinoId)},
+                 {nameof(Contrato.InmuebleId)} = @{nameof(Contrato.InmuebleId)},
+                 {nameof(Contrato.FechaInicio)} = @{nameof(Contrato.FechaInicio)},
+                 {nameof(Contrato.FechaFin)} = @{nameof(Contrato.FechaFin)},
+                 {nameof(Contrato.FechaFinAnticipada)} = @{nameof(Contrato.FechaFinAnticipada)},
+                 {nameof(Contrato.PrecioXmes)} = @{nameof(Contrato.PrecioXmes)},
+                 {nameof(Contrato.Estado)} = @{nameof(Contrato.Estado)}
+             WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
+
+		     Console.WriteLine("*****************************************************sql");
+        Console.WriteLine(sql);
+			using(var command = new MySqlCommand(sql, connection))
+			{
+				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.InmuebleId)}", contrato.InmuebleId.Id);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.FechaInicio)}", contrato.FechaInicio);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFin)}", contrato.FechaFin);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.FechaFinAnticipada)}", contrato.FechaFinAnticipada);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.PrecioXmes)}", contrato.PrecioXmes);
+                command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", contrato.Estado);
+				command.Parameters.AddWithValue($"@{nameof(Contrato.Id)}", contrato.Id);
+				connection.Open();
+				command.ExecuteNonQuery();
+				connection.Close();
+			}
+		}
+		return 0;
+	}
+
 
     
 }
