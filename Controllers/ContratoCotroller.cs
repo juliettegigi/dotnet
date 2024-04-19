@@ -1,12 +1,14 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.DAO;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Views.ContratoView;
 
-namespace InmobiliariaGutierrez.Controllers;
+namespace InmobiliariaGutierrez.Controllers{
 
+[Authorize]
 public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;
@@ -19,7 +21,7 @@ public class ContratoController : Controller
         _logger = logger;
     }
 
-  public IActionResult Index(int page,int limit=5)
+  public IActionResult Index(int page=1,int limit=5)
     {   
         int offset=(page-1)*limit;
 		var rc=new RepositorioContrato();
@@ -96,7 +98,8 @@ public class ContratoController : Controller
 [HttpGet]
     public IActionResult Editar(int id=0)
 	{   
-       
+        if(TempData.ContainsKey("msg"))
+           ViewBag.msg=TempData["msg"];
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
@@ -149,12 +152,14 @@ public class ContratoController : Controller
 	{  
         Console.WriteLine("*****************************************************contrato");
         Console.WriteLine(contrato);
-       
+        string msg="";
 		RepositorioContrato rc = new RepositorioContrato();
 		RepositorioPago rp = new RepositorioPago();
 		
-		if(contrato.Id > 0)
+		if(contrato.Id > 0){
 			rc.ModificaContrato(contrato);
+            msg="Contrato Actualizado.";
+        }
 		else{
 			rc.AltaContrato(contrato);
             var pago=new Pago{
@@ -164,8 +169,10 @@ public class ContratoController : Controller
                 FechaPago=contrato.FechaInicio
             };
             rp.InsertPago(pago);
+            msg="Contrato registrado.";
         }
-		return RedirectToAction(nameof(Index),new{page=1});
+        TempData["msg"]=msg;
+		return RedirectToAction(nameof(Editar));
 	
 	}
 
@@ -365,4 +372,6 @@ pagosstatic=multa;
 
 
   
+}
+
 }

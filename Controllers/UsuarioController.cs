@@ -48,7 +48,8 @@ public class UsuarioController : Controller
 
 	//***************************************************************************************************************************************************
 		public ActionResult Editar(int id)
-		{   
+		{   Console.WriteLine("********************************************* editaaaaaaaaaaar");
+		    Console.WriteLine(id);
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario usuario = ru.ObtenerPorId(id);
 			Console.WriteLine(usuario.Rol);

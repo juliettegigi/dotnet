@@ -1,57 +1,61 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
+
+@{if(ViewBag.msg!=null){
+  <div class="alert alert-success" role="alert">
+          ✔@ViewBag.msg
+  </div>
+  <div>
+  <a asp-action="Index">Volver</a>
+</div>
+}
+else{
+
+
 <h4>Nuevo contrato</h4>
 
 <hr />
 
 
 <div class="container position-relative z-1 h-50 w-50">
- 
-
-
     <form asp-action="Guardar" method="post">  
-      
-      
-      <div class="formularioContrato z-5 position-absolute  top-0 start-0 h-50 w-50 visible">
-        <div class="form-group">
-          <input asp-for="Id" type="hidden" value=@(Model!=null?Model.Id:0)>
-          <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
-          <label asp-for="InquilinoId" class="control-label">Inquilino</label>
-          <input asp-for="InquilinoId" class="form-control"
-                 id="innquilinoDataList"
-                 autocomplete="off"
-                 placeholder="cualquier dato del inquilino..."
-                 data-bs-toggle="collapse"
-                 data-bs-target="#collapseExample"
-                 aria-expanded="false"
-                 aria-controls="collapseExample"
-                 value=@(Model!=null? $"{Model.InquilinoId.Nombre} {Model.InquilinoId.Apellido}":"")
-        
-                 >
-            <div class="collapse" id="collapseExample">
-               <h5 id="tituloDivInquilino"></h5>
-               <ul id="ulInquilino">
-               </ul>
-             </div>
-        
+        <div class="formularioContrato z-5 position-absolute  top-0 start-0 h-50 w-50 visible">
+                 <div class="form-group">
+                      <input asp-for="Id" type="hidden" value=@(Model!=null?Model.Id:0)>
+                      <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
+                      <label asp-for="InquilinoId" class="control-label">Inquilino</label>
+                      <input asp-for="InquilinoId" class="form-control"
+                                                   id="innquilinoDataList"
+                                                   autocomplete="off"
+                                                   placeholder="cualquier dato del inquilino..."
+                                                   data-bs-toggle="collapse"
+                                                   data-bs-target="#collapseExample"
+                                                   aria-expanded="false"
+                                                   aria-controls="collapseExample"
+                                                   value=@(Model!=null? $"{Model.InquilinoId.Nombre} {Model.InquilinoId.Apellido}":"")
+                                          
+                                                   >
+                      <div class="collapse" id="collapseExample">
+                         <h5 id="tituloDivInquilino"></h5>
+                         <ul id="ulInquilino">
+                         </ul>
+                       </div>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-secondary disabled" id="btnNext1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                           <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                      </svg>
+                    </button>
+                  </div>
         </div>
-        <div>
-          <button type="button" class="btn btn-secondary disabled" id="btnNext1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                 <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible ">
+        <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible ">
                 <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
                 <div class="form-group">
-                  @Html.Partial("_tablaContrato.cshtml")
-                  <div>
-                     <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Filtrar</button>
-
-                   </div>
+                     @Html.Partial("_tablaContrato.cshtml")
+                     <div>
+                        <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Filtrar</button>
+                     </div>
                 </div>
-                
                 <div>
                   <button type="button" class="btn btn-secondary disabled" id="btnNext2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
@@ -59,13 +63,11 @@
                     </svg>
                   </button>
                 </div>
-      </div>  
-      
-      
-      <div class="formularioContrato z-3 position-absolute  top-0 start-0 h-50 w-50 invisible">
+        </div>  
+        <div class="formularioContrato z-3 position-absolute  top-0 start-0 h-50 w-50 invisible">
                 <div class="card mb-4 rounded-3 shadow-sm">
                     <div class="card-header py-3">
-                      <h4 class="my-0 fw-normal">Inmueble</h4>
+                         <h4 class="my-0 fw-normal">Inmueble</h4>
                     </div>
                     <div class="card-body">
                               <h1 class="card-title pricing-card-title" id="nombreCard">@(Model!=null?Model.InmuebleId.PropietarioId.Nombre:"") <small  class="text-body-secondary fw-light" id="apellidoCard">@(Model!=null?Model.InmuebleId.PropietarioId.Apellido:"")</small></h1>
@@ -92,48 +94,38 @@
                               </div>
                     </div>
                 </div>
-      </div>
-      
-      <div class="formularioContrato z-2 position-absolute  top-0 start-0 h-50 w-50 invisible">
-        
-        <div class="form-group">
-                <label asp-for="FechaInicio" class="control-label"></label>
-                <input asp-for="FechaInicio" class="form-control" />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
-        </div>
-        <div class="form-group">
+         </div>
+         <div class="formularioContrato z-2 position-absolute  top-0 start-0 h-50 w-50 invisible">
+              <div class="form-group">
+                   <label asp-for="FechaInicio" class="control-label"></label>
+                   <input asp-for="FechaInicio" class="form-control" />
+                   <span asp-validation-for="FechaInicio" class="text-danger"></span>
+              </div>
+              <div class="form-group">
                 <label asp-for="FechaFin" class="control-label"></label>
                 <input asp-for="FechaFin" class="form-control" />
                 <span asp-validation-for="FechaFin" class="text-danger"></span>
-        </div>
-        <div class="form-group">
+              </div>
+              <div class="form-group">
                 <label asp-for="PrecioXmes" class="control-label"></label>
                 <input asp-for="PrecioXmes" class="form-control"  />
                 <span asp-validation-for="PrecioXmes" class="text-danger"></span>
-        </div>
-        <div class="row mt-5">
-            <div class="form-group col">
-                 <button type="button" class="btn btn-primary" id="btnVolver2">
-                      <i class="bi bi-arrow-left"></i>
-                 </button>
-            </div>
-            <div class="form-group col">
-              <input type="submit" value="Guardar" class="btn btn-primary float-end" />
-            </div>
-        </div>
-        
-      </div>
+              </div>
+              <div class="row mt-5">
+                  <div class="form-group col">
+                       <button type="button" class="btn btn-primary" id="btnVolver2">
+                            <i class="bi bi-arrow-left"></i>
+                       </button>
+                  </div>
+                  <div class="form-group col">
+                    <input type="submit" value="Guardar" class="btn btn-primary float-end" />
+                  </div>
+              </div>
+          </div>
     </form>
-
-
 </div>
 
-  </div>
-</div>
 
-<div>
-  <a asp-action="Index">Volver</a>
-</div>
 
 
 
@@ -475,3 +467,5 @@ function pagSiguiente(z){
   @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
+}
+}

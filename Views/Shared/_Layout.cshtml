@@ -16,9 +16,7 @@
      
 </head>
 <body>
-
-
-    
+   
 		<header>
             @if (User.Identity.IsAuthenticated){
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -61,8 +59,7 @@
                                     </image>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-lg-end">
-                                  <li><a class="dropdown-item" href="#">Action</a></li>
-                                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                                  <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Editar" asp-route-id="@User.FindFirst("id").Value" >Editar mi perfil</a></li>
                                   <li><a asp-controller="Usuario" asp-action="Logout" class="dropdown-item" >🚪 Salir</a></li>
                                 </ul>
                             </li>

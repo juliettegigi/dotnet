@@ -11,7 +11,7 @@ public abstract class RepositorioBase
 		protected readonly string? ConnectionString ;
 
 		protected RepositorioBase()
-		{  ConnectionString="Server=localhost;Database=inmobiliariadotnet;User=root;Password=;";
+		{  ConnectionString="Server=localhost;Database=inmobiliariadotnet;User=root;Password=15581016gpt;";
 		}
       public string GetCamposPago(string nombreTabla, string id, string como)
 			{
