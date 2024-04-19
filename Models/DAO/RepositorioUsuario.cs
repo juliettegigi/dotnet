@@ -164,37 +164,35 @@ public Usuario ObtenerPorId(int id)
 
 		//-------------------------------------------------------------------------------------------------
 
-		public Usuario ObtenerPorEmail(string email)
-		{
-			Usuario? e = null;
-			using (var connection = new MySqlConnection(ConnectionString))
-			{
-				string sql = @"SELECT
-					Id, Nombre, Apellido, Avatar, Email, Pass, Rol FROM Usuarios
-					WHERE Email=@email";
-				using (var command = new MySqlCommand(sql, connection))
-				{
-					command.Parameters.AddWithValue("@email",  email);
-					connection.Open();
-					var reader = command.ExecuteReader();
-					if (reader.Read())
-					{
-						e = new Usuario
-						{
-							Id = reader.GetInt32("Id"),
-							Nombre = reader.GetString("Nombre"),
-							Apellido = reader.GetString("Apellido"),
-							Avatar = reader.GetString("Avatar"),
-							Email = reader.GetString("Email"),
-							Pass = reader.GetString("Pass"),
-							Rol = reader.GetInt32("Rol"),
-						};
-					}
-					connection.Close();
-				}
-			}
-			return e;
-		}
+public Usuario ObtenerPorEmail(string email)
+{
+    Usuario e = null;
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        string sql = @"SELECT
+            Id, Nombre, Apellido, Avatar, Email, Pass, Rol FROM Usuarios
+            WHERE Email=@email";
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@email",  email);
+            connection.Open();
+            var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                e = new Usuario();
+                e.Id = reader.IsDBNull(reader.GetOrdinal("Id")) ? 0 : reader.GetInt32("Id");
+                e.Nombre = reader.IsDBNull(reader.GetOrdinal("Nombre")) ? "" : reader.GetString("Nombre");
+                e.Apellido = reader.IsDBNull(reader.GetOrdinal("Apellido")) ? "" : reader.GetString("Apellido");
+                e.Avatar = reader.IsDBNull(reader.GetOrdinal("Avatar")) ? "" : reader.GetString("Avatar");
+                e.Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? "" : reader.GetString("Email");
+                e.Pass = reader.IsDBNull(reader.GetOrdinal("Pass")) ? "" : reader.GetString("Pass");
+                e.Rol = reader.IsDBNull(reader.GetOrdinal("Rol")) ? 0 : reader.GetInt32("Rol");
+            }
+            connection.Close();
+        }
+    }
+    return e;
+}
 
 public void ActualizarUsuario(Usuario usuario)
 {
