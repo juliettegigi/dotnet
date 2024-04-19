@@ -104,24 +104,13 @@ public decimal UpdatePago(Pago pago)
     using (var connection = new MySqlConnection(ConnectionString))
     {
         var sql = @"UPDATE Pagos 
-                    SET ContratoId = @ContratoId,
-                        FechaPago = @FechaPago";
-
-        // Agregar el parámetro Importe solo si es diferente de cero
-        if (pago.Importe != 0)
-            sql += ", Importe = @Importe";
-
-        sql += " WHERE NumeroPago = @NumeroPago";
+                    SET FechaPago = @FechaPago
+                    WHERE NumeroPago = @NumeroPago";
 
         using (var command = new MySqlCommand(sql, connection))
         {
-            command.Parameters.AddWithValue("@NumeroPago", pago.NumeroPago);
-            command.Parameters.AddWithValue("@ContratoId", pago.ContratoId);
             command.Parameters.AddWithValue("@FechaPago", pago.FechaPago);
-
-            // Agregar el parámetro Importe solo si es diferente de cero
-            if (pago.Importe != 0)
-                command.Parameters.AddWithValue("@Importe", pago.Importe);
+            command.Parameters.AddWithValue("@NumeroPago", pago.NumeroPago); // Agregar número de pago como condición WHERE
 
             connection.Open();
             command.ExecuteNonQuery();
@@ -131,7 +120,6 @@ public decimal UpdatePago(Pago pago)
     // Retornar el importe obtenido de la base de datos
     return importeBaseDatos;
 }
-
 
 	public IList<Contrato> GetContratos()
 	{
@@ -231,6 +219,46 @@ public IList<(Pago pago, Contrato contrato, Inquilino inquilino)> GetDetallesPag
         }
     }
     return detallesPagos;
+}
+
+
+public Pago GetPago(int contratoId, int numeroPago)
+{
+    Pago pago = null;
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"SELECT NumeroPago,
+                            ContratoId,
+                            Fecha,
+                            FechaPago,
+                            Importe
+                     FROM Pagos
+                     WHERE ContratoId = @ContratoId AND NumeroPago = @NumeroPago";
+
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@ContratoId", contratoId);
+            command.Parameters.AddWithValue("@NumeroPago", numeroPago);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    pago = new Pago
+                    {
+                        NumeroPago = reader.GetInt32(reader.GetOrdinal(nameof(Pago.NumeroPago))),
+                        ContratoId = reader.GetInt32(reader.GetOrdinal(nameof(Pago.ContratoId))),
+                        Fecha = reader.GetDateTime(reader.GetOrdinal(nameof(Pago.Fecha))),
+                        FechaPago = !reader.IsDBNull(reader.GetOrdinal(nameof(Pago.FechaPago))) ? reader.GetDateTime(reader.GetOrdinal(nameof(Pago.FechaPago))) : DateTime.MinValue,
+                        Importe = reader.GetDecimal(reader.GetOrdinal(nameof(Pago.Importe)))
+                    };
+                }
+            }
+        }
+    }
+
+    return pago;
 }
 
     
