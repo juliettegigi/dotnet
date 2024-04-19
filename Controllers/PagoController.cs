@@ -27,6 +27,14 @@ public class PagoController : Controller
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
     } 
+     public IActionResult Eliminar(int ContratoId,int NumeroPago)
+    {   
+		  RepositorioPago rp=new RepositorioPago();
+      Pago pago=rp.GetPago(ContratoId,NumeroPago);
+      pago.FechaPago=null;
+      rp.UpdatePago(pago);
+     return RedirectToAction(nameof(Index));
+    } 
       public IActionResult Pagar( string nombre, string apellido,int ContratoId,int NumeroPago, DateTime fecha )
     {   
          DateTime nuevaFecha = new DateTime(fecha.Year, fecha.Day + 1 , fecha.Month );
