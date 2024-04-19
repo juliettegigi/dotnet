@@ -34,7 +34,7 @@
                 <td>@contrato.InquilinoId.DNI</td>
                 <td>@contrato.InmuebleId.Direccion</td>
 				<td>
-				<form asp-action="Prepago" asp-route-id="@contrato.InquilinoId.Id" asp-route-nombre="@contrato.InquilinoId.Nombre" asp-route-apellido="@contrato.InquilinoId.Apellido" asp-route-dni="@contrato.InquilinoId.DNI" method="post">
+				<form asp-action="Prepago" asp-route-idcontrato="@contrato.Id" asp-route-id="@contrato.InquilinoId.Id" asp-route-nombre="@contrato.InquilinoId.Nombre" asp-route-apellido="@contrato.InquilinoId.Apellido" asp-route-dni="@contrato.InquilinoId.DNI" method="post">
                     <button type="submit" title="Pagar Cuota"><i class="bi bi-cash text-success"></i></button>
                 </form>
 

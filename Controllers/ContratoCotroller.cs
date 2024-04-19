@@ -10,6 +10,9 @@ namespace InmobiliariaGutierrez.Controllers;
 public class ContratoController : Controller
 {
     private readonly ILogger<ContratoController> _logger;
+    public static decimal pagosstatic;
+    public static decimal mesesstatic;
+
 
     public ContratoController(ILogger<ContratoController> logger)
     {
@@ -36,9 +39,58 @@ public class ContratoController : Controller
 
     public IActionResult Eliminar(int id)
 	{   
-		RepositorioContrato rp = new RepositorioContrato();
-		rp.EliminarContrato(id);
+      
+        DateTime FechaFinparametro=DateTime.Now;;// tiene wue venir porparametro
+		RepositorioContrato rc= new RepositorioContrato();
+        RepositorioPago rp=new RepositorioPago();
+        
+        IList<Pago> pago ;
+         pago=rp.GetPago(id);
+        Contrato contrato=rc.GetContrato(id);
+         DateTime fechaActual = DateTime.Now;
+           /*
+         int mesestotaldeuda=0;
+            int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
+            int  mitad=(contrato.FechaFin.Year-contrato.FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
+            mitad=mitad/2 ;
+            int deudas=0;
+            int cantidadpagos=0;
+            decimal multa;
+           for(int i = 0; i<pago.Count; i++){
+            if(pago[i].FechaPago>DateTime.MinValue)
+            {
+                cantidadpagos++;
+
+            }else{
+                deudas++;
+            }
+       
+           }
+           mesestotaldeuda=diferenciaMeses-cantidadpagos;
+
+            if(deudas>0){
+
+            
+            if (diferenciaMeses>=mitad){
+                mesestotaldeuda=mesestotaldeuda+2;
+            }
+            else{
+                mesestotaldeuda++;
+            }
+            multa=mesestotaldeuda*pago[0].Importe;
+           }
+
+
+          Console.WriteLine(cantidadpagos);
+          Console.WriteLine(deudas);
+   
+
+        return Json(pago);
+        */
+        
+		rc.EliminarContrato(id);
 		return RedirectToAction(nameof(Index),new { page = 1});
+        
 	}
 
 [HttpGet]
@@ -138,4 +190,179 @@ public class ContratoController : Controller
         
     }
    
+   public IActionResult Finalizar(int Id){
+    RepositorioContrato rc=new RepositorioContrato();
+    
+    Contrato contrato=rc.GetContrato(Id);
+    if (contrato.FechaFinAnticipada > new DateTime(1, 1, 1, 0, 0, 0))
+{
+  contrato.tienefechapactada=true;
+   RepositorioPago rp=new RepositorioPago();
+    IList<Pago> pagos;
+    pagos=rp.GetPago(Id);
+    int cont=pagos.Count();
+    contrato.preciototal=pagos[cont-1].Importe;
+    pagosstatic=contrato.preciototal;
+
+}
+else{
+    contrato.tienefechapactada=false;
+   
+}
+    return View(contrato);
+   }
+ public IActionResult Calcular([FromBody] List<Arreglo> arreglo)
+    {
+            RepositorioContrato rc=new RepositorioContrato();
+            RepositorioPago rp=new RepositorioPago();
+            IList<Pago> pagos;
+            Contrato contrato = new Contrato();
+            
+            string[] partesId = arreglo[0].Id.Split('/');
+            int Id = Convert.ToInt32(partesId[0]);
+            DateTime FechaFinparametro = DateTime.Parse(partesId[1]);
+            contrato=rc.GetContrato(Id);
+            pagos=rp.GetPago(Id);
+            
+          
+
+            
+         int mesestotaldeuda=0;
+         /*entre fechaanticipada y contrato*/   int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
+     Console.WriteLine( "diferenciaMeses");
+      Console.WriteLine( diferenciaMeses);
+      Console.WriteLine( "diferenciaMeses");
+             int  mitad=(contrato.FechaFin.Year-contrato.    FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
+            
+            /*mitadl total*/ mitad=mitad/2 ;
+
+       /*aca sacar calculo de multa*/     int fechamulta = (contrato.FechaFin.Year-FechaFinparametro.Year  ) * 12 + contrato.FechaFin.Month-FechaFinparametro.Month ;
+           
+            int deudas=0;
+            int cantidadpagos=0;
+            decimal multa=0;
+           for(int i = 0; i<pagos.Count; i++){
+            if(pagos[i].FechaPago>DateTime.MinValue)
+            {
+                cantidadpagos++;
+
+            }else{
+                deudas++;
+            }
+       
+           }
+
+            mesestotaldeuda=diferenciaMeses-cantidadpagos;
+                
+      
+      int mesesadeudado=mesestotaldeuda;
+      int mesesmulta=0;
+           
+
+            
+            if (fechamulta>mitad){
+                mesestotaldeuda=mesestotaldeuda+2;
+                mesesmulta=mesesmulta+2;
+            }
+            else{
+                mesestotaldeuda++;
+                mesesmulta=mesesmulta+1;
+            }
+            multa=mesestotaldeuda*pagos[0].Importe;
+           
+
+
+       var resultado = new
+    {
+        Mensaje = "Tiene un total de meses adeudado: " + mesesadeudado + ", y una multa de " + mesesmulta+" meses de alquiler"+ "total a pagar es " + multa, 
+        mesesadeudado = mesesadeudado,
+        mesesmulta=mesesmulta,
+        multa=multa
+    };
+pagosstatic=multa;
+
+   
+        return Json(resultado);
+    }
+
+
+     public IActionResult PagarCuota(int Id){
+        RepositorioContrato rc=new RepositorioContrato();
+        RepositorioPago rp=new RepositorioPago();
+        Contrato contrato=new Contrato();
+        IList<Pago>pagos;
+        pagos=rp.GetPago(Id);
+        Pago pago=new Pago();
+          pagos= rp.GetPago(Id);
+        pago.NumeroPago=pagos.Count()+1;
+       
+         
+
+
+ Console.WriteLine("go");
+
+
+        try{
+        DateTime fechaactual=DateTime.Now;
+        contrato=rc.GetContrato(Id);
+        contrato.FechaFinAnticipada=fechaactual;
+        contrato.Estado=false;
+        rc.ModificaContratoparmi(contrato);
+       
+        pago.Fecha=contrato.FechaFin;
+        pago.FechaPago=DateTime.Now;
+        pago.Importe=pagosstatic;
+        pago.ContratoId=Id;
+        Console.WriteLine(pago);
+        rp.InsertPago(pago);
+        
+
+
+        return RedirectToAction(nameof(Index),new{page=1});
+        }catch (Exception e){
+           return Content("Ocurrió un error al intentar modificar el contrato: " + e.Message);
+        }
+   }
+
+ public IActionResult Pactarfecha(int Id){
+    Console.WriteLine("holsdffffffffffffff"   + Id);
+        RepositorioContrato rc=new RepositorioContrato();
+        RepositorioPago rp=new RepositorioPago();
+        Contrato contrato=new Contrato();
+        IList<Pago>pagos;
+        pagos=rp.GetPago(Id);
+        Pago pago=new Pago();
+          pagos= rp.GetPago(Id);
+        pago.NumeroPago=pagos.Count()+1;
+       
+         
+
+
+ Console.WriteLine("go");
+
+
+        try{
+        DateTime fechaactual=DateTime.Now;
+        contrato=rc.GetContrato(Id);
+        contrato.FechaFinAnticipada=fechaactual;
+        contrato.Estado=true;
+        rc.ModificaContratoparmi(contrato);
+       
+        pago.Fecha=contrato.FechaFin;
+        pago.FechaPago=null;
+        pago.Importe=pagosstatic;
+        pago.ContratoId=Id;
+        Console.WriteLine(pago);
+        rp.InsertPago(pago);
+        
+
+
+        return RedirectToAction(nameof(Index),new{page=1});
+        }catch (Exception e){
+           return Content("Ocurrió un error al intentar modificar el contrato: " + e.Message);
+        }
+   }
+
+
+  
 }

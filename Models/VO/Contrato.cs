@@ -24,6 +24,9 @@ public class Contrato
 	public DateTime FechaFinAnticipada { get; set; }
 	public decimal PrecioXmes { get; set; }
     public bool Estado{ get; set; }
+    public bool tienefechapactada { get; set; }
+    
+    public decimal preciototal { get; set; }
   
     public override string ToString()
         {  string inquilino=InquilinoId!=null?InquilinoId.ToString():" ";

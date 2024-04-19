@@ -23,23 +23,28 @@ public class PagoController : Controller
    public IActionResult Index()
     {   
 		RepositorioContrato rc=new RepositorioContrato();
+    DateTime da=DateTime.MinValue;
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
     } 
       public IActionResult Pagar( string nombre, string apellido,int ContratoId,int NumeroPago, DateTime fecha )
     {   
          DateTime nuevaFecha = new DateTime(fecha.Year, fecha.Day + 1 , fecha.Month );
-        
+         Console.WriteLine( "ContratoId");
+        Console.WriteLine( ContratoId);
         
         RepositorioContrato rc=new RepositorioContrato();
         RepositorioPago rp=new RepositorioPago();
+        IList <Pago> pagos=new List<Pago>();
+        pagos=rp.GetPago(ContratoId);
+        // aca me falta contar cuantas pagos hay para agregarq
         Contrato con=new Contrato();
         con=rc.GetContrato(ContratoId);
          DateTime fechaActual = DateTime.Now;
          Pago pago = new Pago();
          pago.ContratoId = ContratoId;
-         pago.NumeroPago=NumeroPago;
-         pago.Importe=0;
+        // pago.NumeroPago=NumeroPago;
+         pago.Importe=con.PrecioXmes;
          decimal numeroDecimal;
         
         
@@ -60,12 +65,13 @@ public class PagoController : Controller
        else{
         
         decimal importe=rp.UpdatePago(pago);
-          pago.ContratoId = ContratoId;
-         pago.NumeroPago=NumeroPago+1;
+        Pago pagose=new Pago();
+          pagose.ContratoId = ContratoId;
+         pagose.NumeroPago=NumeroPago+1;
           fecha=fecha.AddMonths(1);
-         pago.Fecha=nuevaFecha;
-         pago.FechaPago= null;
-         pago.Importe=importe;   
+         pagose.Fecha=nuevaFecha;
+         pagose.FechaPago= null;
+         pagose.Importe=importe;   
         
         rp.InsertPago(pago);
          
@@ -81,13 +87,7 @@ public class PagoController : Controller
 
 
 
-         /*
 
-         INSERT INTO Pagos (ContratoId, Importe, FechaPago)
-VALUES (@ContratoId, @Importe, GETDATE());
-
-
-         */
 
    
     public IActionResult Privacy()
@@ -97,18 +97,37 @@ VALUES (@ContratoId, @Importe, GETDATE());
 
 
 
-    public IActionResult Prepago(int Id, string nombre, string apellido, string dni)
+    public IActionResult Prepago(int Id, int idcontrato, string nombre, string apellido, string dni)
     {    
  RepositorioPago rp = new RepositorioPago();
-    IList<Pago> pagos = rp.GetPago(Id);
-    // Obtener la lista de pagos y ordenarla por el número de pago de mayor a menor
-//IList<Pago> pagos = rp.GetPago(Id).OrderByDescending(p => p.NumeroPago).ToList();
-
-     
-
+    IList<Pago> pagos = rp.GetPago(idcontrato);
       RepositorioContrato rc=new RepositorioContrato();
         Contrato con=new Contrato();
-        con=rc.GetContrato(Id);
+
+        con=rc.GetContrato(idcontrato);
+         Console.WriteLine("pagos");
+        Console.WriteLine(pagos);
+        Console.WriteLine("pagos");
+      
+       
+        if(pagos.Count()<1){
+          try{
+
+             Pago pago= new Pago();
+           pago.ContratoId=idcontrato;
+           pago.NumeroPago=1;
+           pago.Fecha=con.FechaInicio;
+           pago.FechaPago=null;
+           pago.Importe=con.PrecioXmes;
+        
+           rp.InsertPago(pago); 
+           }
+           catch (Exception e){
+              return Json("ca");
+           }
+
+        }
+        pagos = rp.GetPago(idcontrato);
 
     ModelAuxiliar modelo = new ModelAuxiliar();
     modelo.FinContrato=con.FechaFin;
