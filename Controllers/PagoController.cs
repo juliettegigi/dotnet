@@ -35,13 +35,16 @@ public class PagoController : Controller
         
         RepositorioContrato rc=new RepositorioContrato();
         RepositorioPago rp=new RepositorioPago();
+        IList <Pago> pagos=new List<Pago>();
+        pagos=rp.GetPago(ContratoId);
+        // aca me falta contar cuantas pagos hay para agregarq
         Contrato con=new Contrato();
         con=rc.GetContrato(ContratoId);
          DateTime fechaActual = DateTime.Now;
          Pago pago = new Pago();
          pago.ContratoId = ContratoId;
-         pago.NumeroPago=NumeroPago;
-         pago.Importe=0;
+        // pago.NumeroPago=NumeroPago;
+         pago.Importe=con.PrecioXmes;
          decimal numeroDecimal;
         
         
@@ -62,12 +65,13 @@ public class PagoController : Controller
        else{
         
         decimal importe=rp.UpdatePago(pago);
-          pago.ContratoId = ContratoId;
-         pago.NumeroPago=NumeroPago+1;
+        Pago pagose=new Pago();
+          pagose.ContratoId = ContratoId;
+         pagose.NumeroPago=NumeroPago+1;
           fecha=fecha.AddMonths(1);
-         pago.Fecha=nuevaFecha;
-         pago.FechaPago= null;
-         pago.Importe=importe;   
+         pagose.Fecha=nuevaFecha;
+         pagose.FechaPago= null;
+         pagose.Importe=importe;   
         
         rp.InsertPago(pago);
          
