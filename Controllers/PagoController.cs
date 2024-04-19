@@ -37,53 +37,37 @@ public class PagoController : Controller
         RepositorioPago rp=new RepositorioPago();
         IList <Pago> pagos=new List<Pago>();
         pagos=rp.GetPago(ContratoId);
-        // aca me falta contar cuantas pagos hay para agregarq
+        Pago pago1=rp.GetPago(ContratoId,NumeroPago);
+        pago1.FechaPago=DateTime.Now;
+    
         Contrato con=new Contrato();
         con=rc.GetContrato(ContratoId);
-         DateTime fechaActual = DateTime.Now;
-         Pago pago = new Pago();
-         pago.ContratoId = ContratoId;
-        // pago.NumeroPago=NumeroPago;
-         pago.Importe=con.PrecioXmes;
-         decimal numeroDecimal;
         
-        
-         pago.FechaPago= DateTime.Now;
-         Console.WriteLine(nuevaFecha);
-           Console.WriteLine( con.FechaFin);
-           
-    
+        pago1.FechaPago=DateTime.Now;
+        rp.UpdatePago(pago1);
+        if(pagos.Count()==pago1.NumeroPago)
+        { try{
+          Pago pago=pago1;
+          pago.Fecha=pago.Fecha.AddMonths(1);
+          pago.FechaPago=null;
+          pago.NumeroPago=pago.NumeroPago+1;
          
-
-         if (nuevaFecha>con.FechaFin)
+          rp.InsertPago(pago);
+          return RedirectToAction(nameof(Index));
+        } catch (Exception e)
         {
-             TempData["dato"]="Tiene que renovar Contrato O tiene que desalojarlo";
-             decimal importe=rp.UpdatePago(pago);
-       return RedirectToAction(nameof(Index));
-   
-       }
-       else{
-        
-        decimal importe=rp.UpdatePago(pago);
-        Pago pagose=new Pago();
-          pagose.ContratoId = ContratoId;
-         pagose.NumeroPago=NumeroPago+1;
-          fecha=fecha.AddMonths(1);
-         pagose.Fecha=nuevaFecha;
-         pagose.FechaPago= null;
-         pagose.Importe=importe;   
-        
-        rp.InsertPago(pago);
-         
-         
+            // Manejar la excepción adecuadamente
+            // Aquí podrías registrar la excepción, mostrar un mensaje al usuario, etc.
+            return Json(new { error = e.Message });
+        }
+        }
 
-  
-           return RedirectToAction(nameof(Index));  
-       
+         return RedirectToAction(nameof(Index));
+        
        }
        
 
- }
+ 
 
 
 
@@ -106,12 +90,12 @@ public class PagoController : Controller
 
         con=rc.GetContrato(idcontrato);
          Console.WriteLine("pagos");
-        Console.WriteLine(pagos);
+        Console.WriteLine(pagos.Count());
         Console.WriteLine("pagos");
-      
+     
        
-        if(pagos.Count()<1){
-          try{
+        if(pagos.Count()==0){
+        
 
              Pago pago= new Pago();
            pago.ContratoId=idcontrato;
@@ -121,11 +105,9 @@ public class PagoController : Controller
            pago.Importe=con.PrecioXmes;
         
            rp.InsertPago(pago); 
-           }
-           catch (Exception e){
-              return Json("ca");
-           }
-
+           
+           
+      
         }
         pagos = rp.GetPago(idcontrato);
 

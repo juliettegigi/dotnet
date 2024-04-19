@@ -130,13 +130,13 @@ public ActionResult Login(string? returnUrl)
 //*********************************************************************************************************************		
 [HttpPost]
 public async Task<IActionResult> Login(ViewLogin login)
-		{
+		{ RepositorioUsuario ru=new RepositorioUsuario();
 			try
 			{
 				// url de retorno= esto redirecciona a donnde se quiso acceder sin estar logueado
 				var returnUrl = String.IsNullOrEmpty(TempData["returnUrl"] as string) ? "/Home" : TempData["returnUrl"].ToString();
 				if (ModelState.IsValid)
-				{
+				{  Console.WriteLine("hola");
 					// hasheo la clave
 					string passIngresada = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 						password: login.Pass,
@@ -144,10 +144,11 @@ public async Task<IActionResult> Login(ViewLogin login)
 						prf: KeyDerivationPrf.HMACSHA1,
 						iterationCount: 1000,
 						numBytesRequested: 256 / 8));
-
+                     Console.WriteLine(login.Usuario);
 					// lo busco al user por email
-					var u = repositorio.ObtenerPorEmail(login.Usuario);
-					
+				 Usuario u = ru.ObtenerPorEmail(login.Usuario);
+
+					Console.WriteLine(u.Apellido);
 					//  si puso cualquier email o la pass es culquira
 					if (u == null || u.Pass != passIngresada)
 					{
