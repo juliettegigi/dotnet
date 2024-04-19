@@ -52,16 +52,31 @@ public class PagoController : Controller
         con=rc.GetContrato(ContratoId);
         
         pago1.FechaPago=DateTime.Now;
+        DateTime fechacondicion=DateTime.Now;
         rp.UpdatePago(pago1);
         if(pagos.Count()==pago1.NumeroPago)
         { try{
+
+          if(pago1.Fecha.AddMonths(1)<=con.FechaFin){
           Pago pago=pago1;
           pago.Fecha=pago.Fecha.AddMonths(1);
-          pago.FechaPago=null;
+          pago.FechaPago=null;  
           pago.NumeroPago=pago.NumeroPago+1;
          
           rp.InsertPago(pago);
           return RedirectToAction(nameof(Index));
+          }else{
+             Pago pago=pago1;
+         
+          pago.FechaPago=DateTime.Now;
+         
+         
+          rp.UpdatePago(pago);
+
+              TempData["dato"]="Tiene que renovar Contrato O tiene que desalojarlo";
+              return RedirectToAction(nameof(Index));
+
+          }
         } catch (Exception e)
         {
             // Manejar la excepción adecuadamente
