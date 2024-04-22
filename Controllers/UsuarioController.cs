@@ -136,7 +136,7 @@ public async Task<IActionResult> Login(ViewLogin login)
 				// url de retorno= esto redirecciona a donnde se quiso acceder sin estar logueado
 				var returnUrl = String.IsNullOrEmpty(TempData["returnUrl"] as string) ? "/Home" : TempData["returnUrl"].ToString();
 				if (ModelState.IsValid)
-				{  Console.WriteLine("hola");
+				{  
 					// hasheo la clave
 					string passIngresada = Convert.ToBase64String(KeyDerivation.Pbkdf2(
 						password: login.Pass,

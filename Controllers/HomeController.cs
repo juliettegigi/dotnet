@@ -15,10 +15,11 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-   
-    public IActionResult Index(){
+   [HttpGet]
+    public IActionResult Index(string? returnUrl){
         if(TempData.ContainsKey("msg"))
           ViewBag.msg=TempData["msg"];
+        TempData["returnUrl"] = returnUrl;
         return View();
     }
 

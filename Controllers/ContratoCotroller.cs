@@ -50,45 +50,7 @@ public class ContratoController : Controller
          pago=rp.GetPago(id);
         Contrato contrato=rc.GetContrato(id);
          DateTime fechaActual = DateTime.Now;
-           /*
-         int mesestotaldeuda=0;
-            int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
-            int  mitad=(contrato.FechaFin.Year-contrato.FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
-            mitad=mitad/2 ;
-            int deudas=0;
-            int cantidadpagos=0;
-            decimal multa;
-           for(int i = 0; i<pago.Count; i++){
-            if(pago[i].FechaPago>DateTime.MinValue)
-            {
-                cantidadpagos++;
-
-            }else{
-                deudas++;
-            }
-       
-           }
-           mesestotaldeuda=diferenciaMeses-cantidadpagos;
-
-            if(deudas>0){
-
-            
-            if (diferenciaMeses>=mitad){
-                mesestotaldeuda=mesestotaldeuda+2;
-            }
-            else{
-                mesestotaldeuda++;
-            }
-            multa=mesestotaldeuda*pago[0].Importe;
-           }
-
-
-          Console.WriteLine(cantidadpagos);
-          Console.WriteLine(deudas);
-   
-
-        return Json(pago);
-        */
+         
         
 		rc.EliminarContrato(id);
 		return RedirectToAction(nameof(Index),new { page = 1});
@@ -96,14 +58,15 @@ public class ContratoController : Controller
 	}
 
 [HttpGet]
-    public IActionResult Editar(int id=0)
-	{   
+    public IActionResult Editar(int id=0, Contrato? contrato=null)
+	{    RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
+             ViewBag.ListaTipos=rit.GetInmuebleTipos();
+
+
         if(TempData.ContainsKey("msg"))
            ViewBag.msg=TempData["msg"];
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
-        RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
-        ViewBag.ListaTipos=rit.GetInmuebleTipos();
         if(id!=0){
          Contrato c=rc.GetContrato(id);
          return View(c);
@@ -150,8 +113,26 @@ public class ContratoController : Controller
 [HttpPost]
 	public IActionResult Guardar(Contrato contrato)
 	{  
-        Console.WriteLine("*****************************************************contrato");
+
+Console.WriteLine("*****************************************************contrato");
         Console.WriteLine(contrato);
+        if (!ModelState.IsValid) {
+            Console.WriteLine("***************************************************** Entro");
+            foreach (var kvp in ModelState)
+    {
+        foreach (var error in kvp.Value.Errors)
+        {
+            Console.WriteLine(error.ErrorMessage);
+        }
+    }
+
+             RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
+             ViewBag.ListaTipos=rit.GetInmuebleTipos();
+            return View("Editar", contrato);
+            
+            }
+
+        
         string msg="";
 		RepositorioContrato rc = new RepositorioContrato();
 		RepositorioPago rp = new RepositorioPago();

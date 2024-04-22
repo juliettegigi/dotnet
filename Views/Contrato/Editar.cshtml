@@ -1,5 +1,7 @@
 @model InmobiliariaGutierrez.Models.VO.Contrato
 
+
+
 @{if(ViewBag.msg!=null){
   <div class="alert alert-success" role="alert">
           ✔@ViewBag.msg
@@ -22,6 +24,8 @@ else{
                  <div class="form-group">
                       <input asp-for="Id" type="hidden" value=@(Model!=null?Model.Id:0)>
                       <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
+                      <input asp-for="InquilinoId.Nombre" type="hidden" id="inquilinoNombre">
+                      <input asp-for="InquilinoId.Apellido" type="hidden" id="inquilinoApellido">
                       <label asp-for="InquilinoId" class="control-label">Inquilino</label>
                       <input asp-for="InquilinoId" class="form-control"
                                                    id="innquilinoDataList"
@@ -70,10 +74,22 @@ else{
                          <h4 class="my-0 fw-normal">Inmueble</h4>
                     </div>
                     <div class="card-body">
-                              <h1 class="card-title pricing-card-title" id="nombreCard">@(Model!=null?Model.InmuebleId.PropietarioId.Nombre:"") <small  class="text-body-secondary fw-light" id="apellidoCard">@(Model!=null?Model.InmuebleId.PropietarioId.Apellido:"")</small></h1>
+                              <h1 class="card-title pricing-card-title" id="nombreCard">@(Model==null?"":
+                                                                                          (Model.InmuebleId.PropietarioId==null?"":
+                                                                                          Model.InmuebleId.PropietarioId.Nombre))
+                                       <small  class="text-body-secondary fw-light" id="apellidoCard">
+                                            @(Model==null?"":
+                                             (Model.InmuebleId.PropietarioId==null?"":
+                                              Model.InmuebleId.PropietarioId.Apellido))
+                                        </small>
+                              </h1>
                               <ul class="list-unstyled mt-3 mb-4">
                                 <li id="direccionCard">Dirección: @(Model!=null?Model.InmuebleId.Direccion:"")</li>
-                                <li id="tipoCard">Tipo: @(Model!=null?Model.InmuebleId.InmuebleTipoId.Tipo:"")</li>
+                                <li id="tipoCard">Tipo:
+                                    @(Model==null?"":
+                                    (Model.InmuebleId.InmuebleTipoId==null?"":
+                                    Model.InmuebleId.InmuebleTipoId.Tipo))
+                                </li>
                                 <li id="usoCard">Uso: @(Model!=null?Model.InmuebleId.Uso:"")</li>
                                 <li id="cantidadCard">Cantidad de ambientes: @(Model!=null?Model.InmuebleId.CantidadAmbientes:"")</li>
                               </ul>
@@ -94,6 +110,7 @@ else{
                               </div>
                     </div>
                 </div>
+                <span asp-validation-for="InmuebleId" class="text-danger"></span>
          </div>
          <div class="formularioContrato z-2 position-absolute  top-0 start-0 h-50 w-50 invisible">
               <div class="form-group">
@@ -271,6 +288,8 @@ btn3.addEventListener('click',()=>{
                            ulInquilino.appendChild(li);
                            li.addEventListener("click",(e)=>{
                                   document.getElementById("inquilinoId").value=e.target.id;
+                                  document.getElementById("inquilinoNombre").value=inquilino.nombre;
+                                  document.getElementById("inquilinoApellido").value=inquilino.apellido;
                                   inputInnquilino.value=e.target.textContent;
                                   inputInnquilino.setAttribute("aria-expanded","false"); 
                                    inputInnquilino.click();

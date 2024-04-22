@@ -13,11 +13,15 @@ public class Contrato
 {
     public int Id { get; set; }
     [ForeignKey(nameof(InmuebleId))]
+
+    [ExisteInmueble()]
     public Inmueble InmuebleId { get; set; }
+
+    [ExisteInquilino()]
     [ForeignKey(nameof(InquilinoId))]
     public Inquilino InquilinoId { get; set; }
 
-    
+    [FechaNoMenorQueLaActual()]
 	public DateTime FechaInicio { get; set; }
 	[FechaNoMenorQueLaActual()]
     public DateTime FechaFin { get; set; }
