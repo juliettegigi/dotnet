@@ -13,7 +13,10 @@
             border-collapse: collapse;
             width: 100%;
         }
-
+        #calculo {
+             display: none;
+       
+        }
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
@@ -61,7 +64,7 @@
 <input type="datetime-local" id="fechaSalida" name="fechaSalida">
 <button type="submit" title="Pagar Cuota" onclick="calcular()">Calcular</button>
 </div>
- <div id="calculo"></div>
+<div id="calculo" class="alert alert-info estilo-bonito hidden" role="alert"> </div>
 
 <form action="/Contrato/PagarCuota">
     <button class="hidden" type="submit" title="Pagar Cuota" name="Id" value="@Model.Id">Pagar</button>
@@ -87,15 +90,22 @@ else
 
 <div>
 
-<button type="submit" title="Pagar Cuota">Volver</button>
+<button type="button" title="Volver" onclick="goBack()">Volver</button>
 </div>
 <script>
+    function goBack() {
+  window.history.back();
+}
 function calcular()
  {
     var botonesOcultos = document.querySelectorAll('.hidden');
        botonesOcultos.forEach(boton => {
         boton.classList.remove('hidden');
     });
+    var elementoCalculo = document.getElementById('calculo');
+    elementoCalculo.classList.remove('hidden');
+        // Cambia el estilo para hacer el elemento visible
+        elementoCalculo.style.display = 'block';
     var fechaSeleccionada = document.getElementById('fechaSalida').value;
     var contratoId = @Model.Id+"/"+fechaSeleccionada; 
     var fechaSeleccionada=fechaSeleccionada+"hola";
@@ -115,7 +125,7 @@ function calcular()
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('calculo').innerHTML = JSON.stringify(data.mensaje);
+        document.getElementById('calculo').innerText = "Mensaje: " + data.mensaje;      
        
     })
     .catch(error => console.error('Error:', error));
