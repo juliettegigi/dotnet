@@ -4,7 +4,7 @@
 
 @{if(ViewBag.msg!=null){
   <div class="alert alert-success" role="alert">
-          ✔@ViewBag.msg
+          @ViewBag.msg
   </div>
   <div>
   <a asp-action="Index">Volver</a>
@@ -12,6 +12,14 @@
 }
 else{
 
+if(ViewBag.errores!=null){
+  <div class="alert alert-warning" role="alert">
+          ✔Errores en los datos ingresados, vuelva a ingresarlos correctamente
+  </div>
+  <div>
+  <a asp-action="Index">Volver</a>
+</div>
+}
 
 <h4>Nuevo contrato</h4>
 

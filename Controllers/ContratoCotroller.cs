@@ -65,6 +65,8 @@ public class ContratoController : Controller
 
         if(TempData.ContainsKey("msg"))
            ViewBag.msg=TempData["msg"];
+        if(TempData.ContainsKey("errores"))
+           ViewBag.errores=TempData["errores"];  
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
@@ -128,6 +130,7 @@ Console.WriteLine("*****************************************************contrato
 
              RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
              ViewBag.ListaTipos=rit.GetInmuebleTipos();
+              ViewBag.errores=true;
             return View("Editar", contrato);
             
             }
