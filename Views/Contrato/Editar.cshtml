@@ -26,6 +26,10 @@ else{
                       <input asp-for="InquilinoId.Id" type="hidden"  id="inquilinoId">
                       <input asp-for="InquilinoId.Nombre" type="hidden" id="inquilinoNombre">
                       <input asp-for="InquilinoId.Apellido" type="hidden" id="inquilinoApellido">
+                      <input asp-for="InquilinoId.DNI" type="hidden" id="inquilinoDNI">
+                      <input asp-for="InquilinoId.Email" type="hidden" id="inquilinoEmail">
+                      <input asp-for="InquilinoId.Telefono" type="hidden" id="inquilinoTelefono">
+                      <input asp-for="InquilinoId.Domicilio" type="hidden" id="inquilinoDomicilio">
                       <label asp-for="InquilinoId" class="control-label">Inquilino</label>
                       <input asp-for="InquilinoId" class="form-control"
                                                    id="innquilinoDataList"
@@ -290,6 +294,10 @@ btn3.addEventListener('click',()=>{
                                   document.getElementById("inquilinoId").value=e.target.id;
                                   document.getElementById("inquilinoNombre").value=inquilino.nombre;
                                   document.getElementById("inquilinoApellido").value=inquilino.apellido;
+                                  document.getElementById("inquilinoDNI").value=inquilino.dni;
+                                  document.getElementById("inquilinoTelefono").value=inquilino.telefono;
+                                  document.getElementById("inquilinoEmail").value=inquilino.email;
+                                  document.getElementById("inquilinoDomicilio").value=inquilino.domicilio;
                                   inputInnquilino.value=e.target.textContent;
                                   inputInnquilino.setAttribute("aria-expanded","false"); 
                                    inputInnquilino.click();

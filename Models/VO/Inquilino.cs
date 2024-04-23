@@ -20,7 +20,7 @@ public class Inquilino
     
    
     [Required(ErrorMessage = "El teléfono es obligatorio"),StringLength(15, ErrorMessage = "El teléfono no puede tener más de 15 caracteres")]
-    [RegularExpression(@"^[0-9]+$", ErrorMessage = "El teléfono solo puede contener números")]
+   // [RegularExpression(@"^[0-9]+$", ErrorMessage = "El teléfono solo puede contener números")]
     public String? Telefono { get; set; }
     [Required, EmailAddress]
     public String? Email { get; set; }
