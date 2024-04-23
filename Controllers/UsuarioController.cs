@@ -29,7 +29,7 @@ public class UsuarioController : Controller
 	
 
 
-	[Authorize]
+	 [Authorize(Policy ="Administrador")]
       public IActionResult Index(){
 		IList<Usuario> usuarios=new List<Usuario>();
 		RepositorioUsuario ru=new RepositorioUsuario();
@@ -164,6 +164,7 @@ public async Task<IActionResult> Login(ViewLogin login)
 						new Claim(ClaimTypes.Role, u.RolNombre),
 						new Claim("id", $"{u.Id}"),
 						new Claim("img", $"{u.Avatar}"),
+						new Claim(ClaimTypes.Role,u.RolNombre)
 
 					};
 
