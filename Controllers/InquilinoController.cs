@@ -42,7 +42,7 @@ public class InquilinoController : Controller
 	{  if (ModelState.IsValid){
 		RepositorioInquilino rp = new RepositorioInquilino();
 		
-		if(inquilino.Id > 0)
+		if(inquilino.Id !=null)
 			rp.ModificaInquilino(inquilino);
 		else
 			rp.AltaInquilino(inquilino);
