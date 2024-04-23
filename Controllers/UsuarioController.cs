@@ -26,6 +26,9 @@ public class UsuarioController : Controller
 			environment=env;
             }
 	
+
+
+	[Authorize]
       public IActionResult Index(){
 		IList<Usuario> usuarios=new List<Usuario>();
 		RepositorioUsuario ru=new RepositorioUsuario();
@@ -47,12 +50,10 @@ public class UsuarioController : Controller
 
 
 	//***************************************************************************************************************************************************
+	[Authorize]
 		public ActionResult Editar(int id)
-		{   Console.WriteLine("********************************************* editaaaaaaaaaaar");
-		    Console.WriteLine(id);
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario usuario = ru.ObtenerPorId(id);
-			Console.WriteLine(usuario.Rol);
 			ViewBag.Roles = Usuario.ObtenerRoles();
 			return View(usuario);
 			} 
@@ -63,6 +64,7 @@ public class UsuarioController : Controller
 //*************************************************************************************************************
 //********************************************************************************************************************************************
 	//***************************************************************************************************************************************************
+	[Authorize]
 		public ActionResult Baja(int id)
 		{ repositorio.Baja(id);
 			 return RedirectToAction("Index");
@@ -144,11 +146,8 @@ public async Task<IActionResult> Login(ViewLogin login)
 						prf: KeyDerivationPrf.HMACSHA1,
 						iterationCount: 1000,
 						numBytesRequested: 256 / 8));
-                     Console.WriteLine(login.Usuario);
 					// lo busco al user por email
 				 Usuario u = ru.ObtenerPorEmail(login.Usuario);
-
-					Console.WriteLine(u.Apellido);
 					//  si puso cualquier email o la pass es culquira
 					if (u == null || u.Pass != passIngresada)
 					{
@@ -166,7 +165,6 @@ public async Task<IActionResult> Login(ViewLogin login)
 						new Claim("img", $"{u.Avatar}"),
 
 					};
-					Console.WriteLine(u.Avatar);
 
                     // al objeto le paso la lista, los datos del user, y lo 2do me crea la identidad conn cookies  
 					var claimsIdentity = new ClaimsIdentity(
@@ -193,6 +191,10 @@ public async Task<IActionResult> Login(ViewLogin login)
 		}
 
 //**************************************************************************************************************************************************************
+
+
+
+[Authorize]
 public async Task<ActionResult> Logout()
 		{
 			await HttpContext.SignOutAsync(
@@ -204,7 +206,7 @@ public async Task<ActionResult> Logout()
 
 
 
-
+[Authorize]
 [HttpPost]
 public ActionResult Update(Usuario u)
 {  
@@ -254,8 +256,10 @@ public ActionResult Update(Usuario u)
 
 	
 }
+
+[Authorize]
 public ActionResult Updatese(Usuario u)
-{  Console.WriteLine(u.Avatar);
+{  
     try
     {
         // Verificar si se proporciona una nueva contraseña y hashearla
@@ -280,18 +284,12 @@ if (u.EliminarFoto)
 
     // Eliminar la parte "/Uploads" de la ruta
     string fileName = u.Avatar.Replace("/Uploads", "");
-	 Console.WriteLine("-----------");
-   Console.WriteLine(path);
-    Console.WriteLine("-------------");
 
     // Reemplazar las barras inclinadas inversas por barras inclinadas
     fileName = fileName.Replace("/", "\\");
 
     // Obtener la ruta completa del archivo
     string fullPath =path+fileName;
-	 Console.WriteLine("-----------");
-   Console.WriteLine(fullPath);
-    Console.WriteLine("-------------");
     // Verificar si el archivo existe y eliminarlo
     if (System.IO.File.Exists(fullPath))
     {
@@ -328,7 +326,7 @@ if (u.EliminarFoto)
             }
         }
         else if (string.IsNullOrEmpty(u.Avatar))
-        {Console.WriteLine("Entrando aca");
+        {
           
             u.Avatar = repositorio.ObtenerPorId(u.Id).Avatar;
         }

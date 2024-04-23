@@ -5,7 +5,9 @@ using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Models.DAO;
 using System.Globalization;
 
-namespace InmobiliariaGutierrez.Controllers;
+namespace InmobiliariaGutierrez.Controllers{
+
+[Authorize]
 
 public class InmuebleController : Controller
 {
@@ -43,7 +45,6 @@ public class InmuebleController : Controller
             {
                 
                 TempData["ErrorMessage"] = "No se puede eliminar el inmueble porque está alquilado.";
-                Console.WriteLine("hola");
             return RedirectToAction("Index");
             }
           
@@ -159,10 +160,6 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
         
          if(IdInmueble>0){
             inmueble.Id=IdInmueble;
-             Console.WriteLine("++++++++++++++++++++++++++++++");
-          Console.WriteLine(inmueble.Uso.ToString());
-
-           Console.WriteLine("++++++++++++++++++++++++++++++");
       
             repo.ModificaInmueble(inmueble);
          }
@@ -207,4 +204,5 @@ if (decimal.TryParse(latitud, NumberStyles.Float, cultura, out latitudDecimal) &
      return RedirectToAction("Index", "Home");
   }
 	
+}
 }

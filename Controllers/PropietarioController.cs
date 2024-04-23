@@ -4,8 +4,9 @@ using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Models.DAO;
 
-namespace InmobiliariaGutierrez.Controllers;
+namespace InmobiliariaGutierrez.Controllers{
 
+[Authorize]
 public class PropietarioController : Controller
 {
 	private readonly RepositorioPropietario rp ;
@@ -104,4 +105,5 @@ public class PropietarioController : Controller
            	
                return Json(opciones);
            }
+}
 }

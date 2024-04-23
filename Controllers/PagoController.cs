@@ -8,8 +8,9 @@ using InmobiliariaGutierrez.Views.ContratoView;
 using InmobiliariaGutierrez.Views.ContratoView;
 
 
-namespace InmobiliariaGutierrez.Controllers;
+namespace InmobiliariaGutierrez.Controllers{
 
+[Authorize]
 public class PagoController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -38,8 +39,6 @@ public class PagoController : Controller
       public IActionResult Pagar( string nombre, string apellido,int ContratoId,int NumeroPago, DateTime fecha )
     {   
          DateTime nuevaFecha = new DateTime(fecha.Year, fecha.Day + 1 , fecha.Month );
-         Console.WriteLine( "ContratoId");
-        Console.WriteLine( ContratoId);
         
         RepositorioContrato rc=new RepositorioContrato();
         RepositorioPago rp=new RepositorioPago();
@@ -112,9 +111,6 @@ public class PagoController : Controller
         Contrato con=new Contrato();
 
         con=rc.GetContrato(idcontrato);
-         Console.WriteLine("pagos");
-        Console.WriteLine(pagos.Count());
-        Console.WriteLine("pagos");
      
        
         if(pagos.Count()==0){
@@ -169,4 +165,5 @@ public class PagoController : Controller
 		{
 			return View();
 		}
+}
 }

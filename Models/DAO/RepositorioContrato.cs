@@ -161,8 +161,6 @@ public class RepositorioContrato:RepositorioBase
 				             {nameof(Contrato.Estado)} = 1
 				          WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
 
-		     Console.WriteLine("*****************************************************sql");
-        Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);
@@ -511,8 +509,6 @@ public IList<Contrato> GetContratosTodos()
                  {nameof(Contrato.Estado)} = @{nameof(Contrato.Estado)}
              WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)};";
 
-		     Console.WriteLine("*****************************************************sql");
-        Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.InquilinoId)}", contrato.InquilinoId.Id);

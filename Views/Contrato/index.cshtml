@@ -87,9 +87,10 @@
 							 <a asp-action="Editar" asp-route-id="@item.Id">
    						         <button type="submit"><i class="bi bi-pencil-square"></i></button>
    						     </a>
+                    @if(User.IsInRole("Administrador")){
    						     <a asp-action="Finalizar" asp-route-id="@item.Id" method="post">
    						         <button type="submit"  class="mx-2 "><i class="bi bi-trash"></i></button>
-   						     </a>
+   						     </a>}
 						</td>
                      @{i++;}
             	</tr>

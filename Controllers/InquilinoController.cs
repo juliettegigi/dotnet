@@ -4,8 +4,9 @@ using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Views.InquilinoView;
 using InmobiliariaGutierrez.Models.DAO;
-namespace InmobiliariaGutierrez.Controllers;
+namespace InmobiliariaGutierrez.Controllers{
 
+[Authorize]
 public class InquilinoController : Controller
 {
 	private readonly ILogger<InquilinoController> _logger;
@@ -103,3 +104,4 @@ public class InquilinoController : Controller
 
 }
 
+}
