@@ -292,7 +292,8 @@ public int AltaInmueble(Inmueble inmueble)
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-            command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}", inmueble.Uso);
+            string valorEnum = inmueble.Uso == TipoUso.Comercial ? "Comercial" : "Residencial";
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}",valorEnum);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
             command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLongitud)}", inmueble.Coordenadas.CLongitud);
@@ -330,7 +331,8 @@ public int AltaInmueble(Inmueble inmueble)
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Direccion)}", inmueble.Direccion);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.InmuebleTipoId)}", inmueble.InmuebleTipoId.Tipo);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.CantidadAmbientes)}", inmueble.CantidadAmbientes);
-                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}",(Enum)inmueble.Uso);
+                    string valorEnum = inmueble.Uso == TipoUso.Comercial ? "Comercial" : "Residencial";
+                    command.Parameters.AddWithValue($"@{nameof(Inmueble.Uso)}",valorEnum);
 
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.PrecioBase)}", inmueble.PrecioBase);
                     command.Parameters.AddWithValue($"@{nameof(Inmueble.Coordenadas.CLatitud)}", inmueble.Coordenadas.CLatitud);
