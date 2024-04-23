@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Models.DAO;
@@ -8,7 +9,6 @@ using System.Globalization;
 namespace InmobiliariaGutierrez.Controllers{
 
 [Authorize]
-
 public class InmuebleController : Controller
 {
 	private readonly RepositorioPropietario rp ;

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using Microsoft.AspNetCore.Hosting;  // para el IWebHostEnviroment
@@ -51,7 +52,7 @@ public class UsuarioController : Controller
 
 	//***************************************************************************************************************************************************
 	[Authorize]
-		public ActionResult Editar(int id)
+		public ActionResult Editar(int id){
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario usuario = ru.ObtenerPorId(id);
 			ViewBag.Roles = Usuario.ObtenerRoles();
