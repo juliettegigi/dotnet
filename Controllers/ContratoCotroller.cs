@@ -114,7 +114,7 @@ public class ContratoController : Controller
 
 [HttpPost]
 	public IActionResult Guardar(Contrato contrato)
-	{  
+	{  int alta=0;
 
 Console.WriteLine("*****************************************************contrato");
         Console.WriteLine(contrato);
@@ -145,17 +145,35 @@ Console.WriteLine("*****************************************************contrato
             msg="Contrato Actualizado.";
         }
 		else{
-			rc.AltaContrato(contrato);
-            var pago=new Pago{
+			int id =rc.AltaContrato(contrato);
+            Inquilino inquilino;
+            RepositorioInquilino ri=new RepositorioInquilino();
+            Contrato contrato1=rc.GetContrato(id);
+                msg="Contrato registrado.";
+          return RedirectToAction("Prepago", "Pago", new { idContrato = id, idInquilino = contrato1.InquilinoId.Id });
+
+
+
+
+            /*var pago=new Pago{
                 NumeroPago=1,
                 ContratoId=contrato.Id,
                 Fecha=contrato.FechaInicio,
                 FechaPago=contrato.FechaInicio
             };
             rp.InsertPago(pago);
-            msg="Contrato registrado.";
+            */
+
+           
+            alta=1;
+          
         }
         TempData["msg"]=msg;
+        if (alta==1){
+
+            
+        }
+
 		return RedirectToAction(nameof(Editar));
 	
 	}
