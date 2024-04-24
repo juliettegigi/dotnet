@@ -2,57 +2,44 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Detalles de Auditoría de Pago</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
+
 <body>
 
 <div class="container">
     <h2>Detalles de Auditoría de Pago</h2>
 
-      <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Contrato</h4>
-                <p class="card-text">ID: @Model.Contrato.Id</p>
-                <p class="card-text">Fecha de Inicio: @Model.Contrato.FechaInicio.ToString("dd/MM/yyyy")</p>
-                <p class="card-text">Fecha de Fin: @Model.Contrato.FechaFin.ToString("dd/MM/yyyy")</p>
-            </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h4 class="card-title">Contrato</h4>
+            <p class="card-text">ID: @Model.Contrato.Id</p>
+            <p class="card-text">Fecha de Inicio: @Model.Contrato.FechaInicio.ToString("dd/MM/yyyy")</p>
+            <p class="card-text">Fecha de Fin: @Model.Contrato.FechaFin.ToString("dd/MM/yyyy")</p>
         </div>
+    </div>
 
-    @foreach(var auditoria in Model.Auditoriapago)
-    {
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Usuario que Recibió el Pago</h4>
-                <p class="card-text">@Model.Usuario.Nombre @Model.Usuario.Apellido</p>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Fecha de Recepción del Pago</h4>
-                <p class="card-text">@{ var fechaPago = auditoria.FechaPago.HasValue ? auditoria.FechaPago.Value.ToString("dd/MM/yyyy") : "No disponible"; }@fechaPago</p>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Fecha de Cancelación del Pago</h4>
-                <p class="card-text">@{ var fechaCancelacion = auditoria.FechaCancelacion.HasValue ? auditoria.FechaCancelacion.Value.ToString("dd/MM/yyyy") : "No disponible"; }@fechaCancelacion</p>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-body">
-                <h4 class="card-title">Inquilino</h4>
-                <p class="card-text">@Model.Contrato.InquilinoId.Nombre @Model.Contrato.InquilinoId.Apellido</p>
-            </div>
-        </div>
-
-      
-    }
+    <table id="auditoriaTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Usuario que Recibió el Pago</th>
+                <th>Fecha de Recepción del Pago</th>
+                <th>Fecha de Cancelación del Pago</th>
+                <th>Inquilino</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var auditoria in Model.Auditoriapago)
+            {
+                <tr>
+                    <td>@Model.Usuario.Nombre @Model.Usuario.Apellido</td>
+                    <td>@(auditoria.FechaPago.HasValue ? auditoria.FechaPago.Value.ToString("dd/MM/yyyy") : "No disponible")</td>
+                    <td>@(auditoria.FechaCancelacion.HasValue ? auditoria.FechaCancelacion.Value.ToString("dd/MM/yyyy") : "No disponible")</td>
+                    <td>@Model.Contrato.InquilinoId.Nombre @Model.Contrato.InquilinoId.Apellido</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
 
 </body>
 </html>
