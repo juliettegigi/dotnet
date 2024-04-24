@@ -21,6 +21,44 @@ SET time_zone = "+00:00";
 -- Base de datos: `inmobiliariadotnet`
 --
 
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auditoriacontrato`
+--
+
+CREATE TABLE `auditoriacontrato` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fechaInicio` datetime DEFAULT NULL,
+  `fechacancelacion` datetime DEFAULT NULL,
+  `id_contrato` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `auditoriacontrato`
+--
+
+INSERT INTO `auditoriacontrato` (`id`, `id_usuario`, `fechaInicio`, `fechacancelacion`, `id_contrato`) VALUES
+(2, 5, '2024-04-24 17:04:32', NULL, 21),
+(3, 5, NULL, '2024-04-24 17:07:33', 21);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auditoriapagos`
+--
+
+CREATE TABLE `auditoriapagos` (
+  `id` int(11) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fechaPago` datetime DEFAULT NULL,
+  `fechaCancelacion` datetime DEFAULT NULL,
+  `numero_pago` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
 -- --------------------------------------------------------
 
 --
@@ -253,6 +291,26 @@ INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `email`, `pass`, `avatar`, `
 --
 
 --
+
+
+-- Indices de la tabla `auditoriacontrato`
+--
+
+
+
+ALTER TABLE `auditoriacontrato`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_usuario_id` (`id_usuario`),
+  ADD KEY `fk_contrato_id` (`id_contrato`);
+
+--
+-- Indices de la tabla `auditoriapagos`
+--
+ALTER TABLE `auditoriapagos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kf_usuario_Id` (`id_usuario`),
+  ADD KEY `kf_numero_Pago` (`numero_pago`);
+
 -- Indices de la tabla `contratos`
 --
 ALTER TABLE `contratos`
@@ -307,7 +365,8 @@ ALTER TABLE `usuarios`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
+ALTER TABLE `auditoriacontrato`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `contratos`
 --
@@ -368,6 +427,19 @@ ALTER TABLE `inmuebles`
 ALTER TABLE `pagos`
   ADD CONSTRAINT `pagos_ibfk_1` FOREIGN KEY (`contratoId`) REFERENCES `contratos` (`id`);
 COMMIT;
+
+ALTER TABLE `auditoriacontrato`
+  ADD CONSTRAINT `fk_contrato_id` FOREIGN KEY (`id_contrato`) REFERENCES `contratos` (`id`),
+  ADD CONSTRAINT `fk_usuario_id` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `auditoriapagos`
+--
+ALTER TABLE `auditoriapagos`
+  ADD CONSTRAINT `kf_numero_Pago` FOREIGN KEY (`numero_pago`) REFERENCES `pagos` (`numeroPago`),
+  ADD CONSTRAINT `kf_usuario_Id` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
