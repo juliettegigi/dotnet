@@ -28,8 +28,8 @@ public class ViewInquilinoFiltrarInmueble
                            CbResidencial=false;
                            PrecioMin=0;
                            PrecioMax=0;
-                           ApartirDe=DateTime.Now;
-                           Hasta=DateTime.Now.AddYears(50);
+                           ApartirDe=DateTime.Now.AddYears(199);
+                           Hasta=DateTime.Now.AddYears(200);
                            Tipo="";
     }
 

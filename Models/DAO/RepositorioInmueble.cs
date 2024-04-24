@@ -498,7 +498,7 @@ public int getCantidadRegistrosFiltrado(ViewInquilinoFiltrarInmueble? filtros)
                       INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
                       WHERE inmuebles.Direccion LIKE @searchTerm OR
                             inmuebles.Uso LIKE @searchTerm OR
-                            propietarios.Nombre LIKE @searchTerm -- Agrega todas las columnas que deseas buscar
+                            propietarios.Nombre LIKE @searchTerm 
                       ORDER BY id
                       LIMIT @limite OFFSET @offset;";
 
@@ -538,19 +538,16 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
         
         List<string> listaDeFiltros = new List<string>();
         //string where="where contratos.estado=true";
-        string where="";
+       String where="where contratos_validos.inmuebleId IS NULL";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
         if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
         if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
         if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
         if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
         if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
-        /* listaDeFiltros.Add(@$"(contratos.fechainicio<@aPartirDe or contratos.fechafin>@aPartirDe) and
-                              (contratos.fechainicio<@hasta or contratos.fechafin>@hasta) 
-                               "); */
-
+        
         if(listaDeFiltros.Count!=0){
-            where="where ";
+            where+=" And ";
             int i=0;
             for(i=0;i<listaDeFiltros.Count-1;i++)
                 {
@@ -566,13 +563,23 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 			                    {getCamposPropietario("propietarios","id","idPropietario")},
 								{getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")}
 			             
-						  FROM inmuebles
-            INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
-            INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
-            {where}
-            order by id
-            limit @limite offset @offset;
-            "; 
+						FROM inmuebles
+                        LEFT JOIN 
+                            propietarios ON inmuebles.propietarioId = propietarios.id
+                        LEFT JOIN 
+                            inmuebletipos ON inmuebles.inmuebletipoId = inmuebletipos.id
+                        LEFT JOIN 
+                            (SELECT DISTINCT inmuebles.id as inmuebleId 
+                             FROM inmuebles
+                             LEFT JOIN contratos ON inmuebles.id = contratos.inmuebleid 
+                             WHERE 
+                                 (@aPartirDe <= contratos.FechaInicio AND contratos.FechaInicio <= @hasta) OR
+                                 (@aPartirDe <= contratos.FechaFin AND contratos.FechaFin <= @hasta)
+                            ) AS contratos_validos ON inmuebles.id = contratos_validos.inmuebleId
+                        {where } 
+                                    order by inmuebles.id
+                                    limit @limite offset @offset;
+                                    "; 
 
             Console.WriteLine("**********************************************************");
             Console.WriteLine(sql);

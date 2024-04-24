@@ -41,8 +41,7 @@ public abstract class RepositorioBase
 					   {(!String.IsNullOrEmpty(nombreTabla) ? $"{nombreTabla}." : "")}domicilio as domicilioInq";
 	}
 	public String getCamposInmueble(String nombreTabla, String id,String como){
-          return  @$"
-	                  {nombreTabla}.{id } as {como},
+          return  @$"{nombreTabla}.{id } as {como},
 	                  {nombreTabla}.propietarioId,
 	                  {nombreTabla}.inmuebleTipoId,
 	                  {nombreTabla}.direccion,
