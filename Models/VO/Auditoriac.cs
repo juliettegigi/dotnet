@@ -17,6 +17,9 @@ public class Auditoriac
     [ForeignKey(nameof(UsuarioId))]
     public Usuario UsuarioId { get; set; }
 
+    [ForeignKey(nameof(ContratoId))]
+    public Contrato ContratoId { get; set; }
+   
   
 	public DateTime? FechaInicio { get; set; }
 

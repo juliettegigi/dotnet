@@ -172,6 +172,8 @@ Console.WriteLine("*****************************************************contrato
                     auditoriac.UsuarioId.Id=idsuario;
                     auditoriac.FechaInicio=DateTime.Now;
                     auditoriac.FechaCancelacion=null;
+                     auditoriac.ContratoId=new Contrato();
+                    auditoriac.ContratoId.Id=id;
                     rac.InsertAucitoriac(auditoriac);
 
                     
@@ -358,6 +360,45 @@ pagosstatic=multa;
         pago.ContratoId=Id;
         Console.WriteLine(pago);
         rp.InsertPago(pago);
+        //-------------------------------Auditoria------------------------------------------
+         string idUsuario = HttpContext.User.FindFirst("id")?.Value;
+            
+            if (string.IsNullOrEmpty(idUsuario))
+            {
+                
+                return RedirectToAction("Error");
+            }
+              else{
+
+                string idUsuarioStr=idUsuario ;
+                int idsuario;
+                if (int.TryParse(idUsuarioStr, out idsuario))
+                {
+                    RepositorioAuditoriac rac=new RepositorioAuditoriac();
+                    Usuario usuario=new Usuario();
+                    Auditoriac auditoriac=new Auditoriac();
+                    auditoriac.UsuarioId=new Usuario();
+                    auditoriac.UsuarioId.Id=idsuario;
+                    auditoriac.FechaInicio=null;
+                    auditoriac.FechaCancelacion=DateTime.Now;
+                    auditoriac.ContratoId=new Contrato();
+                    auditoriac.ContratoId.Id=Id;
+                    rac.InsertAucitoriac(auditoriac);
+
+                    
+                }
+
+              
+
+
+               
+              }
+
+
+
+
+
+        //-------------------------------------------------------------------------
         
 
 
