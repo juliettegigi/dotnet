@@ -39,4 +39,37 @@ public class RepositorioAuditoriapago:RepositorioBase
         }
     }
 }
+public List<Auditoriapago> GetPorPago(int numeroPago)
+{
+    List<Auditoriapago> pagos = new List<Auditoriapago>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"SELECT * FROM auditoriapagos WHERE numero_pago = @NumeroPago";
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@NumeroPago", numeroPago);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var pago = new Auditoriapago
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        UsuarioId = new Usuario { Id = Convert.ToInt32(reader["id_usuario"]) },
+                        FechaPago = reader.IsDBNull(reader.GetOrdinal("fechaPago")) ? null : (DateTime?)reader["fechaPago"],
+                        FechaCancelacion = reader.IsDBNull(reader.GetOrdinal("fechaCancelacion")) ? null : (DateTime?)reader["fechaCancelacion"],
+                        NumeroPago = Convert.ToInt32(reader["numero_pago"]),
+                        ContratoId = new Contrato { Id = Convert.ToInt32(reader["id_contrato"]) }
+                    };
+                    pagos.Add(pago);
+                }
+            }
+        }
+    }
+    return pagos;
+}
+
+
 }

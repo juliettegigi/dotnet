@@ -26,10 +26,45 @@ public class AuditoriapController : Controller
 
 		return View();
     } 
-    public IActionResult Auditoria()
+    public IActionResult Auditoria(int ContratoId,int NumeroPago)
     {   
+      RepositorioContrato con=new RepositorioContrato();
+      Contrato contrato;
+       contrato=con.GetContrato(ContratoId);
+       AuditoriaViewModel Avm=new AuditoriaViewModel();
+       Avm.Contrato = contrato;
+        string idUsuario = HttpContext.User.FindFirst("id")?.Value;
+        RepositorioAuditoriapago rap=new RepositorioAuditoriapago();
+       
+        IList<Auditoriapago>auditoria=new List<Auditoriapago>();
+        auditoria=rap.GetPorPago(NumeroPago);
+        Avm.Auditoriapago=auditoria;
+            
+            if (string.IsNullOrEmpty(idUsuario))
+            {
+                
+                return RedirectToAction("Error");
+            }
+              else{
 
-		return Json("carajo");
+                string idUsuarioStr=idUsuario ;
+                int idsuario;
+                if (int.TryParse(idUsuarioStr, out idsuario))
+                {
+                    
+                 Usuario usuario=new Usuario();
+                 RepositorioUsuario ru=new RepositorioUsuario();
+                 usuario=ru.ObtenerPorId(idsuario);
+                 Avm.Usuario=usuario;
+                    
+                }
+
+               }
+
+
+
+
+		     return View(Avm);
     } 
 
 }

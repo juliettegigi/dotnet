@@ -1,0 +1,58 @@
+@model InmobiliariaGutierrez.Models.VO.AuditoriaViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalles de Auditoría de Pago</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h2>Detalles de Auditoría de Pago</h2>
+
+      <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Contrato</h4>
+                <p class="card-text">ID: @Model.Contrato.Id</p>
+                <p class="card-text">Fecha de Inicio: @Model.Contrato.FechaInicio.ToString("dd/MM/yyyy")</p>
+                <p class="card-text">Fecha de Fin: @Model.Contrato.FechaFin.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+
+    @foreach(var auditoria in Model.Auditoriapago)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Usuario que Recibió el Pago</h4>
+                <p class="card-text">@Model.Usuario.Nombre @Model.Usuario.Apellido</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Fecha de Recepción del Pago</h4>
+                <p class="card-text">@{ var fechaPago = auditoria.FechaPago.HasValue ? auditoria.FechaPago.Value.ToString("dd/MM/yyyy") : "No disponible"; }@fechaPago</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Fecha de Cancelación del Pago</h4>
+                <p class="card-text">@{ var fechaCancelacion = auditoria.FechaCancelacion.HasValue ? auditoria.FechaCancelacion.Value.ToString("dd/MM/yyyy") : "No disponible"; }@fechaCancelacion</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Inquilino</h4>
+                <p class="card-text">@Model.Contrato.InquilinoId.Nombre @Model.Contrato.InquilinoId.Apellido</p>
+            </div>
+        </div>
+
+      
+    }
+</div>
+
+</body>
+</html>
