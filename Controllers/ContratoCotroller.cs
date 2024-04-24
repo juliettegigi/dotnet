@@ -65,15 +65,17 @@ public class ContratoController : Controller
 
         if(TempData.ContainsKey("msg"))
            ViewBag.msg=TempData["msg"];
-        if(TempData.ContainsKey("errores"))
-           ViewBag.errores=TempData["errores"];  
+         
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
          Contrato c=rc.GetContrato(id);
          return View(c);
         }
-
+        if(TempData.ContainsKey("errores")){
+           ViewBag.errores=TempData["errores"]; 
+           return View(contrato);
+           }
 		//ri.BuscarPorTodosLosCampos();
 		return View();
 	}

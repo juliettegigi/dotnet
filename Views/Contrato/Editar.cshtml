@@ -14,7 +14,7 @@ else{
 
 if(ViewBag.errores!=null){
   <div class="alert alert-warning" role="alert">
-          ✔Errores en los datos ingresados, vuelva a ingresarlos correctamente
+          ⚠Errores en los datos ingresados, vuelva a ingresarlos correctamente
   </div>
   <div>
   <a asp-action="Index">Volver</a>
@@ -66,6 +66,11 @@ if(ViewBag.errores!=null){
         </div>
         <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible ">
                 <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
+                      <input asp-for="InmuebleId.PropietarioId.Nombre" type="hidden" id="propietarioNombre">
+                      <input asp-for="InmuebleId.PropietarioId.Apellido" type="hidden" id="propietarioApellido">
+                      <input asp-for="InmuebleId.Direccion" type="hidden" id="inmuebleDireccion">
+                      <input asp-for="InmuebleId.InmuebleTipoId.Tipo" type="hidden" id="inmuebleTipo">
+                      <input asp-for="InmuebleId.CantidadAmbientes" type="hidden" id="inmuebleCantidadAmbientes">
                 <div class="form-group">
                      @Html.Partial("_tablaContrato.cshtml")
                      <div>
@@ -86,7 +91,7 @@ if(ViewBag.errores!=null){
                          <h4 class="my-0 fw-normal">Inmueble</h4>
                     </div>
                     <div class="card-body">
-                              <h1 class="card-title pricing-card-title" id="nombreCard">@(Model==null?"":
+                              <h4 class="card-title pricing-card-title" id="nombreCard">Propietario: @(Model==null?"":
                                                                                           (Model.InmuebleId.PropietarioId==null?"":
                                                                                           Model.InmuebleId.PropietarioId.Nombre))
                                        <small  class="text-body-secondary fw-light" id="apellidoCard">
@@ -94,7 +99,7 @@ if(ViewBag.errores!=null){
                                              (Model.InmuebleId.PropietarioId==null?"":
                                               Model.InmuebleId.PropietarioId.Apellido))
                                         </small>
-                              </h1>
+                              </h4>
                               <ul class="list-unstyled mt-3 mb-4">
                                 <li id="direccionCard">Dirección: @(Model!=null?Model.InmuebleId.Direccion:"")</li>
                                 <li id="tipoCard">Tipo:
@@ -368,6 +373,16 @@ function dibujarTabla(page=1,ruta,queryString='&'){
                                   //evennto para cada fila
                                   registroClon.addEventListener('click',(e)=>{
                                          const id=document.getElementById("inmuebleId");
+                                         const propNombre=document.getElementById("propietarioNombre");
+                                         const cantAmb=document.getElementById("inmuebleCantidadAmbientes");
+                                         const direccion=document.getElementById("inmuebleDireccion");
+                                         const tipoInm=document.getElementById("inmuebleTipo");
+                                         const propApellido=document.getElementById("propietarioApellido");
+                                         propNombre.value=inm.propietarioId.nombre;
+                                         propApellido.value=inm.propietarioId.apellido;
+                                         direccion.value=inm.direccion;
+                                         tipoInm.value=inm.inmuebleTipoId.tipo;
+                                         cantAmb.value=inm.cantidadAmbientes;
                                          id.value=inm.id;
                                          const filasActivas = document.querySelectorAll('.table-active');
                                          filasActivas.forEach(fila => {
@@ -382,7 +397,7 @@ function dibujarTabla(page=1,ruta,queryString='&'){
                                          document.getElementById("usoCard").textContent=`Uso: ${inm.uso==1?'Residelcial':'Comercial'}`;
                                          document.getElementById("cantidadCard").textContent=`Cantidad de ambientes: ${inm.cantidadAmbientes}`; 
                                          document.getElementById("nombreCard").textContent=` ${inm.propietarioId.nombre}`; 
-                                         //document.getElementById("apellidoCard").textContent=` ${inm.propietarioId.apellido}`; 
+                                        // document.getElementById("apellidoCard").textContent=` ${inm.propietarioId.apellido}`; 
                                          pagSiguiente('z-4');                            
                                          });
                                   bodyTabla.appendChild(registroClon);
