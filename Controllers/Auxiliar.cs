@@ -1,42 +1,4 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using InmobiliariaGutierrez.Models;
-using InmobiliariaGutierrez.Models.DAO;
-using InmobiliariaGutierrez.Models.VO;
-using InmobiliariaGutierrez.Views.ContratoView;
-
-namespace InmobiliariaGutierrez.Controllers{
-
-[Authorize]
-public class ContratoController : Controller
-{
-    private readonly ILogger<ContratoController> _logger;
-    public static decimal pagosstatic;
-    public static decimal mesesstatic;
-
-
-    public ContratoController(ILogger<ContratoController> logger)
-    {
-        _logger = logger;
-    }
-
-  public IActionResult Index(int page=1,int limit=5)
-    {   
-        int offset=(page-1)*limit;
-		var rc=new RepositorioContrato();
-        IList<Contrato>lista =rc.GetContratosPaginado(limit,offset);
-		int totalReg=rc.getCantidadRegistros();
-		int cantidadPaginas=totalReg/limit;
-		cantidadPaginas=totalReg%limit!=0?++cantidadPaginas:cantidadPaginas;
-		
-		var objetoView=new IndexView{ListaContratos=lista};
-		objetoView.PrimerNumero=page%limit==0?page-(limit-1):((page/limit)*limit+1);
-		objetoView.Page=page;
-		objetoView.CantidadPaginas=cantidadPaginas;
-		
-		return View(objetoView);
-    }
+/*
 
 [Authorize(Policy ="Administrador")]
     public IActionResult Eliminar(int id)
@@ -65,17 +27,15 @@ public class ContratoController : Controller
 
         if(TempData.ContainsKey("msg"))
            ViewBag.msg=TempData["msg"];
-         
+        if(TempData.ContainsKey("errores"))
+           ViewBag.errores=TempData["errores"];  
 		RepositorioContrato rc = new RepositorioContrato();
         RepositorioInquilino ri=new RepositorioInquilino();
         if(id!=0){
          Contrato c=rc.GetContrato(id);
          return View(c);
         }
-        if(TempData.ContainsKey("errores")){
-           ViewBag.errores=TempData["errores"]; 
-           return View(contrato);
-           }
+
 		//ri.BuscarPorTodosLosCampos();
 		return View();
 	}
@@ -198,8 +158,7 @@ Console.WriteLine("*****************************************************contrato
                 FechaPago=contrato.FechaInicio
             };
             rp.InsertPago(pago);
-            */
-
+       
            
             alta=1;
           
@@ -272,16 +231,14 @@ else{
           
 
             
-         int mesestotaldeuda=0;
-         /*entre fechaanticipada y contrato*/   int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
+     int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
      Console.WriteLine( "diferenciaMeses");
       Console.WriteLine( diferenciaMeses);
       Console.WriteLine( "diferenciaMeses");
              int  mitad=(contrato.FechaFin.Year-contrato.    FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
-            
-            /*mitadl total*/ mitad=mitad/2 ;
+     mitad=mitad/2 ;
 
-       /*aca sacar calculo de multa*/     int fechamulta = (contrato.FechaFin.Year-FechaFinparametro.Year  ) * 12 + contrato.FechaFin.Month-FechaFinparametro.Month ;
+  int fechamulta = (contrato.FechaFin.Year-FechaFinparametro.Year  ) * 12 + contrato.FechaFin.Month-FechaFinparametro.Month ;
            
             int deudas=0;
             int cantidadpagos=0;
@@ -450,3 +407,4 @@ pagosstatic=multa;
 }
 
 }
+*/

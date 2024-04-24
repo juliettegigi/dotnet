@@ -26,6 +26,11 @@ public class AuditoriapController : Controller
 
 		return View();
     } 
+    public IActionResult Auditoria()
+    {   
+
+		return Json("carajo");
+    } 
 
 }
 }
