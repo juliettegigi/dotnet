@@ -150,6 +150,37 @@ Console.WriteLine("*****************************************************contrato
             Inquilino inquilino;
             RepositorioInquilino ri=new RepositorioInquilino();
             Contrato contrato1=rc.GetContrato(id);
+            string idUsuario = HttpContext.User.FindFirst("id")?.Value;
+            
+            if (string.IsNullOrEmpty(idUsuario))
+            {
+                
+                return RedirectToAction("Error");
+            }
+              else{
+
+                string idUsuarioStr=idUsuario ;
+                int idsuario;
+                if (int.TryParse(idUsuarioStr, out idsuario))
+                {
+                    RepositorioAuditoriac rac=new RepositorioAuditoriac();
+                    Usuario usuario=new Usuario();
+                    Auditoriac auditoriac=new Auditoriac();
+                    auditoriac.UsuarioId=new Usuario();
+                    auditoriac.UsuarioId.Id=idsuario;
+                    auditoriac.FechaInicio=DateTime.Now;
+                    auditoriac.FechaCancelacion=null;
+                    rac.InsertAucitoriac(auditoriac);
+
+                    
+                }
+
+              
+
+
+               
+              }
+
                 msg="Contrato registrado.";
           return RedirectToAction("Prepago", "Pago", new { idContrato = id, idInquilino = contrato1.InquilinoId.Id });
 
