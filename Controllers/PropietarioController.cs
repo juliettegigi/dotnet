@@ -89,7 +89,7 @@ public class PropietarioController : Controller
 		
 	}
     
-   
+   [Authorize(Policy ="Administrador")]
 	public IActionResult Eliminar(int id)
 	{
 		RepositorioPropietario rp = new RepositorioPropietario();

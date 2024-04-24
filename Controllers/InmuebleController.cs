@@ -32,6 +32,8 @@ public class InmuebleController : Controller
             
             return View(inmuebles);
         }
+
+        [Authorize(Policy ="Administrador")]
         public IActionResult Eliminar(int id)
         {  
            

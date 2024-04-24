@@ -38,7 +38,7 @@ public class ContratoController : Controller
 		return View(objetoView);
     }
 
-
+[Authorize(Policy ="Administrador")]
     public IActionResult Eliminar(int id)
 	{   
       
@@ -139,6 +139,7 @@ Console.WriteLine("*****************************************************contrato
         string msg="";
 		RepositorioContrato rc = new RepositorioContrato();
 		RepositorioPago rp = new RepositorioPago();
+        
 		
 		if(contrato.Id > 0){
 			rc.ModificaContrato(contrato);
@@ -334,7 +335,6 @@ pagosstatic=multa;
    }
 
  public IActionResult Pactarfecha(int Id){
-    Console.WriteLine("holsdffffffffffffff"   + Id);
         RepositorioContrato rc=new RepositorioContrato();
         RepositorioPago rp=new RepositorioPago();
         Contrato contrato=new Contrato();
@@ -347,7 +347,6 @@ pagosstatic=multa;
          
 
 
- Console.WriteLine("go");
 
 
         try{

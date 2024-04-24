@@ -28,6 +28,8 @@ public class PagoController : Controller
         IList<Contrato> contratos=rc.GetContratosTodos();
 		return View(contratos);
     } 
+
+    [Authorize(Policy ="Administrador")]
      public IActionResult Eliminar(int ContratoId,int NumeroPago)
     {   
 		  RepositorioPago rp=new RepositorioPago();

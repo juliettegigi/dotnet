@@ -537,19 +537,20 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 	{
         
         List<string> listaDeFiltros = new List<string>();
-        string where="where contratos.estado=true";
+        //string where="where contratos.estado=true";
+        string where="";
         if(filtros.CantidadAmbientes != 0)listaDeFiltros.Add("cantidadAmbientes=@c");
         if(filtros.CbComercial==true)listaDeFiltros.Add("uso=@uc");
         if(filtros.CbResidencial==true)listaDeFiltros.Add("uso=@ur");
         if(filtros.PrecioMax!=0)listaDeFiltros.Add("precioBase<@pmax");
         if(filtros.PrecioMin!=0)listaDeFiltros.Add("precioBase<@pmin");
         if(!string.IsNullOrEmpty(filtros.Tipo))listaDeFiltros.Add("tipo=@t");
-        listaDeFiltros.Add(@$"(contratos.fechainicio<@aPartirDe or contratos.fechafin>@aPartirDe) and
+        /* listaDeFiltros.Add(@$"(contratos.fechainicio<@aPartirDe or contratos.fechafin>@aPartirDe) and
                               (contratos.fechainicio<@hasta or contratos.fechafin>@hasta) 
-                               ");
+                               "); */
 
         if(listaDeFiltros.Count!=0){
-            where="where contratos.estado=true AND ";
+            where="where ";
             int i=0;
             for(i=0;i<listaDeFiltros.Count-1;i++)
                 {
@@ -568,11 +569,15 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
 						  FROM inmuebles
             INNER JOIN propietarios ON inmuebles.propietarioId = propietarios.id
             INNER JOIN inmuebleTipos ON inmuebles.inmuebleTipoId = inmuebleTipos.id
-            INNER JOIN contratos ON inmuebles.id=contratos.inmuebleid
             {where}
             order by id
             limit @limite offset @offset;
             "; 
+
+            Console.WriteLine("**********************************************************");
+            Console.WriteLine(sql);
+            Console.WriteLine(filtros.ApartirDe.ToString("yyyy-MM-dd"));
+            Console.WriteLine(filtros.Hasta.ToString("yyyy-MM-dd"));
 
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);

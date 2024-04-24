@@ -434,6 +434,72 @@ public IList<Contrato> GetContratosTerminan(int dias)
 		return cantidad;
 	}
 
+
+	
+//*************************************************************************************************
+public IList<Contrato> GetContratoByInmueble(int inmuebleId){
+	 var contratos = new List<Contrato>();
+	 using(var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @$"SELECT {getCamposContrato("contratos","id","id")},
+		                    {getCamposInquilino("inquilinos","id","idInquilino")},
+								{getCamposInmueble("inmueblesCompleto","idInmueble","idInmueble")},
+								{getCamposPropietario("inmueblesCompleto","idPropietario","idPropietario")},
+								{getCamposInmuebleTipo("inmueblesCompleto","idInmuebleTipo","idInmuebleTipo")}
+						FROM contratos
+                        
+						INNER JOIN inquilinos 
+						ON contratos.inquilinoId=Inquilinos.id
+                        
+						INNER JOIN (   SELECT {getCamposInmueble("inmuebles","id","idInmueble")},
+						                      {getCamposPropietario("propietarios","id","idPropietario")},
+								              {getCamposInmuebleTipo("inmuebleTipos","id","idInmuebleTipo")} 
+		                               FROM inmuebles
+                                       
+									   INNER JOIN propietarios 
+									   on inmuebles.propietarioId=propietarios.id
+                                       
+									   INNER JOIN inmuebleTipos 
+									   on inmuebles.inmuebleTipoId=inmuebleTipos.id
+									) as inmueblesCompleto
+	                    ON contratos.inmuebleId=idInmueble
+				    where inmuebleId=@inmuebleId
+                    ORDER BY id;
+ 
+
+            "; 
+			Console.WriteLine("**************************************************");
+			Console.WriteLine(sql);
+
+
+        using(var command = new MySqlCommand(sql, connection))
+        {   command.Parameters.AddWithValue("inmuebleId", inmuebleId);
+            connection.Open();
+            using(var reader = command.ExecuteReader())
+            {
+                while(reader.Read())
+                {      
+                    
+                    contratos.Add(new Contrato
+                    {   Id = reader.GetInt32("id"),
+                        InquilinoId= crearInquilino(reader),
+                        InmuebleId= crearInmueble(reader,crearPropietario(reader),crearInmuebleTipo(reader),crearCoordenadas(reader),crearUso(reader)),
+                        FechaInicio= reader.GetDateTime(nameof(Contrato.FechaInicio)),
+                        FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+                        FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
+                        PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
+                        Estado = reader.GetBoolean(nameof(Contrato.Estado)),
+                    });
+                }
+            }
+                
+        }
+        connection.Close();
+    }
+    return contratos;
+
+}
+
 public IList<Contrato> GetContratosTodos()
 {
     var contratos = new List<Contrato>();

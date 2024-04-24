@@ -51,6 +51,7 @@ public class InquilinoController : Controller
 		else return RedirectToAction(nameof(Editar));;
 	}
 
+[Authorize(Policy ="Administrador")]
 	public IActionResult Eliminar(int id)
 	{
 		RepositorioInquilino rp = new RepositorioInquilino();

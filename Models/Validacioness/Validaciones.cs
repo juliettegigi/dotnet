@@ -68,12 +68,27 @@ public class InquilinoGuardarValidationAttribute : ValidationAttribute
             if(ri.GetInmueble(inmueble.Id)==null)
                 return new ValidationResult("El inmueble no pertenece a nuestro registro.");
             
-                
+            // existe el inmueble pero    
+            // el nnuevo contrato no puede tener un inmueble con la fecha superpuesta
+            Contrato contrato=(Contrato)validationContext.ObjectInstance;
+            RepositorioContrato rc = new RepositorioContrato();
+            var lista=rc.GetContratoByInmueble(inmueble.Id);
+            foreach (Contrato c in lista)
+            {
+                if( (c.FechaInicio<=contrato.FechaInicio && contrato.FechaInicio<=c.FechaFin) ||
+                    (c.FechaInicio<=contrato.FechaFin && contrato.FechaFin<=c.FechaFin))
+                              {
+                                return new ValidationResult("El inmueble ya tiene contrato en la fecha ingresada.");
+                              } 
+            }
+
             return ValidationResult.Success;
             
 
     }
     }
+
+        
 
 
     
