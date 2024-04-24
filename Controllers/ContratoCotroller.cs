@@ -167,7 +167,7 @@ Console.WriteLine("*****************************************************contrato
                 {
                     RepositorioAuditoriac rac=new RepositorioAuditoriac();
                     Usuario usuario=new Usuario();
-                    Auditoriac auditoriac=new Auditoriac();
+                    Auditoriacontrato auditoriac=new Auditoriacontrato();
                     auditoriac.UsuarioId=new Usuario();
                     auditoriac.UsuarioId.Id=idsuario;
                     auditoriac.FechaInicio=DateTime.Now;
@@ -376,7 +376,7 @@ pagosstatic=multa;
                 {
                     RepositorioAuditoriac rac=new RepositorioAuditoriac();
                     Usuario usuario=new Usuario();
-                    Auditoriac auditoriac=new Auditoriac();
+                    Auditoriacontrato auditoriac=new Auditoriacontrato();
                     auditoriac.UsuarioId=new Usuario();
                     auditoriac.UsuarioId.Id=idsuario;
                     auditoriac.FechaInicio=null;

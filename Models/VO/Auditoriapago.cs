@@ -9,18 +9,24 @@ using InmobiliariaGutierrez.Models.Validacioness;
 
 namespace InmobiliariaGutierrez.Models.VO;
 
-public class Auditoriap
+public class Auditoriapago
 {
     public int Id { get; set; }
     
    
-    [ForeignKey(nameof(InquilinoId))]
-    public Inquilino InquilinoId { get; set; }
+    [ForeignKey(nameof(UsuarioId))]
+    public Usuario UsuarioId { get; set; }
+
+ [ForeignKey(nameof(ContratoId))]
+    public Contrato ContratoId { get; set; }
+
+[ForeignKey(nameof(NumeroPago))]
+     public int NumeroPago { get; set; }
 
   
-	public DateTime FechaInicio { get; set; }
+	public DateTime? FechaPago { get; set; }
 
-    public DateTime FechaCancelacion { get; set; }
+    public DateTime? FechaCancelacion { get; set; }
 	
 
 

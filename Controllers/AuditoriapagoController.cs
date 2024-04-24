@@ -11,11 +11,11 @@ using InmobiliariaGutierrez.Views.ContratoView;
 namespace InmobiliariaGutierrez.Controllers{
 
 [Authorize]
-public class AuditoriacController : Controller
+public class AuditoriapController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public AuditoriacController(ILogger<HomeController> logger)
+    public AuditoriapController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
@@ -23,10 +23,8 @@ public class AuditoriacController : Controller
    
    public IActionResult Index()
     {   
-		RepositorioContrato rc=new RepositorioContrato();
-    DateTime da=DateTime.MinValue;
-        IList<Contrato> contratos=rc.GetContratosTodos();
-		return View(contratos);
+
+		return View();
     } 
 
 }

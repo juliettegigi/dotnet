@@ -9,7 +9,7 @@ using InmobiliariaGutierrez.Models.Validacioness;
 
 namespace InmobiliariaGutierrez.Models.VO;
 
-public class Auditoriac
+public class Auditoriacontrato
 {
     public int Id { get; set; }
     

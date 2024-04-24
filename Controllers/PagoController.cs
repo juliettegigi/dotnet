@@ -36,6 +36,36 @@ public class PagoController : Controller
       Pago pago=rp.GetPago(ContratoId,NumeroPago);
       pago.FechaPago=null;
       rp.UpdatePago(pago);
+        string idUsuario = HttpContext.User.FindFirst("id")?.Value;
+            
+            if (string.IsNullOrEmpty(idUsuario))
+            {
+                
+                return RedirectToAction("Error");
+            }
+              else{
+
+                string idUsuarioStr=idUsuario ;
+                int idsuario;
+                if (int.TryParse(idUsuarioStr, out idsuario))
+                {
+                    RepositorioAuditoriapago rap=new RepositorioAuditoriapago();
+                    Usuario usuario=new Usuario();
+                    Auditoriapago auditoriap=new Auditoriapago();
+                    auditoriap.UsuarioId=new Usuario();
+                    auditoriap.UsuarioId.Id=idsuario;
+                    auditoriap.FechaPago=null;
+                    auditoriap.FechaCancelacion=DateTime.Now;
+                     auditoriap.ContratoId=new Contrato();
+                    auditoriap.ContratoId.Id=ContratoId;
+                    auditoriap.NumeroPago=NumeroPago;
+                    rap.InsertAuditoriapago(auditoriap);
+
+                    
+                }
+
+               }
+
      return RedirectToAction(nameof(Index));
     } 
       public IActionResult Pagar( string nombre, string apellido,int ContratoId,int NumeroPago, DateTime fecha )
@@ -48,17 +78,55 @@ public class PagoController : Controller
         pagos=rp.GetPago(ContratoId);
         Pago pago1=rp.GetPago(ContratoId,NumeroPago);
         pago1.FechaPago=DateTime.Now;
-    
+          
         Contrato con=new Contrato();
         con=rc.GetContrato(ContratoId);
         
         pago1.FechaPago=DateTime.Now;
         DateTime fechacondicion=DateTime.Now;
         rp.UpdatePago(pago1);
+        Console.WriteLine("pago1.Fecha");
+        Console.WriteLine(pago1.Fecha);
+         Console.WriteLine("pago1.Fecha");
+        //---------------------------------------------------------------------------------------
+             string idUsuario = HttpContext.User.FindFirst("id")?.Value;
+            
+            if (string.IsNullOrEmpty(idUsuario))
+            {
+                
+                return RedirectToAction("Error");
+            }
+              else{
+
+                string idUsuarioStr=idUsuario ;
+                int idsuario;
+                if (int.TryParse(idUsuarioStr, out idsuario))
+                {
+                    RepositorioAuditoriapago rap=new RepositorioAuditoriapago();
+                    Usuario usuario=new Usuario();
+                    Auditoriapago auditoriap=new Auditoriapago();
+                    auditoriap.UsuarioId=new Usuario();
+                    auditoriap.UsuarioId.Id=idsuario;
+                    auditoriap.FechaPago=DateTime.Now;
+                    auditoriap.FechaCancelacion=null;
+                     auditoriap.ContratoId=new Contrato();
+                    auditoriap.ContratoId.Id=ContratoId;
+                    auditoriap.NumeroPago=NumeroPago;
+                    rap.InsertAuditoriapago(auditoriap);
+
+                    
+                }
+
+               }
+
+        //-----------------------------------------------------------------------------------------------------------
+
         if(pagos.Count()==pago1.NumeroPago)
         { try{
 
           if(pago1.Fecha.AddMonths(1)<=con.FechaFin){
+            Console.WriteLine(pago1.Fecha);
+            Console.WriteLine(con.FechaFin);
           Pago pago=pago1;
           pago.Fecha=pago.Fecha.AddMonths(1);
           pago.FechaPago=null;  
@@ -67,6 +135,8 @@ public class PagoController : Controller
           rp.InsertPago(pago);
           return RedirectToAction(nameof(Index));
           }else{
+             Console.WriteLine(pago1.Fecha);
+            Console.WriteLine(con.FechaFin);
              Pago pago=pago1;
          
           pago.FechaPago=DateTime.Now;

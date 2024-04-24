@@ -16,7 +16,7 @@ public class RepositorioAuditoriac:RepositorioBase
 	}
 
 
-    public void InsertAucitoriac(Auditoriac auditoriac)
+    public void InsertAucitoriac(Auditoriacontrato auditoriac)
 {
     using (var connection = new MySqlConnection(ConnectionString))
     {
