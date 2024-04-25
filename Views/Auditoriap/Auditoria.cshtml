@@ -1,4 +1,4 @@
-@model InmobiliariaGutierrez.Models.VO.AuditoriaViewModel
+@model InmobiliariaGutierrez.Models.VO.AuditoriaViewModelPago
 
 <!DOCTYPE html>
 <html>
@@ -12,8 +12,9 @@
         <div class="card-body">
             <h4 class="card-title">Contrato</h4>
             <p class="card-text">ID: @Model.Contrato.Id</p>
-            <p class="card-text">Fecha de Inicio: @Model.Contrato.FechaInicio.ToString("dd/MM/yyyy")</p>
-            <p class="card-text">Fecha de Fin: @Model.Contrato.FechaFin.ToString("dd/MM/yyyy")</p>
+       <p class="card-text">ID: @Model.Contrato.Id</p>
+        <p class="card-text">Fecha de Inicio: @(Model.Contrato.FechaInicio != null ? Model.Contrato.FechaInicio.ToString("dd/MM/yyyy") : "No disponible")</p>
+        <p class="card-text">Fecha de Fin: @(Model.Contrato.FechaFin != null ? Model.Contrato.FechaFin.ToString("dd/MM/yyyy") : "No disponible")</p>
         </div>
     </div>
 
@@ -27,19 +28,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var auditoria in Model.Auditoriapago)
+            @foreach(var auditoria in Model.AuditoriaDatapago)
             {
                 <tr>
-                    <td>@Model.Usuario.Nombre @Model.Usuario.Apellido</td>
+                    <td>@(auditoria.Usuario.Nombre) @(auditoria.Usuario.Apellido)</td>
+                    <td>@(auditoria.Fecha.HasValue ? auditoria.Fecha.Value.ToString("dd/MM/yyyy") : "No disponible")</td>
                     <td>@(auditoria.FechaPago.HasValue ? auditoria.FechaPago.Value.ToString("dd/MM/yyyy") : "No disponible")</td>
-                    <td>@(auditoria.FechaCancelacion.HasValue ? auditoria.FechaCancelacion.Value.ToString("dd/MM/yyyy") : "No disponible")</td>
-                    <td>@Model.Contrato.InquilinoId.Nombre @Model.Contrato.InquilinoId.Apellido</td>
+                    <td>@(Model.Contrato.InquilinoId.Nombre) @(Model.Contrato.InquilinoId.Apellido)</td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
 
 </body>
 </html>

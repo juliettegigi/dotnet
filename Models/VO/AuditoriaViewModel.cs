@@ -10,7 +10,7 @@ namespace InmobiliariaGutierrez.Models.VO;
         public Usuario Usuario { get; set; }
         public Contrato Contrato { get; set; }
 
-        public IList<Auditoriapago> Auditoriapago { get; set;}
+        public IList<AuditoriaData> AuditoriaData { get; set;}
     
         
     }
