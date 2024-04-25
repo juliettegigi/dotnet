@@ -29,8 +29,6 @@ public IActionResult Detalle(int ContratoId, bool estado=true)
     RepositorioAuditoriac rac = new RepositorioAuditoriac();
     IList<Auditoriacontrato> auditoria;
     
-    Console.WriteLine("**********************************");
-    Console.WriteLine(contrato);
     auditoria = rac.GetAuditoriasPorContratoId(ContratoId);
     
     AuditoriaViewModelContrato Avm = new AuditoriaViewModelContrato();

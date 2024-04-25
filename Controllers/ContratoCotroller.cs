@@ -118,10 +118,7 @@ public class ContratoController : Controller
 	public IActionResult Guardar(Contrato contrato)
 	{  int alta=0;
 
-Console.WriteLine("*****************************************************contrato");
-        Console.WriteLine(contrato);
         if (!ModelState.IsValid) {
-            Console.WriteLine("***************************************************** Entro");
             foreach (var kvp in ModelState)
                 {
                     foreach (var error in kvp.Value.Errors)
@@ -274,9 +271,7 @@ else{
             
          int mesestotaldeuda=0;
          /*entre fechaanticipada y contrato*/   int diferenciaMeses = (FechaFinparametro.Year-contrato.FechaInicio.Year  ) * 12 + FechaFinparametro.Month-contrato.FechaInicio.Month ;
-     Console.WriteLine( "diferenciaMeses");
-      Console.WriteLine( diferenciaMeses);
-      Console.WriteLine( "diferenciaMeses");
+    
              int  mitad=(contrato.FechaFin.Year-contrato.    FechaInicio.Year  ) * 12 + contrato.FechaFin.Month-contrato.FechaInicio.Month ;
             
             /*mitadl total*/ mitad=mitad/2 ;
@@ -344,7 +339,6 @@ pagosstatic=multa;
          
 
 
- Console.WriteLine("go");
 
 
         try{
@@ -358,7 +352,6 @@ pagosstatic=multa;
         pago.FechaPago=DateTime.Now;
         pago.Importe=pagosstatic;
         pago.ContratoId=Id;
-        Console.WriteLine(pago);
         rp.InsertPago(pago);
         //-------------------------------Auditoria------------------------------------------
          string idUsuario = HttpContext.User.FindFirst("id")?.Value;
@@ -434,7 +427,6 @@ pagosstatic=multa;
         pago.FechaPago=null;
         pago.Importe=pagosstatic;
         pago.ContratoId=Id;
-        Console.WriteLine(pago);
         rp.InsertPago(pago);
         
 

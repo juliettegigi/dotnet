@@ -85,9 +85,6 @@ public class PagoController : Controller
         pago1.FechaPago=DateTime.Now;
         DateTime fechacondicion=DateTime.Now;
         rp.UpdatePago(pago1);
-        Console.WriteLine("pago1.Fecha");
-        Console.WriteLine(pago1.Fecha);
-         Console.WriteLine("pago1.Fecha");
         //---------------------------------------------------------------------------------------
              string idUsuario = HttpContext.User.FindFirst("id")?.Value;
             
@@ -125,8 +122,6 @@ public class PagoController : Controller
         { try{
 
           if(pago1.Fecha.AddMonths(1)<=con.FechaFin){
-            Console.WriteLine(pago1.Fecha);
-            Console.WriteLine(con.FechaFin);
           Pago pago=pago1;
           pago.Fecha=pago.Fecha.AddMonths(1);
           pago.FechaPago=null;  
@@ -135,8 +130,6 @@ public class PagoController : Controller
           rp.InsertPago(pago);
           return RedirectToAction(nameof(Index));
           }else{
-             Console.WriteLine(pago1.Fecha);
-            Console.WriteLine(con.FechaFin);
              Pago pago=pago1;
          
           pago.FechaPago=DateTime.Now;

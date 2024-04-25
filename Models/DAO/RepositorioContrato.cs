@@ -14,7 +14,7 @@ public class RepositorioContrato:RepositorioBase
 		
 	}
 
-	public Contrato? GetContrato(int id, bool estado=false)
+	public Contrato? GetContrato(int id, bool estado=true)
 	{
 		Contrato? Contrato = null;
 		using(var connection = new MySqlConnection(ConnectionString))
