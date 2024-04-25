@@ -20,14 +20,17 @@ public class AuditoriacController : Controller
     }
 
    [Authorize(Policy ="Administrador")]
-public IActionResult Detalle(int ContratoId, bool estado=false)
+public IActionResult Detalle(int ContratoId, bool estado=true)
 {   
     RepositorioContrato rc = new RepositorioContrato();
-    Contrato contrato = rc.GetContrato(ContratoId,false);
+    Contrato contrato = rc.GetContrato(ContratoId,estado);
     
     RepositorioUsuario ru = new RepositorioUsuario();
     RepositorioAuditoriac rac = new RepositorioAuditoriac();
     IList<Auditoriacontrato> auditoria;
+    
+    Console.WriteLine("**********************************");
+    Console.WriteLine(contrato);
     auditoria = rac.GetAuditoriasPorContratoId(ContratoId);
     
     AuditoriaViewModelContrato Avm = new AuditoriaViewModelContrato();
