@@ -46,6 +46,12 @@ public class PropietarioController : Controller
 	}
 	public IActionResult Crear(int id)
     {  
+
+		 if(TempData.ContainsKey("errores")){
+           ViewBag.errores=TempData["errores"]; 
+           return View();
+           }
+		   
 	 ModalViewModel viewModel = new ModalViewModel();
         viewModel.MostrarModal = false;
     if (id > 0)
@@ -70,7 +76,19 @@ public class PropietarioController : Controller
 	public IActionResult Guardar(Propietario propietario)
 	{
 		if (!ModelState.IsValid){
-			return RedirectToAction(nameof(Crear));;
+             string errores="";
+			 foreach (var kvp in ModelState){
+                  foreach (var error in kvp.Value.Errors)
+                  {
+                      Console.WriteLine(error.ErrorMessage);
+					  errores+=error.ErrorMessage+" ";
+                  }
+		     
+            }    
+			 Console.WriteLine("salida  "+errores);
+			 TempData["errores"]=errores;
+	        
+			return RedirectToAction(nameof(Crear));
 		}
 		RepositorioPropietario rp = new RepositorioPropietario();
 		if(propietario.Id > 0)
