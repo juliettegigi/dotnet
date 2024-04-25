@@ -23,6 +23,7 @@
                 <th>Fechas</th>
                 <th>Precio por mes</th>
                 <th></th>
+                <th></th>
             </tr>
 		</thead>
         <tbody >
@@ -91,6 +92,15 @@
    						     <a asp-action="Finalizar" asp-route-id="@item.Id" method="post">
    						         <button type="submit"  class="mx-2 "><i class="bi bi-trash"></i></button>
    						     </a>}
+                   
+                <form id="formAuditoria" asp-controller="Auditoriac" asp-action="Detalle" method="post">
+                  <input type="hidden" name="ContratoId" value="@item.Id" />
+                  
+  
+                  <button type="submit" class="mx-2 ">
+                      <i class="bi bi-info-circle" style="font-size: 1rem;"></i> <!-- Cambié el icono aquí y ajusté el tamaño -->
+                  </button>
+              </form>
 						</td>
                      @{i++;}
             	</tr>

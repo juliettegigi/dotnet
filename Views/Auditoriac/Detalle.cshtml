@@ -1,0 +1,42 @@
+@model InmobiliariaGutierrez.Models.VO.AuditoriaViewModelContrato
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalle de Contrato</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h2>Detalle de Contrato</h2>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <h4 class="card-title">Información del Contrato</h4>
+            <p class="card-text">ID: @Model.Contrato.Id</p>
+            <p class="card-text">Fecha de Inicio: @Model.Contrato.FechaInicio.ToString("dd/MM/yyyy")</p>
+            <p class="card-text">Fecha de Fin: @Model.Contrato.FechaFin.ToString("dd/MM/yyyy")</p>
+        </div>
+    </div>
+
+    @foreach (var auditoria in Model.AuditoriaData)
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Usuario que realizó la acción</h4>
+                <p class="card-text">Nombre: @auditoria.Usuario.Nombre @auditoria.Usuario.Apellido</p>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4 class="card-title">Detalle de la acción</h4>
+                <p class="card-text">Fecha de Inicio: @auditoria.FechasInicio</p>
+                <p class="card-text">Fecha de Cancelación: @(auditoria.FechasCancelacion.HasValue ? auditoria.FechasCancelacion.Value.ToString("dd/MM/yyyy") : "No disponible")</p>
+            </div>
+        </div>
+    }
+</div>
+
+</body>
+</html>

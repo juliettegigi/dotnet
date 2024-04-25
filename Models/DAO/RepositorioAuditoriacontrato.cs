@@ -34,4 +34,36 @@ public class RepositorioAuditoriac:RepositorioBase
         }
     }
 }
+public List<Auditoriacontrato> GetAuditoriasPorContratoId(int contratoId)
+{
+    List<Auditoriacontrato> auditorias = new List<Auditoriacontrato>();
+
+    using (var connection = new MySqlConnection(ConnectionString))
+    {
+        var sql = @"SELECT * FROM auditoriacontrato WHERE id_contrato = @ContratoId";
+        using (var command = new MySqlCommand(sql, connection))
+        {
+            command.Parameters.AddWithValue("@ContratoId", contratoId);
+            connection.Open();
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var auditoria = new Auditoriacontrato
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        UsuarioId = new Usuario { Id = Convert.ToInt32(reader["id_usuario"]) },
+                        FechaInicio = Convert.ToDateTime(reader["fechaInicio"]),
+                        FechaCancelacion = Convert.IsDBNull(reader["fechaCancelacion"]) ? null : (DateTime?)Convert.ToDateTime(reader["fechaCancelacion"]),
+                        ContratoId = new Contrato { Id = Convert.ToInt32(reader["id_contrato"]) }
+                    };
+                    auditorias.Add(auditoria);
+                }
+            }
+        }
+    }
+
+    return auditorias;
+}
+
 }
