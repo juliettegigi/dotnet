@@ -54,6 +54,7 @@
             
             <div class="form-group">
                  <input type="text" name="Nombre" class="form-input" placeholder="Nombre" />
+                
             </div>
             <div class="form-group">
                  <input type="text" name="Apellido" class="form-input" placeholder="Apellido" />
@@ -74,10 +75,16 @@
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
+        @if(ViewBag.errores!=null )
+{
+    <div class="alert alert-warning" role="alert">
+        ⚠ Errores en los datos ingresados, vuelva a ingresarlos correctamente @ViewBag.errores
+    </div>
+}
     </div>
 </div>
 
-@if (Model.MostrarModal)
+@if (Model!=null && Model.MostrarModal)
 {
     <div class="modal" id="myModal">
         <div class="modal-dialog">

@@ -56,6 +56,61 @@ public class RepositorioPropietario:RepositorioBase
 	}
 
 
+
+
+
+
+public Propietario? GetPropietarioByEmailDni(string email,string dni)
+	{
+		Propietario? Propietario = null;
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"SELECT {nameof(Propietario.Id)}, 
+			                    {nameof(Propietario.DNI)},
+								{nameof(Propietario.Nombre)},
+								{nameof(Propietario.Apellido)}, 
+								{nameof(Propietario.Email)},
+								{nameof(Propietario.Telefono)},
+								{nameof(Propietario.Domicilio)}
+			             FROM Propietarios
+			             WHERE email = @{nameof(Propietario.Email)} ||
+						       dni= @{nameof(Propietario.DNI)};
+                         ";
+			using(var command = new MySqlCommand(sql, connection))
+			{
+				command.Parameters.AddWithValue($"@{nameof(Propietario.Email)}", email);
+				command.Parameters.AddWithValue($"@{nameof(Propietario.DNI)}", dni);
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{
+					if(reader.Read())
+					{
+						Propietario = new Propietario
+						{
+							Id = reader.GetInt32(nameof(Propietario.Id)),
+							DNI = reader.GetString(nameof(Propietario.DNI)),
+                            Nombre = reader.GetString(nameof(Propietario.Nombre)),
+                            Apellido = reader.GetString(nameof(Propietario.Apellido)),
+							Email = reader.GetString(nameof(Propietario.Email)),
+							Telefono = reader.GetString(nameof(Propietario.Telefono)),
+							Domicilio = reader.IsDBNull(reader.GetOrdinal(nameof(Propietario.Domicilio))) ? "" : reader.GetString(reader.GetOrdinal(nameof(Propietario.Domicilio))),
+						};
+					}
+				}
+			}
+            connection.Close();
+		}
+		return Propietario;
+	}
+
+
+
+
+
+
+
+
+
 	public IList<Propietario> GetPropietarios()
 	{
 		var Propietarios = new List<Propietario>();

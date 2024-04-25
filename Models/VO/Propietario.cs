@@ -4,6 +4,7 @@ datos de contacto.
 */
 
 using System.ComponentModel.DataAnnotations;
+ using InmobiliariaGutierrez.Models.Validacioness;
 
 namespace InmobiliariaGutierrez.Models.VO;
 
@@ -17,6 +18,7 @@ public class Propietario
 
 	//[Display(Name = "Teléfono")]
 	public String? Telefono  { get; set; }
+	[UniqueEmailDni()]
     public String? Email  { get; set; }
 	public String? Domicilio { get; set; }
 	public List<Inmueble>? ListaInmuebles {get;set;}

@@ -52,7 +52,7 @@ public class InquilinoController : Controller
 				rp.AltaInquilino(inquilino);}
 		return RedirectToAction(nameof(Index));
 		}
-		else return RedirectToAction(nameof(Editar));;
+		else return RedirectToAction(nameof(Editar));
 	}
 
 [Authorize(Policy ="Administrador")]
