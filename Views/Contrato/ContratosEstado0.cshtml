@@ -73,7 +73,7 @@
             		  <td>@item.PrecioXmes</td>
                       <td>
                         @if(User.IsInRole("Administrador")){  
-                             <form id="formAuditoria" asp-controller="Auditoriac" asp-action="Detalle" method="post">
+                             <form  asp-controller="Auditoriac" asp-action="Detalle" method="post">
                                <input type="hidden" name="ContratoId" value="@item.Id" />
                                
                

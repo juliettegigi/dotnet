@@ -20,10 +20,10 @@ public class AuditoriacController : Controller
     }
 
    [Authorize(Policy ="Administrador")]
-public IActionResult Detalle(int ContratoId)
+public IActionResult Detalle(int ContratoId, bool estado=false)
 {   
     RepositorioContrato rc = new RepositorioContrato();
-    Contrato contrato = rc.GetContrato(ContratoId);
+    Contrato contrato = rc.GetContrato(ContratoId,false);
     
     RepositorioUsuario ru = new RepositorioUsuario();
     RepositorioAuditoriac rac = new RepositorioAuditoriac();

@@ -14,7 +14,7 @@ public class RepositorioContrato:RepositorioBase
 		
 	}
 
-	public Contrato? GetContrato(int id)
+	public Contrato? GetContrato(int id, bool estado=false)
 	{
 		Contrato? Contrato = null;
 		using(var connection = new MySqlConnection(ConnectionString))
@@ -30,11 +30,12 @@ public class RepositorioContrato:RepositorioBase
 			             FROM Contratos
 			             WHERE {nameof(Contrato.Id)} = @{nameof(Contrato.Id)} 
 						       and 
-							   {nameof(Contrato.Estado)} = true ;
+							   {nameof(Contrato.Estado)} =  @{nameof(Contrato.Estado)}  ;
                          ";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.Id)}", id);
+				command.Parameters.AddWithValue($"@{nameof(Contrato.Estado)}", estado);
 				connection.Open();
 				using(var reader = command.ExecuteReader())
 				{
@@ -50,7 +51,7 @@ public class RepositorioContrato:RepositorioBase
 							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
 							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
 							PrecioXmes = reader.GetDecimal(nameof(Contrato.PrecioXmes)),
-							Estado = true
+							Estado = reader.GetBoolean(nameof(Contrato.Estado))
 						};
 					}
 				}
