@@ -50,5 +50,13 @@ public IActionResult Detalle(int ContratoId)
     return View(Avm);
 }
 
+[Authorize(Policy ="Administrador")]
+public IActionResult CotratosEstado0()
+{   
+    RepositorioContrato rc = new RepositorioContrato();
+    IList<Contrato> contratos=rc.GetContratosEstado0();
+    return View("~/Views/Contrato/ContratosEstado0.cshtml",contratos);
+}
+
 }
 }

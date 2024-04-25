@@ -74,7 +74,7 @@ public class RepositorioContrato:RepositorioBase
 								{nameof(Contrato.FechaFinAnticipada)},
 								{nameof(Contrato.PrecioXmes)}
 			             FROM Contratos
-                         WHERE  {nameof(Contrato.Estado)} = true ;/
+                         WHERE  {nameof(Contrato.Estado)} = true ;
                          ";
 			 //var sql=""
 			using(var command = new MySqlCommand(sql, connection))
@@ -103,6 +103,52 @@ public class RepositorioContrato:RepositorioBase
 		}
 		return Contratos;
 	}
+
+
+public IList<Contrato> GetContratosEstado0()
+	{
+		var Contratos = new List<Contrato>();
+		using(var connection = new MySqlConnection(ConnectionString))
+		{
+			var sql = @$"SELECT {nameof(Contrato.Id)},
+								{nameof(Contrato.InquilinoId)},
+								{nameof(Contrato.InmuebleId)},
+								{nameof(Contrato.FechaInicio)},
+								{nameof(Contrato.FechaFin)},
+								{nameof(Contrato.FechaFinAnticipada)},
+								{nameof(Contrato.PrecioXmes)}
+			             FROM Contratos
+                         WHERE  {nameof(Contrato.Estado)} = false ;
+                         ";
+			 //var sql=""
+			using(var command = new MySqlCommand(sql, connection))
+			{
+				connection.Open();
+				using(var reader = command.ExecuteReader())
+				{   var rinq=new RepositorioInquilino();
+				    var rinm=new RepositorioInmueble();
+					while(reader.Read())
+					{    
+						Contratos.Add(new Contrato
+						{   Id = reader.GetInt32(nameof(Contrato.Id)),
+							InquilinoId = rinq.GetInquilino(reader.GetInt32(nameof(Contrato.InquilinoId))),
+                            InmuebleId = rinm.GetInmueble(reader.GetInt32(nameof(Contrato.InmuebleId))),
+                            FechaInicio = reader.GetDateTime(nameof(Contrato.FechaInicio)),
+							FechaFin = reader.GetDateTime(nameof(Contrato.FechaFin)),
+							FechaFinAnticipada = reader.GetDateTime(nameof(Contrato.FechaFinAnticipada)),
+							Estado = false
+
+						});
+					}
+				}
+                
+			}
+             connection.Close();
+		}
+		return Contratos;
+	}
+
+
 
 	public int AltaContrato(Contrato contrato){
 
@@ -342,7 +388,7 @@ public IList<Contrato> GetContratosTerminan(int dias)
 	}
 
 
-	public IList<Contrato> GetContratosPaginado(int limite, int offset)
+	public IList<Contrato> GetContratosPaginado(int limite, int offset,bool estado=true)
 	{
 		var contratos = new List<Contrato>();
 		using(var connection = new MySqlConnection(ConnectionString))
@@ -369,7 +415,7 @@ public IList<Contrato> GetContratosTerminan(int dias)
 									   on inmuebles.inmuebleTipoId=inmuebleTipos.id
 									) as inmueblesCompleto
 	                    ON contratos.inmuebleId=idInmueble
-						where contratos.estado=true
+						where contratos.estado=@estado
 						order by id
 						
                         limit @limite offset @offset;
@@ -380,6 +426,7 @@ public IList<Contrato> GetContratosTerminan(int dias)
 
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);
+			    command.Parameters.AddWithValue("estado", estado);
 			    command.Parameters.AddWithValue("offset", offset);
 				connection.Open();
 				using(var reader = command.ExecuteReader())

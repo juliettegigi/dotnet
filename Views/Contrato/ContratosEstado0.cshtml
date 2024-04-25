@@ -1,31 +1,5 @@
-@model InmobiliariaGutierrez.Views.ContratoView.IndexView
-
-<div>
-<h1 class="d-flex">Lista de contratos
-    <a asp-action="Editar" >
-        <button type="submit"  class="mx-2 " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Agregar un nuevo contrato.">
-             <i class="bi bi-plus"></i>
-        </button>
-    </a>
-    
-
-</h1>
-
-</div>
-
-
-   @if(User.IsInRole("Administrador")){
-                                <form id="formAuditoria" asp-controller="Auditoriac" asp-action="CotratosEstado0" method="post" class="mb-3 mt-5">
-                                    <input type="hidden" name="ContratoId" value="" />
-                                    <input type="hidden" name="NumeroPago" value="" />
-                                  
-                                    
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-journal-plus"></i> Lista de contratos finalizados.
-                                    </button>
-                                </form>
-                                }
-
+@model List<InmobiliariaGutierrez.Models.VO.Contrato>
+    <h1>Contratos dados de baja</h1>
 
 
 <table class="table table-hover table-sm align-middle table-responsive" >
@@ -37,12 +11,11 @@
                 <th>Fechas</th>
                 <th>Precio por mes</th>
                 <th></th>
-                <th></th>
             </tr>
 		</thead>
         <tbody >
       @{int i=0;}
-			@foreach (var item in Model.ListaContratos){
+			@foreach (var item in Model){
             		<tr>
             		      <td>@item.Id</td>
             		      <td>
@@ -98,72 +71,9 @@
                             
                       </td>
             		  <td>@item.PrecioXmes</td>
-                      <td class="d-flex">
-							 <a asp-action="Editar" asp-route-id="@item.Id">
-   						         <button type="submit"><i class="bi bi-pencil-square"></i></button>
-   						     </a>
-                    @if(User.IsInRole("Administrador")){
-   						     <a asp-action="Finalizar" asp-route-id="@item.Id" method="post">
-   						         <button type="submit"  class="mx-2 "><i class="bi bi-trash"></i></button>
-   						     </a>}
-                 @if(User.IsInRole("Administrador")){  
-                <form id="formAuditoria" asp-controller="Auditoriac" asp-action="Detalle" method="post">
-                  <input type="hidden" name="ContratoId" value="@item.Id" />
-                  
-  
-                  <button type="submit" class="mx-2 ">
-                      <i class="bi bi-info-circle" style="font-size: 1rem;"></i> <!-- Cambié el icono aquí y ajusté el tamaño -->
-                  </button>
-
-
-              </form>
-              }
-
-                             
-						</td>
+                    
                      @{i++;}
             	</tr>
            }
 		</tbody>
-	</table>
-
-
-<nav aria-label="Page navigation example">
-  <ul class="pagination">
-     @{int anterior=Model.Page==1?Model.CantidadPaginas:Model.Page-1;}
-    <li class="page-item">
-      <a class="page-link"  asp-controller="Contrato" asp-action="Index" asp-route-page="@(anterior)"  aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-
-    
-      @for(i=Model.PrimerNumero;i<=(Model.PrimerNumero+4) && i<=Model.CantidadPaginas;i++){
-         string active = Model.Page == i ? "active" : "";
-        <li class="page-item @active">
-          <a class="page-link"
-           asp-action="Index"       
-             asp-route-page="@i"
-             >
-             @i
-          </a>
-        </li>
-    }
-     
-  
-    
-    @{Model.Page=Model.Page==Model.CantidadPaginas?0:Model.Page;}
-    <li class="page-item" >
-      <a class="page-link"  asp-controller="Contrato" asp-action="Index" asp-route-page="@(Model.Page+1)" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav> 
-
-
-<script>
-    $(document).ready(function(){
-        $('[data-bs-toggle="tooltip"]').tooltip();
-    });
-</script>
+	</table>    
