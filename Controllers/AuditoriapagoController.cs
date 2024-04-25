@@ -26,6 +26,7 @@ public class AuditoriapController : Controller
 
 		return View();
     } 
+    [Authorize(Policy ="Administrador")]
     public IActionResult Auditoria(int ContratoId,int NumeroPago)
     {   
       RepositorioContrato con=new RepositorioContrato();
