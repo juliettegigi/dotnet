@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 25-04-2024 a las 03:39:08
+-- Tiempo de generación: 25-04-2024 a las 17:08:15
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 8.2.12
 
@@ -35,6 +35,14 @@ CREATE TABLE `auditoriacontrato` (
   `id_contrato` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `auditoriacontrato`
+--
+
+INSERT INTO `auditoriacontrato` (`id`, `id_usuario`, `fechaInicio`, `fechacancelacion`, `id_contrato`) VALUES
+(1, 6, '2024-04-25 10:31:06', NULL, 1),
+(2, 6, '2024-04-25 11:23:02', NULL, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -49,6 +57,13 @@ CREATE TABLE `auditoriapagos` (
   `fechaCancelacion` datetime DEFAULT NULL,
   `numero_pago` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `auditoriapagos`
+--
+
+INSERT INTO `auditoriapagos` (`id`, `id_usuario`, `id_contrato`, `fechaPago`, `fechaCancelacion`, `numero_pago`) VALUES
+(1, 6, 1, '2024-04-25 10:31:50', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -66,6 +81,14 @@ CREATE TABLE `contratos` (
   `precioXmes` decimal(10,0) DEFAULT NULL,
   `estado` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Volcado de datos para la tabla `contratos`
+--
+
+INSERT INTO `contratos` (`id`, `inquilinoId`, `inmuebleId`, `fechaInicio`, `fechaFin`, `fechaFinAnticipada`, `precioXmes`, `estado`) VALUES
+(1, 3, 3, '2024-05-11 00:00:00', '2024-05-25 00:00:00', '0001-01-01 00:00:00', 8, 1),
+(2, 8, 5, '2024-04-27 00:00:00', '2024-05-03 00:00:00', '0001-01-01 00:00:00', 500000, 1);
 
 -- --------------------------------------------------------
 
@@ -169,6 +192,14 @@ CREATE TABLE `pagos` (
   `importe` decimal(10,0) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Volcado de datos para la tabla `pagos`
+--
+
+INSERT INTO `pagos` (`numeroPago`, `contratoId`, `fecha`, `fechaPago`, `importe`) VALUES
+(1, 1, '2024-05-03 00:00:00', '2024-04-25 10:31:50', 500000),
+(1, 2, '2024-04-27 00:00:00', NULL, 500000);
+
 -- --------------------------------------------------------
 
 --
@@ -200,7 +231,8 @@ INSERT INTO `propietarios` (`id`, `dni`, `nombre`, `apellido`, `telefono`, `emai
 (8, 'dni8', 'nombre8', 'apellido8', 'telefono8', 'email@gmail.com8', 'domicilio8'),
 (9, 'dni9', 'nombre9', 'apellido9', 'telefono9', 'email@gmail.com9', 'domicilio9'),
 (10, 'dni10', 'nombre10', 'apellido10', 'telefono10', 'email@gmail.com10', 'domicilio10'),
-(11, 'dni11', 'nombre11', 'apellido11', 'telefono11', 'email@gmail.com11', 'domicilio11');
+(11, 'dni11', 'nombre11', 'apellido11', 'telefono11', 'email@gmail.com11', 'domicilio11'),
+(17, 'dni20', 'NOMBRE20', 'APELLIDO20', '02664877098', 'email@gmail.com20', 'gt');
 
 -- --------------------------------------------------------
 
@@ -312,19 +344,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `auditoriacontrato`
 --
 ALTER TABLE `auditoriacontrato`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `auditoriapagos`
 --
 ALTER TABLE `auditoriapagos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `contratos`
 --
 ALTER TABLE `contratos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `inmuebles`
@@ -348,7 +380,7 @@ ALTER TABLE `inquilinos`
 -- AUTO_INCREMENT de la tabla `propietarios`
 --
 ALTER TABLE `propietarios`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
