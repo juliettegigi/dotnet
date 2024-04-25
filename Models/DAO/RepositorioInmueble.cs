@@ -581,10 +581,7 @@ public IList<Inmueble> GetInmueblesPaginadoFiltrado(int limite, int offset,ViewI
                                     limit @limite offset @offset;
                                     "; 
 
-            Console.WriteLine("**********************************************************");
-            Console.WriteLine(sql);
-            Console.WriteLine(filtros.ApartirDe.ToString("yyyy-MM-dd"));
-            Console.WriteLine(filtros.Hasta.ToString("yyyy-MM-dd"));
+           
 
 			using(var command = new MySqlCommand(sql, connection))
 			{   command.Parameters.AddWithValue("limite", limite);

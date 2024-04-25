@@ -32,11 +32,7 @@ public class RepositorioContrato:RepositorioBase
 						       and 
 							   {nameof(Contrato.Estado)} =  @{nameof(Contrato.Estado)}  ;
                          ";
-						 Console.WriteLine("**********************************");
 						 
-    Console.WriteLine(id);
-    Console.WriteLine(estado);
-    Console.WriteLine(sql);
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Contrato.Id)}", id);
@@ -521,9 +517,6 @@ public IList<Contrato> GetContratoByInmueble(int inmuebleId){
  
 
             "; 
-			Console.WriteLine("**************************************************");
-			Console.WriteLine(sql);
-
 
         using(var command = new MySqlCommand(sql, connection))
         {   command.Parameters.AddWithValue("inmuebleId", inmuebleId);
