@@ -66,6 +66,8 @@ if(ViewBag.errores!=null){
         </div>
         <div class="formularioContrato z-4 position-absolute  top-0 start-0 h-50 w-50 invisible ">
                 <input asp-for="InmuebleId.Id" type="hidden"  id="inmuebleId">
+                      <input asp-for="InmuebleId.PropietarioId.Id" type="hidden" id="propietarioId">
+                      <input asp-for="InmuebleId.PropietarioId.DNI" type="hidden" id="propietarioDni">
                       <input asp-for="InmuebleId.PropietarioId.Nombre" type="hidden" id="propietarioNombre">
                       <input asp-for="InmuebleId.PropietarioId.Apellido" type="hidden" id="propietarioApellido">
                       <input asp-for="InmuebleId.Direccion" type="hidden" id="inmuebleDireccion">
@@ -304,10 +306,11 @@ btn3.addEventListener('click',()=>{
                            li.id=inquilino.id;
                            ulInquilino.appendChild(li);
                            li.addEventListener("click",(e)=>{
+                                
                                   document.getElementById("inquilinoId").value=e.target.id;
                                   document.getElementById("inquilinoNombre").value=inquilino.nombre;
                                   document.getElementById("inquilinoApellido").value=inquilino.apellido;
-                                  document.getElementById("inquilinoDNI").value=inquilino.dni;
+                                  document.getElementById("inquilinoDNI").value=inquilino.DNI;
                                   document.getElementById("inquilinoTelefono").value=inquilino.telefono;
                                   document.getElementById("inquilinoEmail").value=inquilino.email;
                                   document.getElementById("inquilinoDomicilio").value=inquilino.domicilio;
@@ -315,6 +318,7 @@ btn3.addEventListener('click',()=>{
                                   inputInnquilino.setAttribute("aria-expanded","false"); 
                                    inputInnquilino.click();
                                    btn1.classList.remove('disabled');
+                                   console.log("qqqqqqqq");
                            })
                         });
                 } else {
@@ -378,6 +382,10 @@ function dibujarTabla(page=1,ruta,queryString='&'){
                                          const direccion=document.getElementById("inmuebleDireccion");
                                          const tipoInm=document.getElementById("inmuebleTipo");
                                          const propApellido=document.getElementById("propietarioApellido");
+                                         const propId=document.getElementById("propietarioId");
+                                         const propDni=document.getElementById("propietarioDni");
+                                         propId.value=inm.propietarioId.id;
+                                         propDni.value=inm.propietarioId.dni;
                                          propNombre.value=inm.propietarioId.nombre;
                                          propApellido.value=inm.propietarioId.apellido;
                                          direccion.value=inm.direccion;

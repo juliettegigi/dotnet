@@ -18,7 +18,7 @@ public class Propietario
 
 	//[Display(Name = "Teléfono")]
 	public String? Telefono  { get; set; }
-	[UniqueEmailDni()]
+	
     public String? Email  { get; set; }
 	public String? Domicilio { get; set; }
 	public List<Inmueble>? ListaInmuebles {get;set;}

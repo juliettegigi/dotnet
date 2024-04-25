@@ -123,12 +123,12 @@ Console.WriteLine("*****************************************************contrato
         if (!ModelState.IsValid) {
             Console.WriteLine("***************************************************** Entro");
             foreach (var kvp in ModelState)
-    {
-        foreach (var error in kvp.Value.Errors)
-        {
-            Console.WriteLine(error.ErrorMessage);
-        }
-    }
+                {
+                    foreach (var error in kvp.Value.Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
 
              RepositorioInmuebleTipo rit=new RepositorioInmuebleTipo();
              ViewBag.ListaTipos=rit.GetInmuebleTipos();
