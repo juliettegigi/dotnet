@@ -18,8 +18,8 @@ public class Propietario
 
 	//[Display(Name = "Teléfono")]
 	public String? Telefono  { get; set; }
-	
-    public String? Email  { get; set; }
+	 [Required, EmailAddress]
+    public String? Email { get; set; }
 	public String? Domicilio { get; set; }
 	public List<Inmueble>? ListaInmuebles {get;set;}
 	
