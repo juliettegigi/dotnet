@@ -61,9 +61,11 @@
             </div>
             <div class="form-group">
                <input type="text" name="DNI" class="form-input" required placeholder="Documento" />
+               <span class="text-danger">@(ViewBag.mensaje==null?" ":@ViewBag.mensaje)</span>
             </div>
             <div class="form-group">
               <input type="text" name="Email" class="form-input" required placeholder="Email" />
+              <span class="text-danger">@(ViewBag.mensaje==null?" ":@ViewBag.mensaje)</span>
             </div>
             <div class="form-group">
                 <input type="text" name="Telefono" class="form-input" placeholder="Telefono" />

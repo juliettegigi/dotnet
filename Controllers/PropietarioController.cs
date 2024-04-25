@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Models.DAO;
+using MySql.Data.MySqlClient;
 
 namespace InmobiliariaGutierrez.Controllers{
 
@@ -98,6 +99,8 @@ public class PropietarioController : Controller
 			}
 		else
 			{ 
+				try{
+
 				var Id=rp.AltaPropietario(propietario);
 				 ModalViewModel viewModel = new ModalViewModel();
                  viewModel.MostrarModal = true;
@@ -106,6 +109,19 @@ public class PropietarioController : Controller
 				 viewModel.Id = Id;
 				 
 			      return View("~/Views/Propietario/Crear.cshtml", viewModel);
+				  }
+			    catch (MySqlException ex) when (ex.Number == 1062) 
+				{   ModalViewModel viewModel = new ModalViewModel();
+                 viewModel.MostrarModal = false;
+				 viewModel.Apellido = propietario.Nombre+" "+propietario.Apellido;
+				 viewModel.Documento = propietario.DNI;
+				 viewModel.Id = 0;
+					
+					ViewBag.mensaje="El correo electrónico ya está registrado o el dni";
+					return View("Crear",viewModel);
+				}
+				
+			
 			}
 		
 	}

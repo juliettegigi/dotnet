@@ -19,7 +19,7 @@ public class AuditoriacController : Controller
         _logger = logger;
     }
 
-   
+   [Authorize(Policy ="Administrador")]
 public IActionResult Detalle(int ContratoId)
 {   
     RepositorioContrato rc = new RepositorioContrato();

@@ -67,6 +67,7 @@ public class InquilinoController : Controller
             catch (MySqlException ex) when (ex.Number == 1062) 
             {
                 ModelState.AddModelError(nameof(Inquilino.Email), "El correo electrónico ya está registrado.");
+				 ModelState.AddModelError(nameof(Inquilino.DNI), "El Dni ya esta registrado");
                 return View("Editar", inquilino);
             }
         }
