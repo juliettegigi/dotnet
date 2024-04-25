@@ -70,6 +70,7 @@ if(ViewBag.errores!=null){
                       <input asp-for="InmuebleId.PropietarioId.DNI" type="hidden" id="propietarioDni">
                       <input asp-for="InmuebleId.PropietarioId.Nombre" type="hidden" id="propietarioNombre">
                       <input asp-for="InmuebleId.PropietarioId.Apellido" type="hidden" id="propietarioApellido">
+                      <input asp-for="InmuebleId.PropietarioId.Email" type="hidden" id="propietarioEmail">
                       <input asp-for="InmuebleId.Direccion" type="hidden" id="inmuebleDireccion">
                       <input asp-for="InmuebleId.InmuebleTipoId.Tipo" type="hidden" id="inmuebleTipo">
                       <input asp-for="InmuebleId.CantidadAmbientes" type="hidden" id="inmuebleCantidadAmbientes">
@@ -384,6 +385,8 @@ function dibujarTabla(page=1,ruta,queryString='&'){
                                          const propApellido=document.getElementById("propietarioApellido");
                                          const propId=document.getElementById("propietarioId");
                                          const propDni=document.getElementById("propietarioDni");
+                                         const propEmail=document.getElementById("propietarioEmail");
+                                         propEmail.value=inm.propietarioId.email;
                                          propId.value=inm.propietarioId.id;
                                          propDni.value=inm.propietarioId.dni;
                                          propNombre.value=inm.propietarioId.nombre;
