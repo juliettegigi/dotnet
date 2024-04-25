@@ -26,7 +26,7 @@ public class InquilinoController : Controller
 
 	
 	public IActionResult Editar(int id)
-	{   
+	{  
            if(id > 0){
 			   RepositorioInquilino rp = new();
 			   var inquilino = rp.GetInquilino(id);
@@ -42,10 +42,14 @@ public class InquilinoController : Controller
 	{  if (ModelState.IsValid){
 		RepositorioInquilino rp = new RepositorioInquilino();
 		
-		if(inquilino.Id !=null)
+		if(inquilino.Id !=0)
+		 { 
 			rp.ModificaInquilino(inquilino);
+		 }
 		else
-			rp.AltaInquilino(inquilino);
+			{
+				inquilino.Id=0;
+				rp.AltaInquilino(inquilino);}
 		return RedirectToAction(nameof(Index));
 		}
 		else return RedirectToAction(nameof(Editar));;

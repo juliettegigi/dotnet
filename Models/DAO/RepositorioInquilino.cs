@@ -140,12 +140,13 @@ public IList<Inquilino>  BuscarPorTodosLosCampos(string input){
 
 	public int AltaInquilino(Inquilino inquilino)
 	{  
-		int id = 0;
+		int id ;
 		using(var connection = new MySqlConnection(ConnectionString))
 		{
 			var sql = @$"INSERT INTO Inquilinos ({nameof(Inquilino.DNI)}, {nameof(Inquilino.Nombre)}, {nameof(Inquilino.Apellido)}, {nameof(Inquilino.Email)}, {nameof(Inquilino.Telefono)}, {nameof(Inquilino.Domicilio)})
 				VALUES (@{nameof(Inquilino.DNI)}, @{nameof(Inquilino.Nombre)}, @{nameof(Inquilino.Apellido)}, @{nameof(Inquilino.Email)}, @{nameof(Inquilino.Telefono)}, @{nameof(Inquilino.Domicilio)});
-				SELECT LAST_INSERT_ID();";
+				SELECT LAST_INSERT_ID() AS LastInsertId FROM Inquilinos;
+			";
 			using(var command = new MySqlCommand(sql, connection))
 			{
 				command.Parameters.AddWithValue($"@{nameof(Inquilino.DNI)}", inquilino.DNI);
@@ -158,9 +159,7 @@ public IList<Inquilino>  BuscarPorTodosLosCampos(string input){
 
 				connection.Open();
 				id = Convert.ToInt32(command.ExecuteScalar());
-				inquilino.Id = id;
-				var repContrato=new RepositorioContrato();
-				inquilino.ListaContratos=repContrato.GetContratosXinquilino(id).ToList();
+				
 				connection.Close();
 			}
 		}

@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Models.DAO;
-using InmobiliariaGutierrez.Views.ContratoView;
-using InmobiliariaGutierrez.Views.ContratoView;
+
 
 
 namespace InmobiliariaGutierrez.Controllers{
@@ -21,11 +20,35 @@ public class AuditoriacController : Controller
     }
 
    
-   public IActionResult Index()
-    {   
-		
-		return View();
-    } 
+public IActionResult Detalle(int ContratoId)
+{   
+    RepositorioContrato rc = new RepositorioContrato();
+    Contrato contrato = rc.GetContrato(ContratoId);
+    
+    RepositorioUsuario ru = new RepositorioUsuario();
+    RepositorioAuditoriac rac = new RepositorioAuditoriac();
+    IList<Auditoriacontrato> auditoria;
+    auditoria = rac.GetAuditoriasPorContratoId(ContratoId);
+    
+    AuditoriaViewModelContrato Avm = new AuditoriaViewModelContrato();
+    Avm.Contrato = contrato;
+    Avm.AuditoriaData = new List<AuditoriaData>();
+
+    foreach (var aud in auditoria)
+    {
+        var usuario = ru.ObtenerPorId(aud.UsuarioId.Id);
+        var auditoriaData = new AuditoriaData
+        {
+            Usuario = usuario,
+            FechasInicio = aud.FechaInicio,
+            FechasCancelacion = aud.FechaCancelacion
+        };
+
+        Avm.AuditoriaData.Add(auditoriaData);
+    }
+
+    return View(Avm);
+}
 
 }
 }
