@@ -71,6 +71,22 @@
                             
                       </td>
             		  <td>@item.PrecioXmes</td>
+                      <td>
+                        @if(User.IsInRole("Administrador")){  
+                             <form id="formAuditoria" asp-controller="Auditoriac" asp-action="Detalle" method="post">
+                               <input type="hidden" name="ContratoId" value="@item.Id" />
+                               
+               
+                               <button type="submit" class="mx-2 ">
+                                   <i class="bi bi-info-circle" style="font-size: 1rem;"></i> <!-- Cambié el icono aquí y ajusté el tamaño -->
+                               </button>
+             
+                           </form>
+                           }
+                      </td>
+
+
+
                     
                      @{i++;}
             	</tr>
