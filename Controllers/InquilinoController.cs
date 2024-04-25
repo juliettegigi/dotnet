@@ -5,6 +5,7 @@ using InmobiliariaGutierrez.Models;
 using InmobiliariaGutierrez.Models.VO;
 using InmobiliariaGutierrez.Views.InquilinoView;
 using InmobiliariaGutierrez.Models.DAO;
+using MySql.Data.MySqlClient;
 namespace InmobiliariaGutierrez.Controllers{
 
 [Authorize]
@@ -39,21 +40,44 @@ public class InquilinoController : Controller
 
 	[HttpPost]
 	public IActionResult Guardar(Inquilino inquilino)
-	{  if (ModelState.IsValid){
-		RepositorioInquilino rp = new RepositorioInquilino();
-		
-		if(inquilino.Id !=0)
-		 { 
-			rp.ModificaInquilino(inquilino);
-		 }
-		else
-			{
-				inquilino.Id=0;
-				rp.AltaInquilino(inquilino);}
-		return RedirectToAction(nameof(Index));
-		}
-		else return RedirectToAction(nameof(Editar));
-	}
+{  
+    if (ModelState.IsValid)
+    {
+        RepositorioInquilino rp = new RepositorioInquilino();
+        
+        if (inquilino.Id != 0)
+        {
+            try
+            {
+                rp.ModificaInquilino(inquilino);
+            }
+            catch (MySqlException ex) when (ex.Number == 1062) 
+            {
+                ModelState.AddModelError(nameof(Inquilino.Email), "El correo electrónico ya está registrado.");
+                  return View("Editar", inquilino);;
+            }
+        }
+        else
+        {
+            try
+            {
+                inquilino.Id = 0;
+                rp.AltaInquilino(inquilino);
+            }
+            catch (MySqlException ex) when (ex.Number == 1062) 
+            {
+                ModelState.AddModelError(nameof(Inquilino.Email), "El correo electrónico ya está registrado.");
+                return View("Editar", inquilino);
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
+    else
+    {
+        return RedirectToAction(nameof(Editar));
+    }
+}
+
 
 [Authorize(Policy ="Administrador")]
 	public IActionResult Eliminar(int id)
