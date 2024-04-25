@@ -130,4 +130,31 @@ public class InquilinoGuardarValidationAttribute : ValidationAttribute
     }
     }
 
+     public class UniqueEmailDni : ValidationAttribute
+        {
+              protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value == null){
+                return new ValidationResult("Debe ingresar un propietario.");
+            }   
+            
+            
+            
+
+            if (validationContext.ObjectInstance is Propietario)
+            {
+                var propietario=(Propietario)validationContext.ObjectInstance ;
+               RepositorioPropietario rp=new RepositorioPropietario();
+               if(rp.GetPropietarioByEmailDni(propietario.Email,propietario.DNI)!=null)
+                  return new ValidationResult("Ya existe un propietario con el dni o email ingresado.");
+                
+            }
+
+            return ValidationResult.Success;
+            
+
+    }
+    }
+
+
 }

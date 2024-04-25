@@ -69,6 +69,9 @@ public class PropietarioController : Controller
 	[HttpPost]
 	public IActionResult Guardar(Propietario propietario)
 	{
+		if (!ModelState.IsValid){
+			return RedirectToAction(nameof(Crear));;
+		}
 		RepositorioPropietario rp = new RepositorioPropietario();
 		if(propietario.Id > 0)
 			{
