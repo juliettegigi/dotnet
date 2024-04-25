@@ -53,7 +53,7 @@ public List<Auditoriacontrato> GetAuditoriasPorContratoId(int contratoId)
                     {
                         Id = Convert.ToInt32(reader["id"]),
                         UsuarioId = new Usuario { Id = Convert.ToInt32(reader["id_usuario"]) },
-                        FechaInicio = Convert.ToDateTime(reader["fechaInicio"]),
+                        FechaInicio = Convert.IsDBNull(reader["FechaInicio"]) ? null : (DateTime?)Convert.ToDateTime(reader["FechaInicio"]),
                         FechaCancelacion = Convert.IsDBNull(reader["fechaCancelacion"]) ? null : (DateTime?)Convert.ToDateTime(reader["fechaCancelacion"]),
                         ContratoId = new Contrato { Id = Convert.ToInt32(reader["id_contrato"]) }
                     };
