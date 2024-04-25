@@ -53,6 +53,12 @@ public class UsuarioController : Controller
 	//***************************************************************************************************************************************************
 	[Authorize]
 		public ActionResult Editar(int id){
+			  var idUserLoggueado = User.FindFirstValue("id");
+              if (idUserLoggueado != null && idUserLoggueado != id.ToString())
+              {
+                  return View("~/Views/Home/Restringido.cshtml");
+              }
+
 			RepositorioUsuario ru = new RepositorioUsuario();
 			Usuario usuario = ru.ObtenerPorId(id);
 			ViewBag.Roles = Usuario.ObtenerRoles();
